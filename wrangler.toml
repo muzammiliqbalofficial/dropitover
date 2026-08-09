@@ -18,7 +18,7 @@ bucket_name = "sharebeam-files"
 [[d1_databases]]
 binding = "DB"
 database_name = "sharebeam"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "7fb5568d-5d43-4c60-bd06-3b7dbeebe1d5"
 
 # --- Signaling (Modes 1 and 3) ----------------------------------------------
 # NetworkHub: one instance per hashed public IP, for same-network discovery.

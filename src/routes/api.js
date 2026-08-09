@@ -2,7 +2,7 @@
 // Modes 1 and 3 use nothing here beyond /config, /rooms and /qr.
 
 import { LinkStore, publicLink } from '../lib/links.js';
-import { masterKeyFrom, readConfig } from '../lib/config.js';
+import { masterKeyFrom, masterKeyStatus, readConfig } from '../lib/config.js';
 import { randomId, timingSafeEqual } from '../lib/crypto.js';
 import { qrSvg } from '../lib/qr.js';
 
@@ -20,7 +20,10 @@ export async function handleApi(request, env, ctx, url) {
   const config = readConfig(env);
 
   if (segments[0] === 'health') {
-    return json({ ok: true, mode: 'cloudflare-workers' });
+    // `encryptionKey` is a setup diagnostic — it says whether the secret is
+    // well-formed, never anything about its value.
+    const encryptionKey = masterKeyStatus(env);
+    return json({ ok: encryptionKey === 'ok', mode: 'cloudflare-workers', encryptionKey });
   }
 
   if (segments[0] === 'config') {

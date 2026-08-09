@@ -43,16 +43,34 @@ export function readConfig(env) {
   };
 }
 
-/** @throws with a setup hint when the deployment has no master key. */
+const HEX_64 = /^[0-9a-fA-F]{64}$/;
+
+/**
+ * @throws with a precise setup hint when the master key is missing or malformed.
+ * The key itself is never included in the message.
+ */
 export function masterKeyFrom(env) {
-  const raw = (env.MASTER_KEY || '').trim();
+  const raw = String(env.MASTER_KEY ?? '').replace(/\s+/g, '');
   if (!raw) {
     throw new Error(
       'MASTER_KEY is not set. Generate one and store it as a secret:\n' +
-        '  npx wrangler secret put MASTER_KEY'
+        '  node -e "process.stdout.write(require(\'crypto\').randomBytes(32).toString(\'hex\'))" | npx wrangler secret put MASTER_KEY'
     );
   }
-  const key = fromHex(raw);
-  if (key.length !== 32) throw new Error('MASTER_KEY must be 64 hex characters (32 bytes)');
-  return key;
+  if (!HEX_64.test(raw)) {
+    const problem = raw.length !== 64 ? `${raw.length} characters` : 'characters outside 0-9a-f';
+    throw new Error(
+      `MASTER_KEY must be exactly 64 hex characters (32 bytes) but has ${problem}. ` +
+        'Re-set it without pasting stray characters:\n' +
+        '  node -e "process.stdout.write(require(\'crypto\').randomBytes(32).toString(\'hex\'))" | npx wrangler secret put MASTER_KEY'
+    );
+  }
+  return fromHex(raw);
+}
+
+/** Reports key health for /api/health without revealing anything about it. */
+export function masterKeyStatus(env) {
+  const raw = String(env.MASTER_KEY ?? '').replace(/\s+/g, '');
+  if (!raw) return 'missing';
+  return HEX_64.test(raw) ? 'ok' : 'malformed';
 }

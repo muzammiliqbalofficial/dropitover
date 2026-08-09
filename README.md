@@ -38,9 +38,12 @@ npm run db:apply:local            # local, for `wrangler dev`
 ### 2. Set the encryption key
 
 ```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-npx wrangler secret put MASTER_KEY      # paste the 64-character value
+node -e "process.stdout.write(require('crypto').randomBytes(32).toString('hex'))" | npx wrangler secret put MASTER_KEY
 ```
+
+Piping it avoids a paste picking up stray characters — the key must be exactly 64 hex
+characters. `GET /api/health` reports `encryptionKey: "ok" | "malformed" | "missing"`
+if you ever need to check.
 
 Losing this key makes every stored Mode 2 share permanently unreadable. Modes 1 and 3 don't use it — they store nothing.
 
