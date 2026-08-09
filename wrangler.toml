@@ -1,0 +1,61 @@
+name = "sharebeam"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+workers_dev = true
+
+# The frontend ships as static assets. Requests that don't match a file fall
+# through to the Worker, which serves /r/* and /d/* and the API.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# --- Mode 2 storage ---------------------------------------------------------
+# Encrypted file bodies live in R2; metadata and expiry live in D1.
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "sharebeam-files"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "sharebeam"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+# --- Signaling (Modes 1 and 3) ----------------------------------------------
+# NetworkHub: one instance per hashed public IP, for same-network discovery.
+# Room: one instance per room id.
+[[durable_objects.bindings]]
+name = "NETWORK_HUB"
+class_name = "NetworkHub"
+
+[[durable_objects.bindings]]
+name = "ROOM"
+class_name = "Room"
+
+# SQLite-backed Durable Objects — available on the Workers free plan.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["NetworkHub", "Room"]
+
+# --- Expiry sweeper ---------------------------------------------------------
+[triggers]
+crons = ["*/10 * * * *"]
+
+[vars]
+# Bytes. 2 GB per file by default; uploads are chunked so this is not capped by
+# the Workers request-body limit.
+MAX_FILE_SIZE = "2147483648"
+MAX_TOTAL_SIZE = "8589934592"
+MAX_TEXT_LENGTH = "200000"
+# Upload/encryption chunk size in bytes. Must be >= 5 MiB (R2 multipart minimum)
+# and comfortably under the Workers request-body limit.
+PART_SIZE = "8388608"
+DEFAULT_EXPIRY = "24h"
+ROOM_TTL_SECONDS = "43200"
+ROOM_MAX_PARTICIPANTS = "8"
+STUN_URLS = "stun:stun.l.google.com:19302,stun:stun1.l.google.com:19302"
+TURN_URLS = ""
+TURN_USERNAME = ""
+
+# Secrets — set with `npx wrangler secret put <NAME>`, never in this file:
+#   MASTER_KEY      64 hex chars; AES-256-GCM root key for files at rest
+#   TURN_CREDENTIAL TURN password, if you run a TURN server

@@ -1,134 +1,109 @@
-'use strict';
+import test from 'node:test';
+import assert from 'node:assert/strict';
 
-const test = require('node:test');
-const assert = require('node:assert/strict');
-
-const { RoomRegistry } = require('../server/rooms');
+import { RoomState } from '../src/lib/rooms.js';
 
 const HOUR = 3600 * 1000;
+const NOW = Date.UTC(2026, 0, 1);
 
-function harness({ ttlSeconds = 12 * 3600, maxParticipants = 2 } = {}) {
-  const clock = { now: Date.UTC(2026, 0, 1) };
-  let counter = 0;
-  const rooms = new RoomRegistry({
-    ttlSeconds,
-    maxParticipants,
-    now: () => clock.now,
-    idFactory: () => `room${++counter}`,
-  });
-  return { rooms, clock };
-}
+const room = (overrides = {}) =>
+  RoomState.create({ id: 'abc12345', now: NOW, ttlSeconds: 12 * 3600, maxParticipants: 2, ...overrides });
 
-const peer = (id, name) => ({ id, name, deviceType: 'desktop' });
+const peer = (id, name = id) => ({ id, name, deviceType: 'desktop' });
 
-test('creating a room yields an id and a TTL-based expiry', () => {
-  const { rooms, clock } = harness({ ttlSeconds: 12 * 3600 });
-  const room = rooms.create();
-
-  assert.equal(room.id, 'room1');
-  assert.equal(room.participants.length, 0);
-  assert.equal(room.createdAt, clock.now);
-  assert.equal(room.expiresAt - clock.now, 12 * HOUR);
-  assert.equal(rooms.get(room.id).id, room.id);
-});
-
-test('room ids are unique even when the id factory repeats itself', () => {
-  const clock = { now: 0 };
-  const ids = ['dup', 'dup', 'other'];
-  let index = 0;
-  const rooms = new RoomRegistry({ now: () => clock.now, idFactory: () => ids[Math.min(index++, ids.length - 1)] });
-
-  assert.equal(rooms.create().id, 'dup');
-  assert.equal(rooms.create().id, 'other');
-  assert.equal(rooms.size, 2);
-});
-
-test('joining an unknown room reports room_not_found', () => {
-  const { rooms } = harness();
-  assert.deepEqual(rooms.join('nope', peer('s1', 'Phone')), { ok: false, error: 'room_not_found' });
+test('creating a room stamps its lifetime from the TTL', () => {
+  const r = room();
+  assert.equal(r.id, 'abc12345');
+  assert.equal(r.createdAt, NOW);
+  assert.equal(r.expiresAt - NOW, 12 * HOUR);
+  assert.deepEqual(r.participants, []);
+  assert.equal(r.isExpired(NOW), false);
 });
 
 test('the second person to join sees the first as an existing peer', () => {
-  const { rooms } = harness();
-  const room = rooms.create();
+  const r = room();
 
-  const first = rooms.join(room.id, peer('s1', 'Laptop'));
+  const first = r.join(peer('s1', 'Laptop'), NOW);
   assert.equal(first.ok, true);
   assert.deepEqual(first.peers, [], 'nobody was there yet');
 
-  const second = rooms.join(room.id, peer('s2', 'Phone'));
+  const second = r.join(peer('s2', 'Phone'), NOW + 1000);
   assert.equal(second.ok, true);
   assert.equal(second.peers.length, 1);
-  assert.equal(second.peers[0].id, 's1');
-  assert.equal(rooms.get(room.id).participants.length, 2);
+  assert.equal(second.peers[0].name, 'Laptop');
+  assert.equal(r.participants.length, 2);
 });
 
-test('the same socket cannot join twice', () => {
-  const { rooms } = harness();
-  const room = rooms.create();
-  rooms.join(room.id, peer('s1', 'Laptop'));
+test('the peer list handed to a newcomer is a copy, not live state', () => {
+  const r = room({ maxParticipants: 4 });
+  r.join(peer('s1', 'Laptop'), NOW);
+  const { peers } = r.join(peer('s2'), NOW);
 
-  assert.deepEqual(rooms.join(room.id, peer('s1', 'Laptop')), { ok: false, error: 'already_joined' });
-  assert.equal(rooms.get(room.id).participants.length, 1);
+  peers[0].name = 'tampered';
+  assert.equal(r.participants[0].name, 'Laptop');
 });
 
-test('a room refuses joins past maxParticipants', () => {
-  const { rooms } = harness({ maxParticipants: 2 });
-  const room = rooms.create();
-  rooms.join(room.id, peer('s1'));
-  rooms.join(room.id, peer('s2'));
+test('the same connection cannot join twice', () => {
+  const r = room();
+  r.join(peer('s1'), NOW);
+  assert.deepEqual(r.join(peer('s1'), NOW), { ok: false, error: 'already_joined' });
+  assert.equal(r.participants.length, 1);
+});
 
-  assert.deepEqual(rooms.join(room.id, peer('s3')), { ok: false, error: 'room_full' });
-  assert.equal(rooms.get(room.id).participants.length, 2);
+test('a full room refuses further joins', () => {
+  const r = room({ maxParticipants: 2 });
+  r.join(peer('s1'), NOW);
+  r.join(peer('s2'), NOW);
+
+  assert.deepEqual(r.join(peer('s3'), NOW), { ok: false, error: 'room_full' });
+  assert.equal(r.participants.length, 2);
+});
+
+test('an expired room refuses joins', () => {
+  const r = room({ ttlSeconds: 3600 });
+  assert.deepEqual(r.join(peer('s1'), NOW + HOUR), { ok: false, error: 'room_expired' });
+  assert.equal(r.isExpired(NOW + HOUR), true, 'the expiry instant counts as expired');
+  assert.equal(r.isExpired(NOW + HOUR - 1), false);
 });
 
 test('leaving frees a slot and reports who left', () => {
-  const { rooms } = harness({ maxParticipants: 2 });
-  const room = rooms.create();
-  rooms.join(room.id, peer('s1', 'Laptop'));
-  rooms.join(room.id, peer('s2', 'Phone'));
+  const r = room({ maxParticipants: 2 });
+  r.join(peer('s1', 'Laptop'), NOW);
+  r.join(peer('s2', 'Phone'), NOW);
 
-  const left = rooms.leave(room.id, 's1');
+  const left = r.leave('s1');
   assert.equal(left.ok, true);
   assert.equal(left.participant.name, 'Laptop');
-  assert.equal(rooms.get(room.id).participants.length, 1);
+  assert.equal(r.participants.length, 1);
+  assert.equal(r.join(peer('s3'), NOW).ok, true);
 
-  assert.equal(rooms.join(room.id, peer('s3', 'Tablet')).ok, true);
-  assert.deepEqual(rooms.leave(room.id, 'ghost'), { ok: false, error: 'not_a_participant' });
-  assert.deepEqual(rooms.leave('nope', 's1'), { ok: false, error: 'room_not_found' });
+  assert.deepEqual(r.leave('ghost'), { ok: false, error: 'not_a_participant' });
 });
 
-test('an empty room stays joinable until its TTL, so a refresh still works', () => {
-  const { rooms, clock } = harness({ ttlSeconds: 3600 });
-  const room = rooms.create();
-  rooms.join(room.id, peer('s1'));
-  rooms.leave(room.id, 's1');
+test('each join buys another full TTL so a refresh never kills the room', () => {
+  const r = room({ ttlSeconds: 3600 });
+  const late = NOW + 50 * 60 * 1000;
 
-  assert.ok(rooms.get(room.id), 'still reservable while empty');
-  clock.now += 30 * 60 * 1000;
-  assert.equal(rooms.join(room.id, peer('s1-reconnected')).ok, true);
+  r.join(peer('s1'), late);
+  assert.equal(r.expiresAt - late, HOUR);
 });
 
-test('each join extends the room by a full TTL', () => {
-  const { rooms, clock } = harness({ ttlSeconds: 3600 });
-  const room = rooms.create();
-  clock.now += 50 * 60 * 1000;
+test('renaming a participant is reflected in the room', () => {
+  const r = room();
+  r.join(peer('s1', 'Laptop'), NOW);
 
-  rooms.join(room.id, peer('s1'));
-  assert.equal(rooms.get(room.id).expiresAt - clock.now, HOUR);
+  assert.equal(r.update('s1', { name: 'Work laptop' }).name, 'Work laptop');
+  assert.equal(r.participants[0].name, 'Work laptop');
+  assert.equal(r.update('ghost', { name: 'x' }), null);
 });
 
-test('expired rooms disappear and sweep reclaims them', () => {
-  const { rooms, clock } = harness({ ttlSeconds: 3600 });
-  const room = rooms.create();
+test('a room survives a round trip through Durable Object storage', () => {
+  const r = room({ ttlSeconds: 3600 });
+  r.join(peer('s1'), NOW);
 
-  clock.now += HOUR;
-  assert.equal(rooms.get(room.id), null, 'expiry instant counts as expired');
-  assert.deepEqual(rooms.join(room.id, peer('s1')), { ok: false, error: 'room_not_found' });
-
-  const fresh = rooms.create();
-  rooms.rooms.set(room.id, { ...room }); // put the stale record back to test sweep()
-  assert.equal(rooms.sweep(), 1);
-  assert.equal(rooms.size, 1);
-  assert.ok(rooms.get(fresh.id));
+  const restored = RoomState.fromJSON(JSON.parse(JSON.stringify(r.toJSON())));
+  assert.equal(restored.id, r.id);
+  assert.equal(restored.expiresAt, r.expiresAt);
+  assert.equal(restored.maxParticipants, r.maxParticipants);
+  assert.deepEqual(restored.participants, [], 'participants are live sockets, never stored');
 });

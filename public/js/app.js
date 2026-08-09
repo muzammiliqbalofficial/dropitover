@@ -1,10 +1,13 @@
-// Landing page: Mode 1 (nearby devices, P2P), Mode 2 (link share), Mode 3 entry.
+// Landing page: Mode 1 (nearby devices, P2P), Mode 2 (encrypted link share),
+// Mode 3 entry (create/join a room).
 
 import {
-  $, copyText, deviceGlyph, escapeHtml, fileGlyph, formatBytes, formatRelative,
-  getIdentity, loadConfig, setIdentityName, toast,
+  $, copyText, deviceGlyph, escapeHtml, fetchJson, fileGlyph, formatBytes,
+  formatRelative, getIdentity, loadConfig, setIdentityName, toast,
 } from './util.js';
 import { PeerLink } from './peer.js';
+import { Signaling } from './ws.js';
+import { uploadShare } from './upload.js';
 import { TransferLog, confirmModal, wireDropzone } from './ui.js';
 
 const EXPIRY_LABELS = {
@@ -23,9 +26,9 @@ const state = {
 };
 
 const transfers = new TransferLog($('#transfers'), $('#transfers-empty'));
-const socket = io({ transports: ['websocket', 'polling'] });
+const signaling = new Signaling('/ws/net');
 
-init().catch((err) => toast(err.message, 'error'));
+init().catch((err) => toast(err.message, 'error', 6000));
 
 async function init() {
   state.config = await loadConfig();
@@ -35,8 +38,7 @@ async function init() {
     `or tap to choose — up to ${formatBytes(state.config.maxFileSize)} per file, no limit on how many`;
   $('#ice-note').textContent = state.config.hasTurn ? 'STUN + TURN' : 'STUN only';
 
-  const expiry = $('#link-expiry');
-  expiry.replaceChildren(
+  $('#link-expiry').replaceChildren(
     ...state.config.expiryOptions.map((option) => {
       const el = document.createElement('option');
       el.value = option;
@@ -55,8 +57,6 @@ async function init() {
   wireRooms();
 }
 
-// --- Identity ---------------------------------------------------------------
-
 function wireIdentity() {
   const input = $('#device-name');
   input.addEventListener('change', () => {
@@ -66,35 +66,41 @@ function wireIdentity() {
       return;
     }
     state.identity.name = name;
-    socket.emit('identity:update', { name });
-    toast('Other devices now see you as ' + name, 'success', 2200);
+    signaling.send('identity', { name });
+    toast(`Other devices now see you as ${name}`, 'success', 2200);
   });
 }
 
 // --- Mode 1: nearby devices -------------------------------------------------
 
 function wireSignaling() {
-  socket.on('connect', () => {
-    state.selfId = socket.id;
-    socket.emit('hello', state.identity, (res) => {
-      state.selfId = res.id;
-      renderPeers(res.peers);
-    });
+  signaling.on('open', async () => {
+    try {
+      const welcome = await signaling.request('hello', state.identity);
+      state.selfId = welcome.id;
+      renderPeers(welcome.peers || []);
+    } catch (err) {
+      toast(err.message, 'error');
+    }
   });
 
-  socket.on('disconnect', () => {
-    $('#peer-count').textContent = 'Offline';
+  signaling.on('close', () => {
+    $('#peer-count').textContent = 'Reconnecting…';
     renderPeers([]);
   });
 
-  socket.on('peers', (peers) => renderPeers(peers));
+  signaling.on('peers', (peers) => renderPeers(peers || []));
 
-  socket.on('signal', ({ from, description, candidate }) => {
-    const link = state.links.get(from);
-    if (link) link.handleSignal({ description, candidate });
+  signaling.on('signal', ({ from, description, candidate }) => {
+    state.links.get(from)?.handleSignal({ description, candidate });
   });
 
-  socket.on('transfer:incoming', async ({ from, fromName, transferId, summary }) => {
+  signaling.on('peer:gone', ({ id }) => {
+    state.links.get(id)?.close();
+    state.links.delete(id);
+  });
+
+  signaling.on('transfer:incoming', async ({ from, fromName, transferId, summary }) => {
     const accepted = await confirmModal({
       title: `${fromName} wants to send you something`,
       message: describeSummary(summary),
@@ -103,10 +109,10 @@ function wireSignaling() {
     });
     // The link must exist before we answer, so the incoming offer has a home.
     if (accepted) ensureLink(from, false, fromName);
-    socket.emit('transfer:response', { to: from, transferId, accepted });
+    signaling.send('transfer:response', { to: from, transferId, accepted });
   });
 
-  socket.on('transfer:response', async ({ from, fromName, transferId, accepted }) => {
+  signaling.on('transfer:response', async ({ from, fromName, transferId, accepted }) => {
     const pending = state.outgoing.get(transferId);
     if (!pending) return;
     state.outgoing.delete(transferId);
@@ -132,7 +138,6 @@ function renderPeers(peers) {
   const others = peers.filter((p) => p.id !== state.selfId);
   state.peers = new Map(others.map((p) => [p.id, p]));
 
-  // Drop connections to peers that have gone away.
   for (const [peerId, link] of state.links) {
     if (!state.peers.has(peerId)) {
       link.close();
@@ -140,8 +145,7 @@ function renderPeers(peers) {
     }
   }
 
-  const list = $('#peers');
-  list.replaceChildren(
+  $('#peers').replaceChildren(
     ...others.map((peer) => {
       const li = document.createElement('li');
       const button = document.createElement('button');
@@ -159,9 +163,11 @@ function renderPeers(peers) {
   );
 
   $('#peers-empty').hidden = others.length > 0;
-  $('#peer-count').textContent = others.length
-    ? `${others.length} device${others.length === 1 ? '' : 's'} nearby`
-    : 'No devices yet';
+  if (signaling.isOpen) {
+    $('#peer-count').textContent = others.length
+      ? `${others.length} device${others.length === 1 ? '' : 's'} nearby`
+      : 'No devices yet';
+  }
 }
 
 function describeSummary(summary = {}) {
@@ -173,7 +179,6 @@ function describeSummary(summary = {}) {
   return bits.length ? `They want to send ${bits.join(' and ')}.` : 'They want to send you something.';
 }
 
-/** Small compose modal for picking files and/or typing text for one peer. */
 function openSendSheet(peer) {
   const backdrop = document.createElement('div');
   backdrop.className = 'modal-backdrop';
@@ -197,12 +202,11 @@ function openSendSheet(peer) {
     </div>`;
 
   const input = $('input[type=file]', backdrop);
-  const zone = $('.dropzone', backdrop);
   const chosen = $('.chosen', backdrop);
   const textarea = $('textarea', backdrop);
   let files = [];
 
-  wireDropzone(zone, input, (picked) => {
+  wireDropzone($('.dropzone', backdrop), input, (picked) => {
     files = files.concat(picked);
     chosen.textContent = `${files.length} file${files.length === 1 ? '' : 's'} · ${formatBytes(
       files.reduce((sum, f) => sum + f.size, 0)
@@ -229,7 +233,7 @@ function openSendSheet(peer) {
   textarea.focus();
 }
 
-function requestTransfer(peer, files, text) {
+async function requestTransfer(peer, files, text) {
   const summary = {
     fileCount: files.length,
     totalSize: files.reduce((sum, f) => sum + f.size, 0),
@@ -237,14 +241,17 @@ function requestTransfer(peer, files, text) {
     names: files.slice(0, 5).map((f) => f.name),
   };
 
-  socket.emit('transfer:offer', { to: peer.id, summary }, (ack) => {
-    if (!ack?.ok) {
+  try {
+    const result = await signaling.request('transfer:offer', { to: peer.id, summary });
+    if (!result?.ok) {
       toast('That device is no longer reachable.', 'error');
       return;
     }
-    state.outgoing.set(ack.transferId, { peerId: peer.id, files, text });
+    state.outgoing.set(result.transferId, { peerId: peer.id, files, text });
     toast(`Waiting for ${peer.name} to accept…`);
-  });
+  } catch (err) {
+    toast(err.message, 'error');
+  }
 }
 
 function ensureLink(peerId, initiator, peerName) {
@@ -256,7 +263,7 @@ function ensureLink(peerId, initiator, peerName) {
     peerName: peerName || state.peers.get(peerId)?.name || 'Peer',
     initiator,
     iceServers: state.config.iceServers,
-    sendSignal: (message) => socket.emit('signal', message),
+    sendSignal: (message) => signaling.send('signal', message),
   });
 
   link.on('progress', (p) => transfers.progress({ ...p, peer: link.peerName }));
@@ -277,7 +284,7 @@ function ensureLink(peerId, initiator, peerName) {
   return link;
 }
 
-// --- Mode 2: link share -----------------------------------------------------
+// --- Mode 2: encrypted link share -------------------------------------------
 
 function wireLinkShare() {
   wireDropzone($('#link-drop'), $('#link-files'), addFiles);
@@ -301,8 +308,7 @@ function addFiles(files) {
 }
 
 function renderSelection() {
-  const list = $('#link-file-list');
-  list.replaceChildren(
+  $('#link-file-list').replaceChildren(
     ...state.selection.map((file, index) => {
       const li = document.createElement('li');
       li.className = 'item';
@@ -326,63 +332,45 @@ function renderSelection() {
   );
 }
 
-function createShare() {
+async function createShare() {
   const text = $('#link-text').value.trim();
   if (!state.selection.length && !text) {
     toast('Add a file or some text first.', 'warn');
     return;
   }
 
-  const form = new FormData();
-  state.selection.forEach((file) => form.append('files', file, file.name));
-  if (text) form.append('text', text);
-  form.append('expiry', $('#link-expiry').value);
-  form.append('burnAfterRead', String($('#link-burn').checked));
-
   const button = $('#link-send');
   const fill = $('#upload-fill');
   const note = $('#upload-note');
+
   button.disabled = true;
   $('#upload-wrap').hidden = false;
   $('#link-result').hidden = true;
   fill.style.width = '0%';
-  note.textContent = 'Encrypting and uploading…';
+  note.textContent = state.selection.length ? 'Uploading — each chunk is encrypted server-side…' : 'Saving…';
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('POST', '/api/links');
+  try {
+    const share = await uploadShare({
+      files: state.selection,
+      text,
+      expiry: $('#link-expiry').value,
+      burnAfterRead: $('#link-burn').checked,
+      onProgress: ({ sent, total }) => {
+        if (!total) return;
+        fill.style.width = `${Math.min(100, (sent / total) * 100)}%`;
+        note.textContent = `${formatBytes(sent)} of ${formatBytes(total)} uploaded`;
+      },
+    });
 
-  xhr.upload.addEventListener('progress', (event) => {
-    if (!event.lengthComputable) return;
-    const pct = (event.loaded / event.total) * 100;
-    fill.style.width = `${pct}%`;
-    note.textContent = `${formatBytes(event.loaded)} of ${formatBytes(event.total)} uploaded`;
-  });
-
-  xhr.addEventListener('load', () => {
-    button.disabled = false;
-    let body = {};
-    try {
-      body = JSON.parse(xhr.responseText);
-    } catch {
-      /* handled below */
-    }
-    if (xhr.status !== 201) {
-      $('#upload-wrap').hidden = true;
-      toast(body.message || `Upload failed (${xhr.status})`, 'error', 6000);
-      return;
-    }
-    note.textContent = 'Done — encrypted and stored.';
     fill.style.width = '100%';
-    showShare(body);
-  });
-
-  xhr.addEventListener('error', () => {
-    button.disabled = false;
+    note.textContent = 'Done — encrypted with AES-256-GCM and stored.';
+    showShare(share);
+  } catch (err) {
     $('#upload-wrap').hidden = true;
-    toast('Upload failed — check your connection.', 'error');
-  });
-
-  xhr.send(form);
+    toast(err.message, 'error', 7000);
+  } finally {
+    button.disabled = false;
+  }
 }
 
 function showShare(share) {
@@ -390,7 +378,7 @@ function showShare(share) {
   $('#link-result').hidden = false;
   $('#result-url').textContent = share.url;
   $('#result-open').href = share.url;
-  $('#result-qr').src = share.qr;
+  $('#result-qr').src = share.qrUrl;
   $('#result-expiry').textContent = formatRelative(share.expiresAt);
   $('#result-files').textContent = share.files.length
     ? `${share.files.length} file${share.files.length === 1 ? '' : 's'} · ${formatBytes(share.totalSize)}`
@@ -412,7 +400,7 @@ async function revokeShare() {
   if (!state.share) return;
   const ok = await confirmModal({
     title: 'Delete this share?',
-    message: 'The link stops working immediately and the encrypted files are removed from the server.',
+    message: 'The link stops working immediately and the encrypted chunks are removed from storage.',
     confirmLabel: 'Delete',
     cancelLabel: 'Keep',
     danger: true,
@@ -434,14 +422,16 @@ async function revokeShare() {
 // --- Mode 3: rooms ----------------------------------------------------------
 
 function wireRooms() {
-  $('#create-room').addEventListener('click', () => {
-    socket.emit('room:create', {}, (res) => {
-      if (!res?.ok) {
-        toast('Could not create a room.', 'error');
-        return;
-      }
-      window.location.href = `/r/${res.roomId}`;
-    });
+  $('#create-room').addEventListener('click', async () => {
+    const button = $('#create-room');
+    button.disabled = true;
+    try {
+      const room = await fetchJson('/api/rooms', { method: 'POST' });
+      window.location.href = `/r/${room.roomId}`;
+    } catch (err) {
+      toast(err.message, 'error');
+      button.disabled = false;
+    }
   });
 
   const join = () => {

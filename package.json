@@ -1,25 +1,30 @@
 {
   "name": "sharebeam",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Share files and text between devices: same-WiFi auto discovery (P2P), expiring links, and bidirectional rooms (P2P).",
-  "main": "server/index.js",
+  "type": "module",
+  "description": "Share files and text between devices: same-network auto discovery (P2P), expiring encrypted links, and bidirectional rooms (P2P). Runs entirely on Cloudflare Workers.",
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "node --watch server/index.js",
-    "test": "node --test tests/"
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test \"tests/*.test.js\"",
+    "db:create": "wrangler d1 create sharebeam",
+    "db:apply": "wrangler d1 execute sharebeam --remote --file=./schema.sql",
+    "db:apply:local": "wrangler d1 execute sharebeam --local --file=./schema.sql",
+    "r2:create": "wrangler r2 bucket create sharebeam-files",
+    "tail": "wrangler tail"
   },
   "engines": {
     "node": ">=18.17"
   },
   "dependencies": {
-    "busboy": "^1.6.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "qrcode": "^1.5.4",
-    "socket.io": "^4.7.5"
+    "qrcode-generator": "^1.4.4"
   },
-  "optionalDependencies": {
-    "ioredis": "^5.4.1"
+  "devDependencies": {
+    "wrangler": "^4.20.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "workerd@1.20260801.1": true
   }
 }

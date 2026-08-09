@@ -1,11 +1,13 @@
-// Mode 3: room page. Everyone in the room is meshed together with WebRTC data
-// channels, so files and text move directly between browsers in both directions.
+// Mode 3: room page. Everyone in the room is meshed with WebRTC data channels,
+// so files and text move directly between browsers in both directions. The Room
+// Durable Object only relays SDP and ICE.
 
 import {
   $, copyText, deviceGlyph, escapeHtml, formatRelative, getIdentity,
   loadConfig, setIdentityName, toast,
 } from './util.js';
 import { PeerLink } from './peer.js';
+import { Signaling } from './ws.js';
 import { TransferLog, wireDropzone } from './ui.js';
 
 const roomId = decodeURIComponent(window.location.pathname.split('/').filter(Boolean).pop() || '');
@@ -14,23 +16,24 @@ const state = {
   config: null,
   identity: getIdentity(),
   selfId: null,
-  peers: new Map(), // peerId -> {info, link, connState}
-  expiresAt: null,
+  peers: new Map(),
+  joined: false,
 };
 
 const transfers = new TransferLog($('#transfers'), $('#transfers-empty'));
-const socket = io({ transports: ['websocket', 'polling'] });
+const signaling = new Signaling(`/ws/room/${encodeURIComponent(roomId)}`);
 
 init().catch((err) => toast(err.message, 'error'));
 
 async function init() {
   state.config = await loadConfig();
+
   $('#device-name').value = state.identity.name;
   $('#device-name').addEventListener('change', (event) => {
     const name = setIdentityName(event.target.value);
     if (name) {
       state.identity.name = name;
-      socket.emit('identity:update', { name });
+      signaling.send('identity', { name });
     }
   });
 
@@ -52,39 +55,38 @@ function showState(id) {
 }
 
 function wireSignaling() {
-  socket.on('connect', () => {
-    socket.emit('hello', state.identity, (res) => {
-      state.selfId = res.id;
-      joinRoom();
-    });
-  });
+  signaling.on('open', () => joinRoom());
 
-  socket.on('disconnect', () => {
+  signaling.on('close', () => {
+    if (!state.joined) return;
     $('#room-status').textContent = 'Reconnecting…';
     for (const peer of state.peers.values()) peer.link?.close();
     state.peers.clear();
     renderParticipants();
   });
 
-  socket.on('signal', ({ from, fromName, description, candidate }) => {
+  signaling.on('error', ({ code }) => {
+    showState(code === 'room_full' ? 'state-full' : 'state-missing');
+  });
+
+  signaling.on('signal', ({ from, fromName, description, candidate }) => {
     let peer = state.peers.get(from);
     if (!peer?.link && description?.type === 'offer') {
-      // A newcomer is calling us (they always initiate) — answer them.
+      // A newcomer is calling us (newcomers always initiate) — answer them.
       peer = addPeer(peer?.info || { id: from, name: fromName, deviceType: 'desktop' }, false);
     }
     peer?.link?.handleSignal({ description, candidate });
   });
 
-  socket.on('room:peer-joined', (info) => {
+  signaling.on('room:peer-joined', (info) => {
     toast(`${info.name} joined.`, 'success');
-    // The newcomer starts the WebRTC handshake, so we just note their presence.
     if (!state.peers.has(info.id)) {
       state.peers.set(info.id, { info, link: null, connState: 'connecting' });
       renderParticipants();
     }
   });
 
-  socket.on('room:peer-updated', (info) => {
+  signaling.on('room:peer-updated', (info) => {
     const peer = state.peers.get(info.id);
     if (!peer) return;
     peer.info = info;
@@ -92,7 +94,7 @@ function wireSignaling() {
     renderParticipants();
   });
 
-  socket.on('room:peer-left', ({ id, name }) => {
+  signaling.on('room:peer-left', ({ id, name }) => {
     const peer = state.peers.get(id);
     if (!peer) return;
     peer.link?.close();
@@ -102,23 +104,30 @@ function wireSignaling() {
   });
 }
 
-function joinRoom() {
-  socket.emit('room:join', { roomId }, (res) => {
-    if (!res?.ok) {
-      showState(res?.error === 'room_full' ? 'state-full' : 'state-missing');
-      return;
-    }
+async function joinRoom() {
+  let result;
+  try {
+    result = await signaling.request('hello', state.identity);
+  } catch (err) {
+    toast(err.message, 'error');
+    return;
+  }
 
-    state.expiresAt = res.expiresAt;
-    showState(null);
-    $('#room-expiry').textContent =
-      `Room link stays valid for about ${formatRelative(res.expiresAt)} after the last person joins. ` +
-      'Nothing shared here is stored on the server.';
+  if (!result?.ok) {
+    showState(result?.error === 'room_full' ? 'state-full' : 'state-missing');
+    return;
+  }
 
-    // We are the newcomer: open a connection to each peer already here.
-    for (const info of res.peers) addPeer(info, true);
-    renderParticipants();
-  });
+  state.joined = true;
+  state.selfId = result.self.id;
+  showState(null);
+  $('#room-expiry').textContent =
+    `This room link stays valid for about ${formatRelative(result.expiresAt)} after the last person joins. ` +
+    'Nothing shared here is stored — it goes straight between browsers.';
+
+  // We are the newcomer: open a connection to everyone already here.
+  for (const info of result.peers) addPeer(info, true);
+  renderParticipants();
 }
 
 function addPeer(info, initiator) {
@@ -130,7 +139,7 @@ function addPeer(info, initiator) {
     peerName: info.name,
     initiator,
     iceServers: state.config.iceServers,
-    sendSignal: (message) => socket.emit('signal', message),
+    sendSignal: (message) => signaling.send('signal', message),
   });
 
   const peer = { info, link, connState: 'connecting' };
@@ -164,7 +173,6 @@ function connectedPeers() {
 
 function renderParticipants() {
   const peers = Array.from(state.peers.values());
-  const list = $('#participants');
 
   const self = document.createElement('li');
   self.className = 'peer self';
@@ -172,20 +180,20 @@ function renderParticipants() {
     <span class="avatar">${deviceGlyph(state.identity.deviceType)}</span>
     <span class="meta">
       <span class="name">${escapeHtml(state.identity.name)} (you)</span>
-      <span class="status">Host of this tab</span>
+      <span class="status">This device</span>
     </span>`;
 
-  list.replaceChildren(
+  $('#participants').replaceChildren(
     self,
     ...peers.map((peer) => {
       const li = document.createElement('li');
       li.className = 'peer self';
-      const status = {
+      const [dot, label] = {
         connected: ['on', 'Connected · direct'],
         connecting: ['warn', 'Connecting…'],
         new: ['warn', 'Connecting…'],
         checking: ['warn', 'Negotiating…'],
-        disconnected: ['off', 'Disconnected'],
+        disconnected: ['warn', 'Reconnecting…'],
         failed: ['off', 'Connection failed — needs TURN'],
         closed: ['off', 'Disconnected'],
       }[peer.connState] || ['warn', 'Connecting…'];
@@ -194,7 +202,7 @@ function renderParticipants() {
         <span class="avatar">${deviceGlyph(peer.info.deviceType)}</span>
         <span class="meta">
           <span class="name">${escapeHtml(peer.info.name)}</span>
-          <span class="status"><span class="dot ${status[0]}"></span> ${status[1]}</span>
+          <span class="status"><span class="dot ${dot}"></span> ${label}</span>
         </span>`;
       return li;
     })
