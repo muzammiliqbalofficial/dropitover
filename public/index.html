@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>ShareBeam — send files & text between devices</title>
+<meta name="description" content="Send files and text device to device: automatic discovery on the same network, expiring links for anywhere else, and live rooms. Free, no account.">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📡</text></svg>">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <a class="brand" href="/">
+      <span class="mark">📡</span>
+      <span>ShareBeam<small>files &amp; text, device to device</small></span>
+    </a>
+    <div class="identity">
+      <label for="device-name">This device</label>
+      <input id="device-name" type="text" maxlength="32" autocomplete="off" spellcheck="false">
+    </div>
+  </header>
+
+  <div class="modes">
+
+    <!-- Mode 1 ------------------------------------------------------------ -->
+    <section class="card span-2">
+      <header>
+        <div>
+          <h2>Nearby devices</h2>
+          <p class="sub">Same network, discovered automatically. Files go straight device to device.</p>
+        </div>
+        <span class="badge p2p" id="peer-count">Looking…</span>
+      </header>
+
+      <ul class="peer-list" id="peers"></ul>
+      <div class="empty" id="peers-empty">
+        No other devices yet. Open this page on your phone or another computer on the same Wi‑Fi and it will show up here.
+      </div>
+      <p class="footnote" id="net-note">Devices reaching the internet through the same connection see each other. Nothing is uploaded — transfers use an encrypted WebRTC channel.</p>
+    </section>
+
+    <!-- Mode 2 ------------------------------------------------------------ -->
+    <section class="card">
+      <header>
+        <div>
+          <h2>Send via link</h2>
+          <p class="sub">For anyone, any network, any time before it expires.</p>
+        </div>
+        <span class="badge">Mode 2</span>
+      </header>
+
+      <div class="dropzone" id="link-drop" tabindex="0" role="button" aria-label="Choose files to share by link">
+        <strong>Drop files here</strong>
+        <span id="link-limits">or tap to choose — no limit on how many</span>
+      </div>
+      <input id="link-files" type="file" multiple hidden>
+      <ul class="items" id="link-file-list"></ul>
+
+      <div class="mt">
+        <label class="field" for="link-text">Text / note (optional)</label>
+        <textarea id="link-text" rows="3" placeholder="Paste text to share…"></textarea>
+      </div>
+
+      <div class="row mt">
+        <div class="grow">
+          <label class="field" for="link-expiry">Expires after</label>
+          <select id="link-expiry"></select>
+        </div>
+        <div class="grow" style="align-self:flex-end;padding-bottom:10px">
+          <label class="check"><input type="checkbox" id="link-burn"> Delete after first download</label>
+        </div>
+      </div>
+
+      <button class="btn-primary btn-block mt" id="link-send">Create share link</button>
+
+      <div id="upload-wrap" class="mt" hidden>
+        <div class="progress"><span id="upload-fill"></span></div>
+        <p class="footnote" id="upload-note">Uploading…</p>
+      </div>
+
+      <div id="link-result" class="mt" hidden>
+        <hr class="hr">
+        <div class="share-result">
+          <div>
+            <div class="link-box">
+              <code id="result-url"></code>
+              <button class="btn-sm" id="copy-url">Copy</button>
+            </div>
+            <p class="kv mt">
+              <span>Expires in <b id="result-expiry"></b></span>
+              <span><b id="result-files"></b></span>
+              <span id="result-burn" hidden><b>Burns after download</b></span>
+            </p>
+            <div class="row tight mt">
+              <a class="btn btn-sm" id="result-open" target="_blank" rel="noopener">Open</a>
+              <button class="btn-sm btn-danger" id="result-revoke">Delete now</button>
+              <button class="btn-sm btn-ghost" id="result-new">New share</button>
+            </div>
+          </div>
+          <img class="qr" id="result-qr" alt="QR code for the share link">
+        </div>
+      </div>
+    </section>
+
+    <!-- Mode 3 ------------------------------------------------------------ -->
+    <section class="card">
+      <header>
+        <div>
+          <h2>Create a room</h2>
+          <p class="sub">Two-way sharing with someone on any network, live.</p>
+        </div>
+        <span class="badge">Mode 3</span>
+      </header>
+
+      <p class="sub" style="margin-top:0">
+        You get a link and QR code. Once the other person joins, both sides can send files and text
+        back and forth for as long as the room stays open — peer to peer, nothing stored on the server.
+      </p>
+
+      <button class="btn-primary btn-block mt" id="create-room">Create room &amp; get invite link</button>
+
+      <hr class="hr">
+      <label class="field" for="join-code">Have a room code?</label>
+      <div class="row tight">
+        <input class="grow" id="join-code" type="text" placeholder="e.g. k7m2xp9a" autocomplete="off" spellcheck="false">
+        <button id="join-room">Join</button>
+      </div>
+    </section>
+
+    <!-- Activity ---------------------------------------------------------- -->
+    <section class="card span-2">
+      <header>
+        <div>
+          <h2>Activity</h2>
+          <p class="sub">Direct transfers with nearby devices show up here.</p>
+        </div>
+        <span class="badge" id="ice-note"></span>
+      </header>
+      <ul class="items" id="transfers"></ul>
+      <div class="empty" id="transfers-empty">Nothing sent or received yet.</div>
+    </section>
+
+  </div>
+
+  <p class="footnote center">
+    Free, no account, no file-count cap. Link shares are encrypted at rest with AES‑256 and deleted when they expire.
+  </p>
+</div>
+
+<div id="toasts"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>

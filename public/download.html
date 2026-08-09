@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="robots" content="noindex, nofollow">
+<title>Shared with you — ShareBeam</title>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📡</text></svg>">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <a class="brand" href="/">
+      <span class="mark">📡</span>
+      <span>ShareBeam<small>someone shared this with you</small></span>
+    </a>
+  </header>
+
+  <section class="card state" id="state-loading">
+    <div class="glyph">⏳</div>
+    <h2>Opening share…</h2>
+    <p>Fetching the details of this link.</p>
+  </section>
+
+  <section class="card state" id="state-expired" hidden>
+    <div class="glyph">⌛</div>
+    <h2>This link has expired</h2>
+    <p id="expired-note">Shares are deleted automatically when their timer runs out, or right after download if the sender chose that.</p>
+    <a class="btn btn-primary" href="/">Send something yourself</a>
+  </section>
+
+  <div id="share" hidden>
+    <section class="card">
+      <header>
+        <div>
+          <h2 id="share-title">Shared with you</h2>
+          <p class="sub" id="share-sub"></p>
+        </div>
+        <span class="badge" id="share-expiry"></span>
+      </header>
+
+      <div class="empty" id="burn-warning" hidden style="border-color:rgba(240,180,41,.5);color:var(--warn)">
+        ⚠️ The sender set this to delete after the first download. Save everything now — the link stops working afterwards.
+      </div>
+
+      <ul class="items" id="share-items"></ul>
+
+      <p class="footnote">
+        Stored encrypted with AES‑256‑GCM and decrypted only while this download streams.
+        The share is removed from the server when it expires.
+      </p>
+    </section>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<script type="module" src="/js/download.js"></script>
+</body>
+</html>

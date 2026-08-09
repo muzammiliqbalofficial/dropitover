@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>ShareBeam room</title>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📡</text></svg>">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <a class="brand" href="/">
+      <span class="mark">📡</span>
+      <span>ShareBeam<small>room · two-way, peer to peer</small></span>
+    </a>
+    <div class="identity">
+      <label for="device-name">You</label>
+      <input id="device-name" type="text" maxlength="32" autocomplete="off" spellcheck="false">
+    </div>
+  </header>
+
+  <!-- Error / loading states -->
+  <section class="card state" id="state-loading">
+    <div class="glyph">⏳</div>
+    <h2>Joining room…</h2>
+    <p>Setting up a direct connection.</p>
+  </section>
+
+  <section class="card state" id="state-missing" hidden>
+    <div class="glyph">🚪</div>
+    <h2>Room not found</h2>
+    <p>This room has expired or never existed. Rooms stay open for a while after the last person joins.</p>
+    <a class="btn btn-primary" href="/">Create a new room</a>
+  </section>
+
+  <section class="card state" id="state-full" hidden>
+    <div class="glyph">🧍‍♂️🧍‍♀️</div>
+    <h2>Room is full</h2>
+    <p>Everyone allowed in this room has already joined.</p>
+    <a class="btn btn-primary" href="/">Start your own room</a>
+  </section>
+
+  <!-- Room -->
+  <div id="room" hidden>
+    <section class="card">
+      <header>
+        <div>
+          <h2>Room <span id="room-code" style="font-family:var(--mono)"></span></h2>
+          <p class="sub">Share this link or QR code. Everything sent here goes peer to peer.</p>
+        </div>
+        <span class="badge p2p" id="room-status">Waiting</span>
+      </header>
+
+      <div class="share-result">
+        <div>
+          <div class="link-box">
+            <code id="room-url"></code>
+            <button class="btn-sm" id="copy-room">Copy</button>
+          </div>
+          <ul class="peer-list mt" id="participants"></ul>
+          <p class="footnote" id="room-expiry"></p>
+        </div>
+        <img class="qr" id="room-qr" alt="QR code for the room link">
+      </div>
+    </section>
+
+    <section class="card">
+      <header>
+        <div>
+          <h2>Send</h2>
+          <p class="sub">Files go to everyone connected, in both directions, for as long as the room is open.</p>
+        </div>
+      </header>
+
+      <div class="dropzone" id="room-drop" tabindex="0" role="button" aria-label="Choose files to send">
+        <strong>Drop files to send</strong>
+        <span>or tap to choose — they start sending immediately</span>
+      </div>
+      <input id="room-files" type="file" multiple hidden>
+
+      <div class="mt">
+        <label class="field" for="room-text">Text</label>
+        <textarea id="room-text" rows="3" placeholder="Type or paste text, then hit Send text…"></textarea>
+      </div>
+      <button class="btn-primary mt" id="send-text">Send text</button>
+    </section>
+
+    <section class="card">
+      <header>
+        <div>
+          <h2>Shared in this room</h2>
+          <p class="sub">Received files stay on your device — save the ones you want.</p>
+        </div>
+      </header>
+      <ul class="items" id="transfers"></ul>
+      <div class="empty" id="transfers-empty">Nothing shared yet.</div>
+    </section>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/js/room.js"></script>
+</body>
+</html>
