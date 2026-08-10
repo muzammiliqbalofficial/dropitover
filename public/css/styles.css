@@ -302,6 +302,10 @@ a { color: var(--accent); text-underline-offset: 3px; }
   margin-bottom: 16px;
 }
 
+/* Let the heading block shrink instead of pushing the badge off-screen. */
+.card > header > div { min-width: 0; }
+.card h2 { overflow-wrap: anywhere; }
+
 .card > header .tile {
   width: 42px;
   height: 42px;
@@ -651,6 +655,7 @@ label.field {
 .progress {
   height: 7px;
   border-radius: 999px;
+  background: var(--border); /* fallback where color-mix is unsupported */
   background: color-mix(in srgb, var(--border-strong) 60%, transparent);
   overflow: hidden;
   margin-top: 10px;
@@ -694,7 +699,10 @@ label.field {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex: 1;
+  /* Flex items default to min-width:auto, which lets a long URL shove the copy
+     button off a narrow screen. */
+  flex: 1 1 0;
+  min-width: 0;
   color: var(--text);
 }
 
@@ -844,6 +852,75 @@ label.field {
   from { background-position: 0 0; }
   to { background-position: 200% 0; }
 }
+
+/* --- Small screens ------------------------------------------------------------------- */
+
+/* iOS zooms the whole page when a focused control is under 16px. Every form
+   control therefore sits at exactly 16px on touch-sized screens. */
+@media (max-width: 720px) {
+  textarea,
+  select,
+  input[type="text"],
+  .identity input {
+    font-size: 16px;
+  }
+
+  /* Comfortable touch targets — 8px padding gives ~33px, below the 44px guide. */
+  button, .btn { min-height: 44px; }
+  .btn-sm { min-height: 40px; padding: 10px 14px; }
+  .check input { width: 20px; height: 20px; }
+  .peer { min-height: 62px; }
+}
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 14px 64px; }
+
+  .topbar { padding: 11px 0 10px; gap: 10px; }
+  .topbar::after { left: -14px; right: -14px; }
+
+  .brand { font-size: 1rem; }
+  .brand .mark { width: 34px; height: 34px; font-size: 17px; }
+
+  /* Name field gets its own row and fills it, instead of squeezing the logo. */
+  .identity { margin-left: 0; width: 100%; }
+  .identity input { width: auto; flex: 1 1 auto; }
+
+  .hero { padding: 26px 0 20px; }
+  .hero p { font-size: 0.94rem; }
+  .pills { gap: 6px; margin-top: 16px; }
+  .pills li { font-size: 0.73rem; padding: 5px 11px; }
+
+  .card { padding: 17px 15px; border-radius: 18px; }
+  .card > header { gap: 11px; margin-bottom: 14px; }
+  .card > header .tile { width: 38px; height: 38px; font-size: 18px; border-radius: 11px; }
+
+  /* The badge drops under the heading rather than crushing it. */
+  .card > header { flex-wrap: wrap; }
+  .badge { margin-left: 0; order: 3; }
+  .card > header .tile { order: 1; }
+  .card > header > div { order: 2; flex: 1 1 60%; }
+
+  .dropzone { padding: 22px 14px; }
+  .peer-list { grid-template-columns: 1fr; }
+  .qr { width: min(184px, 62vw); height: min(184px, 62vw); }
+  .state { padding: 38px 12px; }
+  .modes { gap: 14px; }
+
+  #toasts { bottom: 14px; width: calc(100% - 20px); }
+}
+
+/* Long unbroken strings (URLs, room codes) must wrap, not widen the page. */
+#room-url, #result-url, .item .note, .kv { overflow-wrap: anywhere; }
+
+@media (max-width: 380px) {
+  .hero h1 { font-size: 1.85rem; }
+  .card { padding: 15px 13px; }
+  .item .line { gap: 9px; }
+  .item .icon { width: 30px; height: 30px; font-size: 15px; }
+}
+
+/* Grid gap already spaces the cards; the fallback margin would double it. */
+.modes > .card { margin-bottom: 0; }
 
 /* Staggered entrance for the cards, so the page assembles rather than snaps. */
 .modes > .card:nth-child(1) { animation-delay: 0.04s; }

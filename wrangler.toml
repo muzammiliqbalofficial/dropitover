@@ -62,4 +62,6 @@ TURN_USERNAME = ""
 
 # Secrets — set with `npx wrangler secret put <NAME>`, never in this file:
 #   MASTER_KEY      64 hex chars; AES-256-GCM root key for files at rest
-#   TURN_CREDENTIAL TURN password, if you run a TURN server
+#   TURN_KEY_ID     Cloudflare Realtime TURN key id  } short-lived relay
+#   TURN_API_TOKEN  its API token                    } credentials, see README
+#   TURN_CREDENTIAL static TURN password, only if you self-host coturn instead

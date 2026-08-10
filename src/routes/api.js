@@ -5,6 +5,7 @@ import { LinkStore, publicLink } from '../lib/links.js';
 import { masterKeyFrom, masterKeyStatus, readConfig } from '../lib/config.js';
 import { hashNetworkId, randomId, timingSafeEqual } from '../lib/crypto.js';
 import { UsageTracker } from '../lib/limits.js';
+import { buildIceServers, hasRelay } from '../lib/turn.js';
 import { qrSvg } from '../lib/qr.js';
 
 const json = (data, init = {}) =>
@@ -28,9 +29,12 @@ export async function handleApi(request, env, ctx, url) {
   }
 
   if (segments[0] === 'config') {
+    // TURN credentials are short-lived, so they're minted per config fetch
+    // (cached per isolate) rather than baked into the deployment.
+    const iceServers = await buildIceServers(env, config.iceServers);
     return json({
-      iceServers: config.iceServers,
-      hasTurn: config.hasTurn,
+      iceServers,
+      hasTurn: hasRelay(iceServers),
       maxFileSize: config.maxFileSize,
       maxTotalSize: config.maxTotalSize,
       maxTextLength: config.maxTextLength,

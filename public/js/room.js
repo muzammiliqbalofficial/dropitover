@@ -157,7 +157,12 @@ function addPeer(info, initiator) {
   link.on('progress', (p) => transfers.progress({ ...p, peer: peer.info.name }));
   link.on('file', (f) => transfers.completeFile({ ...f, direction: 'in' }));
   link.on('text', (t) => transfers.addText({ ...t, direction: 'in' }));
-  link.on('error', (err) => toast(err.message, 'error', 6000));
+  link.on('stall', (err) => {
+    peer.connState = 'stalled';
+    renderParticipants();
+    toast(err.message, 'warn', 12_000);
+  });
+  link.on('error', (err) => toast(err.message, 'error', 12_000));
   link.on('close', () => {
     peer.connState = 'closed';
     renderParticipants();
@@ -194,7 +199,8 @@ function renderParticipants() {
         new: ['warn', 'Connecting…'],
         checking: ['warn', 'Negotiating…'],
         disconnected: ['warn', 'Reconnecting…'],
-        failed: ['off', 'Connection failed — needs TURN'],
+        stalled: ['off', 'Blocked by this network'],
+        failed: ['off', 'Blocked by this network'],
         closed: ['off', 'Disconnected'],
       }[peer.connState] || ['warn', 'Connecting…'];
 

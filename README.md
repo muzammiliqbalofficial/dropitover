@@ -147,11 +147,24 @@ The tighter constraint in practice is the Workers free plan's **100,000 requests
 
 ## Adding a TURN server
 
-STUN alone gets a direct connection through most home routers. It fails on symmetric NAT and some mobile carriers — the UI then says *"Direct connection failed. A TURN server is needed on this network."* TURN relays the (still end-to-end encrypted) stream when no direct path exists.
+STUN alone gets a direct connection through most home routers. It fails on **symmetric NAT, which is what most mobile carriers use** — so a phone on mobile data talking to a laptop on Wi-Fi will typically never connect. Symptom: Modes 1 and 3 sit at "Connecting…" and then report *"This network blocked the direct connection."* TURN relays the (still end-to-end encrypted) stream when no direct path exists.
 
-Cloudflare sells a managed option — **Cloudflare Calls / Realtime TURN** — which is the least-effort fit here: create a TURN key in the dashboard and put the credentials in `TURN_URLS` / `TURN_USERNAME` / `TURN_CREDENTIAL`. Note that TURN relays *do* carry the ciphertext, so it stops being strictly peer-to-peer on those connections (the data is still DTLS-encrypted end to end; the relay can't read it).
+**Cloudflare Realtime TURN** is the least-effort fix and needs no server of your own:
 
-Self-hosting [coturn](https://github.com/coturn/coturn) works too:
+1. Dashboard → **Realtime** → **TURN Keys** → create a key.
+2. Store the two values as secrets:
+
+```bash
+npx wrangler secret put TURN_KEY_ID
+npx wrangler secret put TURN_API_TOKEN
+npm run deploy
+```
+
+`/api/config` then mints **short-lived** credentials per fetch (cached per isolate, 2 h TTL) so no long-lived password ever reaches a browser, and the landing page badge flips from "STUN only" to "STUN + TURN". If the credential API is unreachable the app quietly falls back to STUN rather than failing.
+
+Note that TURN relays *do* carry the traffic, so those connections stop being strictly peer-to-peer — the data stays DTLS-encrypted end to end and the relay can't read it, but it does pass through. Relay minutes are metered by Cloudflare; direct connections (the common case) never touch it.
+
+Self-hosting [coturn](https://github.com/coturn/coturn) works too — set `TURN_URLS` / `TURN_USERNAME` in `[vars]` and `TURN_CREDENTIAL` as a secret:
 
 ```conf
 listening-port=3478

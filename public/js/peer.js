@@ -11,9 +11,22 @@ const LOW_WATER = 1 * 1024 * 1024; // resume once the buffer drains below it
 const DEFAULT_CHUNK = 64 * 1024;
 const MAX_CHUNK = 256 * 1024;
 
+// How long to let ICE negotiate before telling the user something is wrong.
+// Browsers can sit in `checking` for minutes on a hopeless network, so we say
+// so ourselves rather than leaving "Connecting…" on screen forever.
+const STALL_AFTER_MS = 20_000;
+
 function uid() {
   if (crypto.randomUUID) return crypto.randomUUID();
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+/** Turns a bare failure into something the user can act on. */
+function relayHint(lead) {
+  return (
+    `${lead} Mobile networks often block direct device-to-device connections. ` +
+    'Put both devices on the same Wi‑Fi, or use "Send via link" instead — that works on any network.'
+  );
 }
 
 /**
@@ -46,8 +59,10 @@ export class PeerLink extends Emitter {
     this.pc.onconnectionstatechange = () => {
       const state = this.pc.connectionState;
       this.emit('state', state);
+      if (state === 'connected') this.clearStallTimer();
       if (state === 'failed') {
-        this.emit('error', new Error('Direct connection failed. A TURN server is needed on this network.'));
+        this.clearStallTimer();
+        this.emit('error', new Error(relayHint('This network blocked the direct connection.')));
         this.close();
       } else if (state === 'closed') {
         // `disconnected` is often transient — ICE recovers on its own, so only a
@@ -55,6 +70,23 @@ export class PeerLink extends Emitter {
         this.emit('close');
       }
     };
+
+    this.pc.oniceconnectionstatechange = () => {
+      if (this.pc.iceConnectionState === 'failed') {
+        // Ask the browser for a fresh set of candidates once before giving up;
+        // this recovers connections that lost a network interface mid-handshake.
+        try {
+          this.pc.restartIce?.();
+        } catch {
+          /* not supported — the connection-state handler will report the failure */
+        }
+      }
+    };
+
+    this.stallTimer = setTimeout(() => {
+      if (this.isOpen || this.closed) return;
+      this.emit('stall', new Error(relayHint('Still trying to connect.')));
+    }, STALL_AFTER_MS);
 
     if (this.initiator) {
       this.setupChannel(this.pc.createDataChannel('sharebeam', { ordered: true }));
@@ -78,7 +110,10 @@ export class PeerLink extends Emitter {
     this.dc = channel;
     this.dc.binaryType = 'arraybuffer';
     this.dc.bufferedAmountLowThreshold = LOW_WATER;
-    this.dc.onopen = () => this.emit('open');
+    this.dc.onopen = () => {
+      this.clearStallTimer();
+      this.emit('open');
+    };
     this.dc.onclose = () => this.emit('close');
     this.dc.onerror = (event) => this.emit('error', event.error || new Error('Data channel error'));
     this.dc.onmessage = (event) => this.handleMessage(event.data);
@@ -248,9 +283,17 @@ export class PeerLink extends Emitter {
     }
   }
 
+  clearStallTimer() {
+    if (this.stallTimer) {
+      clearTimeout(this.stallTimer);
+      this.stallTimer = null;
+    }
+  }
+
   close() {
     if (this.closed) return;
     this.closed = true;
+    this.clearStallTimer();
     try { this.dc?.close(); } catch { /* already gone */ }
     try { this.pc.close(); } catch { /* already gone */ }
     this.emit('close');

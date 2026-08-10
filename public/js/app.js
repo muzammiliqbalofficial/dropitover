@@ -275,7 +275,8 @@ function ensureLink(peerId, initiator, peerName) {
     transfers.addText({ ...t, direction: 'in' });
     toast(`Text received from ${t.from}`, 'success');
   });
-  link.on('error', (err) => toast(err.message, 'error', 6000));
+  link.on('stall', (err) => toast(err.message, 'warn', 12_000));
+  link.on('error', (err) => toast(err.message, 'error', 12_000));
   link.on('close', () => {
     if (state.links.get(peerId) === link) state.links.delete(peerId);
   });
