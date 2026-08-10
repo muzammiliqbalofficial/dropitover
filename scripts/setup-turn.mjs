@@ -42,7 +42,7 @@ function putSecret(name, value) {
 
 const rl = createInterface({ input: stdin, output: stdout });
 
-console.log('\nShareBeam — TURN setup');
+console.log('\nDropItOver — TURN setup');
 console.log('Paste each value and press Enter. Nothing is written to disk.\n');
 
 try {

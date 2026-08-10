@@ -63,7 +63,7 @@ async function init() {
     $('#peer-count').textContent = 'Unavailable';
     $('#peers-empty').textContent =
       "This browser can't make direct device-to-device connections — that's usually an in-app browser " +
-      'like WhatsApp or Instagram. Open ShareBeam in Chrome or Safari for nearby devices and rooms. ' +
+      'like WhatsApp or Instagram. Open DropItOver in Chrome or Safari for nearby devices and rooms. ' +
       '"Send via link" below works here either way.';
   }
 

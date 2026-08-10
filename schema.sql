@@ -1,4 +1,4 @@
--- ShareBeam D1 schema (Mode 2 link shares).
+-- DropItOver D1 schema (Mode 2 link shares).
 -- Apply with: npm run db:apply        (remote)
 --             npm run db:apply:local  (local dev)
 

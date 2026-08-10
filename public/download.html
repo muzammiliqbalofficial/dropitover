@@ -6,17 +6,17 @@
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
 <meta name="robots" content="noindex, nofollow">
-<title>Shared with you — ShareBeam</title>
+<title>Shared with you — DropItOver</title>
 <link rel="stylesheet" href="/css/styles.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📡</text></svg>">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
 <body>
 <div class="wrap">
 
   <header class="topbar">
     <a class="brand" href="/">
-      <span class="mark">📡</span>
-      <span>ShareBeam<small>someone shared this with you</small></span>
+      <img class="mark" src="/favicon.svg" alt="" width="38" height="38">
+      <span>DropItOver<small>someone shared this with you</small></span>
     </a>
   </header>
 
@@ -68,7 +68,7 @@
     </section>
 
     <footer class="page-foot">
-      Want to send something back? <a href="/">ShareBeam is free</a> — no account needed.
+      Want to send something back? <a href="/">DropItOver is free</a> — no account needed.
     </footer>
   </div>
 </div>
@@ -79,7 +79,7 @@
 <script>
 (function () {
   function fail(detail) {
-    if (window.__sharebeamBooted) return;
+    if (window.__dropitoverBooted) return;
     var banner = document.getElementById('boot-error');
     if (!banner) return;
     banner.hidden = false;

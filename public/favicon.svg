@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="DropItOver">
+  <!-- The mark: something arcs over from the left, drops, and lands on a tray.
+       Read as "drop it over". Kept to four strokes so it stays legible at 16px. -->
+  <defs>
+    <linearGradient id="dio" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6d8cff"/>
+      <stop offset=".55" stop-color="#a56bff"/>
+      <stop offset="1" stop-color="#35d6c3"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="9" fill="url(#dio)"/>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6.5 19.6C6.5 11 11.6 8.1 16 11.9" stroke-width="2.3" opacity=".7"/>
+    <path d="M16 12.1v8.5" stroke-width="2.9"/>
+    <path d="M12.4 17.1 16 20.7l3.6-3.6" stroke-width="2.9"/>
+    <path d="M9.6 25.6h12.8" stroke-width="2.3" opacity=".85"/>
+  </g>
+</svg>

@@ -1,4 +1,4 @@
-// ShareBeam on Cloudflare Workers.
+// DropItOver on Cloudflare Workers.
 //
 //   /                     static assets (served before this Worker runs)
 //   /r/<roomId>           room page          -> public/room.html

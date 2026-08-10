@@ -101,7 +101,7 @@ export function setIdentityName(name) {
 
 /** True once a page module has finished starting up — read by the boot watchdog. */
 export function markBooted() {
-  window.__sharebeamBooted = true;
+  window.__dropitoverBooted = true;
 }
 
 /** Browsers without WebRTC (some in-app webviews) can still use link sharing. */

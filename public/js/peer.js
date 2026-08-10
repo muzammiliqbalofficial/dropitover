@@ -89,7 +89,7 @@ export class PeerLink extends Emitter {
     }, STALL_AFTER_MS);
 
     if (this.initiator) {
-      this.setupChannel(this.pc.createDataChannel('sharebeam', { ordered: true }));
+      this.setupChannel(this.pc.createDataChannel('dropitover', { ordered: true }));
       this.negotiate();
     } else {
       this.pc.ondatachannel = (event) => this.setupChannel(event.channel);

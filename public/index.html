@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>ShareBeam — send files & text between devices</title>
+<title>DropItOver — send files &amp; text between devices</title>
 <meta name="description" content="Send files and text device to device: automatic discovery on the same network, expiring encrypted links for anywhere else, and live rooms. Free, no account, up to 2 GB per file.">
 <link rel="stylesheet" href="/css/styles.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📡</text></svg>">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
 <body>
 <div class="wrap">
 
   <header class="topbar">
     <a class="brand" href="/">
-      <span class="mark">📡</span>
-      <span>ShareBeam<small>files &amp; text, device to device</small></span>
+      <img class="mark" src="/favicon.svg" alt="" width="38" height="38">
+      <span>DropItOver<small>files &amp; text, device to device</small></span>
     </a>
     <div class="identity">
       <label for="device-name">This device</label>
@@ -25,7 +25,7 @@
   </header>
 
   <section class="hero">
-    <h1>Move files between<br><span class="grad">any two devices</span></h1>
+    <h1>Just drop it over to<br><span class="grad">any other device</span></h1>
     <p>Same Wi‑Fi transfers go straight device to device. Everything else gets an encrypted link or a live room. No account, no app, no waiting.</p>
     <ul class="pills">
       <li><b>2 GB</b> per file</li>
@@ -39,7 +39,7 @@
   <!-- Shown by the boot watchdog below if the page scripts never start. -->
   <section class="card state" id="boot-error" hidden>
     <div class="glyph">🧩</div>
-    <h2>This browser couldn't start ShareBeam</h2>
+    <h2>This browser couldn't start DropItOver</h2>
     <p>
       In-app browsers inside WhatsApp, Instagram or Messenger block features this page needs.
       Tap the ⋯ menu and choose <b>Open in browser</b>, or paste the link into Chrome or Safari.
@@ -184,7 +184,7 @@
 <script>
 (function () {
   function fail(detail) {
-    if (window.__sharebeamBooted) return;
+    if (window.__dropitoverBooted) return;
     var banner = document.getElementById('boot-error');
     if (!banner) return;
     banner.hidden = false;

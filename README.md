@@ -1,4 +1,4 @@
-# ShareBeam
+# DropItOver
 
 Send files and text between devices three ways, from one page — running entirely on Cloudflare's edge. No servers to babysit, no account, no paywall, no file-count cap, up to **2 GB per file**, expiry from **1 hour to 7 days** (24 hours by default).
 

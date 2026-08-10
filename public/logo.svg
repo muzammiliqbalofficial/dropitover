@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 232 44" role="img" aria-label="DropItOver">
+  <!-- Full lockup: mark + wordmark. Use this one for anywhere the name needs to
+       appear as an image (README, social cards, print). -->
+  <defs>
+    <linearGradient id="dioMark" x1="6" y1="6" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6d8cff"/>
+      <stop offset=".55" stop-color="#a56bff"/>
+      <stop offset="1" stop-color="#35d6c3"/>
+    </linearGradient>
+    <linearGradient id="dioText" x1="52" y1="0" x2="232" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6d8cff"/>
+      <stop offset="1" stop-color="#a56bff"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="6" y="6" width="32" height="32" rx="9" fill="url(#dioMark)"/>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" transform="translate(6 6)">
+    <path d="M6.5 19.6C6.5 11 11.6 8.1 16 11.9" stroke-width="2.3" opacity=".7"/>
+    <path d="M16 12.1v8.5" stroke-width="2.9"/>
+    <path d="M12.4 17.1 16 20.7l3.6-3.6" stroke-width="2.9"/>
+    <path d="M9.6 25.6h12.8" stroke-width="2.3" opacity=".85"/>
+  </g>
+
+  <text x="50" y="29"
+        font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+        font-size="21" font-weight="700" letter-spacing="-0.6">
+    <tspan fill="currentColor">Drop</tspan><tspan fill="currentColor" opacity=".62">It</tspan><tspan fill="url(#dioText)">Over</tspan>
+  </text>
+</svg>
