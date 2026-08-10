@@ -57,20 +57,56 @@ export function detectDeviceType() {
 
 const NAME_KEY = 'sharebeam:name';
 
+// In-app browsers (WhatsApp, Instagram) and private modes can make localStorage
+// throw on access, not just on write. Reading it at startup therefore has to be
+// guarded, or the whole module dies before the page ever renders.
+let fallbackName = null;
+
+function readStored(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function writeStored(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function getIdentity() {
-  let name = localStorage.getItem(NAME_KEY);
+  let name = readStored(NAME_KEY) || fallbackName;
   if (!name) {
     const platform = /iPhone|iPad|Android/i.test(navigator.userAgent) ? 'Phone' : 'Desktop';
     name = `${platform} ${Math.floor(Math.random() * 900 + 100)}`;
-    localStorage.setItem(NAME_KEY, name);
+    fallbackName = name;
+    writeStored(NAME_KEY, name);
   }
   return { name, deviceType: detectDeviceType() };
 }
 
 export function setIdentityName(name) {
   const clean = String(name || '').trim().slice(0, 32);
-  if (clean) localStorage.setItem(NAME_KEY, clean);
+  if (clean) {
+    fallbackName = clean;
+    writeStored(NAME_KEY, clean);
+  }
   return clean;
+}
+
+/** True once a page module has finished starting up — read by the boot watchdog. */
+export function markBooted() {
+  window.__sharebeamBooted = true;
+}
+
+/** Browsers without WebRTC (some in-app webviews) can still use link sharing. */
+export function supportsWebRtc() {
+  return typeof window.RTCPeerConnection === 'function';
 }
 
 export function toast(message, type = 'info', ms = 4200) {

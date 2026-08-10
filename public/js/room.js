@@ -4,7 +4,7 @@
 
 import {
   $, copyText, deviceGlyph, escapeHtml, formatRelative, getIdentity,
-  loadConfig, setIdentityName, toast,
+  loadConfig, markBooted, setIdentityName, supportsWebRtc, toast,
 } from './util.js';
 import { PeerLink } from './peer.js';
 import { Signaling } from './ws.js';
@@ -12,12 +12,17 @@ import { TransferLog, wireDropzone } from './ui.js';
 
 const roomId = decodeURIComponent(window.location.pathname.split('/').filter(Boolean).pop() || '');
 
+// How long to wait for the room to answer before offering a retry, rather than
+// leaving "Joining room…" on screen indefinitely.
+const JOIN_TIMEOUT_MS = 15_000;
+
 const state = {
   config: null,
   identity: getIdentity(),
   selfId: null,
   peers: new Map(),
   joined: false,
+  joinWatchdog: null,
 };
 
 const transfers = new TransferLog($('#transfers'), $('#transfers-empty'));
@@ -45,13 +50,36 @@ async function init() {
 
   wireDropzone($('#room-drop'), $('#room-files'), sendFiles);
   $('#send-text').addEventListener('click', sendText);
+  $('#retry-join').addEventListener('click', () => window.location.reload());
+
+  if (!supportsWebRtc()) {
+    showState('state-offline');
+    $('#offline-note').textContent =
+      "This browser can't make direct device-to-device connections. Open the link in Chrome or Safari, " +
+      'or ask the sender to use "Send via link" instead — that works everywhere.';
+    markBooted();
+    return;
+  }
 
   wireSignaling();
+  startJoinWatchdog();
+  markBooted();
 }
 
 function showState(id) {
-  for (const el of ['state-loading', 'state-missing', 'state-full']) $(`#${el}`).hidden = el !== id;
+  for (const el of ['state-loading', 'state-missing', 'state-full', 'state-offline']) {
+    $(`#${el}`).hidden = el !== id;
+  }
   $('#room').hidden = Boolean(id);
+}
+
+/** Never leave "Joining room…" up forever — offer a retry instead. */
+function startJoinWatchdog() {
+  clearTimeout(state.joinWatchdog);
+  state.joinWatchdog = setTimeout(() => {
+    if (state.joined) return;
+    showState('state-offline');
+  }, JOIN_TIMEOUT_MS);
 }
 
 function wireSignaling() {
@@ -109,7 +137,8 @@ async function joinRoom() {
   try {
     result = await signaling.request('hello', state.identity);
   } catch (err) {
-    toast(err.message, 'error');
+    showState('state-offline');
+    $('#offline-note').textContent = `The room didn't respond: ${err.message}`;
     return;
   }
 
@@ -119,6 +148,7 @@ async function joinRoom() {
   }
 
   state.joined = true;
+  clearTimeout(state.joinWatchdog);
   state.selfId = result.self.id;
   showState(null);
   $('#room-expiry').textContent =

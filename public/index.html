@@ -36,6 +36,17 @@
     </ul>
   </section>
 
+  <!-- Shown by the boot watchdog below if the page scripts never start. -->
+  <section class="card state" id="boot-error" hidden>
+    <div class="glyph">🧩</div>
+    <h2>This browser couldn't start ShareBeam</h2>
+    <p>
+      In-app browsers inside WhatsApp, Instagram or Messenger block features this page needs.
+      Tap the ⋯ menu and choose <b>Open in browser</b>, or paste the link into Chrome or Safari.
+    </p>
+    <p class="footnote" id="boot-error-detail"></p>
+  </section>
+
   <div class="modes">
 
     <!-- Mode 1 ------------------------------------------------------------ -->
@@ -168,6 +179,25 @@
 
 <div id="toasts"></div>
 
+<!-- Boot watchdog: a module that fails to parse or throws on load would
+     otherwise leave a dead-looking page with no explanation. -->
+<script>
+(function () {
+  function fail(detail) {
+    if (window.__sharebeamBooted) return;
+    var banner = document.getElementById('boot-error');
+    if (!banner) return;
+    banner.hidden = false;
+    var out = document.getElementById('boot-error-detail');
+    if (out && detail) out.textContent = detail;
+  }
+  window.addEventListener('error', function (e) { fail(e && e.message ? e.message : ''); });
+  window.addEventListener('unhandledrejection', function (e) {
+    fail(e && e.reason ? String(e.reason.message || e.reason) : '');
+  });
+  setTimeout(function () { fail('Startup timed out.'); }, 10000);
+})();
+</script>
 <script type="module" src="/js/app.js"></script>
 </body>
 </html>

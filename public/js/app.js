@@ -3,7 +3,8 @@
 
 import {
   $, copyText, deviceGlyph, escapeHtml, fetchJson, fileGlyph, formatBytes,
-  formatRelative, getIdentity, loadConfig, setIdentityName, toast,
+  formatRelative, getIdentity, loadConfig, markBooted, setIdentityName,
+  supportsWebRtc, toast,
 } from './util.js';
 import { PeerLink } from './peer.js';
 import { Signaling } from './ws.js';
@@ -52,9 +53,21 @@ async function init() {
   );
 
   wireIdentity();
-  wireSignaling();
   wireLinkShare();
   wireRooms();
+
+  // Link sharing works without WebRTC; the peer-to-peer modes don't.
+  if (supportsWebRtc()) {
+    wireSignaling();
+  } else {
+    $('#peer-count').textContent = 'Unavailable';
+    $('#peers-empty').textContent =
+      "This browser can't make direct device-to-device connections — that's usually an in-app browser " +
+      'like WhatsApp or Instagram. Open ShareBeam in Chrome or Safari for nearby devices and rooms. ' +
+      '"Send via link" below works here either way.';
+  }
+
+  markBooted();
 }
 
 function wireIdentity() {

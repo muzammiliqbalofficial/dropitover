@@ -24,11 +24,29 @@
     </div>
   </header>
 
+  <!-- Shown by the boot watchdog below if the page scripts never start. -->
+  <section class="card state" id="boot-error" hidden>
+    <div class="glyph">🧩</div>
+    <h2>This browser couldn't start ShareBeam</h2>
+    <p>
+      In-app browsers inside WhatsApp, Instagram or Messenger block features this page needs.
+      Tap the ⋯ menu and choose <b>Open in browser</b>, or paste the link into Chrome or Safari.
+    </p>
+    <p class="footnote" id="boot-error-detail"></p>
+  </section>
+
   <!-- Loading / error states -->
   <section class="card state" id="state-loading">
     <div class="glyph">⏳</div>
     <h2>Joining room…</h2>
     <p>Setting up a direct connection.</p>
+  </section>
+
+  <section class="card state" id="state-offline" hidden>
+    <div class="glyph">📡</div>
+    <h2>Couldn't reach the room</h2>
+    <p id="offline-note">The connection to the server didn't complete. Some networks block this kind of connection.</p>
+    <button class="btn-primary" id="retry-join">Try again</button>
   </section>
 
   <section class="card state" id="state-missing" hidden>
@@ -110,6 +128,27 @@
 
 <div id="toasts"></div>
 
+<!-- Boot watchdog: a module that fails to parse or throws on load would
+     otherwise leave "Joining room…" on screen forever with no explanation. -->
+<script>
+(function () {
+  function fail(detail) {
+    if (window.__sharebeamBooted) return;
+    var banner = document.getElementById('boot-error');
+    if (!banner) return;
+    banner.hidden = false;
+    var loading = document.getElementById('state-loading');
+    if (loading) loading.hidden = true;
+    var out = document.getElementById('boot-error-detail');
+    if (out && detail) out.textContent = detail;
+  }
+  window.addEventListener('error', function (e) { fail(e && e.message ? e.message : ''); });
+  window.addEventListener('unhandledrejection', function (e) {
+    fail(e && e.reason ? String(e.reason.message || e.reason) : '');
+  });
+  setTimeout(function () { fail('Startup timed out.'); }, 10000);
+})();
+</script>
 <script type="module" src="/js/room.js"></script>
 </body>
 </html>

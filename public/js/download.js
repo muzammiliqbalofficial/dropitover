@@ -3,7 +3,7 @@
 
 import {
   $, BlobAssembler, copyText, fetchJson, fileGlyph,
-  formatBytes, formatRelative, saveBlob, toast,
+  formatBytes, formatRelative, markBooted, saveBlob, toast,
 } from './util.js';
 
 const linkId = decodeURIComponent(window.location.pathname.split('/').filter(Boolean).pop() || '');
@@ -11,6 +11,7 @@ const linkId = decodeURIComponent(window.location.pathname.split('/').filter(Boo
 init();
 
 async function init() {
+  markBooted();
   try {
     const share = await fetchJson(`/api/links/${encodeURIComponent(linkId)}`);
     render(share);

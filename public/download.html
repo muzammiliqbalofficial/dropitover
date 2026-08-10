@@ -20,6 +20,16 @@
     </a>
   </header>
 
+  <section class="card state" id="boot-error" hidden>
+    <div class="glyph">🧩</div>
+    <h2>This browser couldn't open the share</h2>
+    <p>
+      In-app browsers inside WhatsApp, Instagram or Messenger block features this page needs.
+      Tap the ⋯ menu and choose <b>Open in browser</b>, or paste the link into Chrome or Safari.
+    </p>
+    <p class="footnote" id="boot-error-detail"></p>
+  </section>
+
   <section class="card state" id="state-loading">
     <div class="glyph">⏳</div>
     <h2>Opening share…</h2>
@@ -64,6 +74,27 @@
 </div>
 
 <div id="toasts"></div>
+
+<!-- Boot watchdog: without it a script failure leaves "Opening share…" up forever. -->
+<script>
+(function () {
+  function fail(detail) {
+    if (window.__sharebeamBooted) return;
+    var banner = document.getElementById('boot-error');
+    if (!banner) return;
+    banner.hidden = false;
+    var loading = document.getElementById('state-loading');
+    if (loading) loading.hidden = true;
+    var out = document.getElementById('boot-error-detail');
+    if (out && detail) out.textContent = detail;
+  }
+  window.addEventListener('error', function (e) { fail(e && e.message ? e.message : ''); });
+  window.addEventListener('unhandledrejection', function (e) {
+    fail(e && e.reason ? String(e.reason.message || e.reason) : '');
+  });
+  setTimeout(function () { fail('Startup timed out.'); }, 10000);
+})();
+</script>
 <script type="module" src="/js/download.js"></script>
 </body>
 </html>
