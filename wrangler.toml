@@ -52,6 +52,10 @@ new_sqlite_classes = ["NetworkHub", "Room"]
 crons = ["*/10 * * * *"]
 
 [vars]
+# The one address the site should be reached on. http, www and any other host
+# that still serves the app redirect here. Leave empty to disable redirects
+# (useful before a domain is attached).
+CANONICAL_HOST = "dropitover.com"
 # Bytes. 2 GB per file by default; uploads are chunked so this is not capped by
 # the Workers request-body limit.
 MAX_FILE_SIZE = "2147483648"

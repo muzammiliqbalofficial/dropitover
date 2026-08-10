@@ -14,6 +14,7 @@
 import { NetworkHub } from './do/network-hub.js';
 import { Room } from './do/room.js';
 import { handleApi } from './routes/api.js';
+import { canonicalRedirect, isCanonicalHost } from './lib/canonical.js';
 import { hashNetworkId } from './lib/crypto.js';
 import { LinkStore } from './lib/links.js';
 import { UsageTracker } from './lib/limits.js';
@@ -30,23 +31,34 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
+    // http -> https and www -> apex, before anything else runs. Plain http is
+    // not a secure context, so the peer-to-peer modes cannot work there.
+    const redirect = canonicalRedirect(request.url, env.CANONICAL_HOST);
+    if (redirect) return Response.redirect(redirect, 301);
+
     try {
       if (url.pathname === '/ws/net') return await connectNetwork(request, env);
       if (url.pathname.startsWith('/ws/room/')) return await connectRoom(request, env, url);
 
+      // The workers.dev address still serves the site as a fallback, but must
+      // not compete with the real domain in search results.
+      const headers = isCanonicalHost(request.url, env.CANONICAL_HOST)
+        ? SECURITY_HEADERS
+        : { ...SECURITY_HEADERS, 'x-robots-tag': 'noindex' };
+
       if (url.pathname === '/api' || url.pathname.startsWith('/api/')) {
         const response = await handleApi(request, env, ctx, url);
-        return withHeaders(response, SECURITY_HEADERS);
+        return withHeaders(response, headers);
       }
 
       // Pretty URLs for the two sub-pages.
-      if (url.pathname.startsWith('/r/')) return await serveAsset(env, url, '/room.html');
-      if (url.pathname.startsWith('/d/')) return await serveAsset(env, url, '/download.html');
+      if (url.pathname.startsWith('/r/')) return await serveAsset(env, url, '/room.html', undefined, headers);
+      if (url.pathname.startsWith('/d/')) return await serveAsset(env, url, '/download.html', undefined, headers);
 
       // Anything else that isn't a static file.
       const asset = await env.ASSETS.fetch(request);
-      if (asset.status !== 404) return withHeaders(asset, SECURITY_HEADERS);
-      return await serveAsset(env, url, '/404.html', 404);
+      if (asset.status !== 404) return withHeaders(asset, headers);
+      return await serveAsset(env, url, '/404.html', 404, headers);
     } catch (err) {
       console.error('[worker]', err.stack || err.message);
       const wantsJson = url.pathname.startsWith('/api/');
@@ -103,10 +115,9 @@ async function connectRoom(request, env, url) {
   return stub.fetch(request);
 }
 
-async function serveAsset(env, url, path, status) {
+async function serveAsset(env, url, path, status, extraHeaders = SECURITY_HEADERS) {
   const response = await env.ASSETS.fetch(new Request(new URL(path, url.origin)));
-  const headers = { ...SECURITY_HEADERS, 'cache-control': 'no-cache' };
-  return withHeaders(response, headers, status);
+  return withHeaders(response, { ...extraHeaders, 'cache-control': 'no-cache' }, status);
 }
 
 function withHeaders(response, extra, status) {
