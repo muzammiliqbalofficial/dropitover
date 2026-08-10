@@ -3,45 +3,200 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#070a12">
 <title>Privacy Policy | DropItOver</title>
+<meta name="description" content="What DropItOver stores, for how long, and what it never sees. Files sent between devices never reach a server; link shares are encrypted and deleted on expiry.">
+<link rel="canonical" href="https://dropitover.com/privacy.html">
 <link rel="stylesheet" href="/css/styles.css">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  .legal { max-width: 44rem; }
+  .legal h1 { font-size: clamp(1.6rem, 4vw, 2.1rem); letter-spacing: -0.03em; margin: 0 0 6px; }
+  .legal h2 { font-size: 1.05rem; margin: 30px 0 8px; letter-spacing: -0.02em; }
+  .legal p, .legal li { color: var(--muted); font-size: 0.94rem; }
+  .legal li { margin-bottom: 6px; }
+  .legal strong { color: var(--text); }
+  .legal .updated { font-size: 0.82rem; color: var(--faint); margin-bottom: 22px; }
+  .legal table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 10px 0 4px; }
+  .legal th, .legal td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .legal th { color: var(--text); font-weight: 650; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .legal td { color: var(--muted); }
+</style>
 </head>
 <body>
-<div class="wrap" style="max-width:800px;margin:40px auto;padding:20px;">
+<div class="wrap" style="max-width:900px">
+
   <header class="topbar">
     <a class="brand" href="/">
-      <img class="mark" src="/favicon.svg" alt="DropItOver" width="38" height="38">
+      <img class="mark" src="/favicon.svg" alt="" width="38" height="38">
       <span>DropItOver<small>Privacy Policy</small></span>
     </a>
   </header>
 
-  <section class="card" style="margin-top:20px;">
+  <section class="card legal">
     <h1>Privacy Policy</h1>
-    <p>Last updated: August 11, 2026</p>
-    <p>At <strong>DropItOver</strong> (accessible from https://dropitover.com/), one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by DropItOver and how we use it.</p>
+    <p class="updated">Last updated: 11 August 2026</p>
 
-    <h2>1. Zero-Knowledge File Sharing</h2>
-    <p>DropItOver is designed with a privacy-first architecture:</p>
+    <p>
+      DropItOver lets you send files and text between devices. This page explains exactly what is
+      stored, for how long, and what never reaches us at all. It is written to match how the service
+      actually works rather than to sound reassuring.
+    </p>
+
+    <h2>1. The short version</h2>
     <ul>
-      <li><strong>Direct Wi-Fi &amp; Room Shares:</strong> Use encrypted peer-to-peer WebRTC data channels. Your files travel directly browser-to-browser and never touch our servers.</li>
-      <li><strong>Link Shares:</strong> Files uploaded via links are encrypted on your device using AES-256-GCM before storage, and are permanently deleted immediately upon expiration or after download.</li>
+      <li>No account, no email address, no password. Nothing identifies you to us.</li>
+      <li>Files sent to a nearby device or inside a room <strong>never reach our servers</strong>.</li>
+      <li>Files sent as a link <strong>are stored</strong>, encrypted, and deleted when they expire.</li>
+      <li>We run no analytics and load no third-party scripts on the transfer pages.</li>
     </ul>
 
-    <h2>2. Log Files &amp; Analytics</h2>
-    <p>DropItOver follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected by log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable.</p>
+    <h2>2. What happens to your files</h2>
+    <p>
+      The service works three ways, and they are not equivalent for privacy. This distinction matters
+      more than anything else on this page.
+    </p>
 
-    <h2>3. Cookies &amp; Third-Party Advertisers</h2>
-    <p>Google is a third-party vendor on our site. It uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to dropitover.com and other sites on the internet. Visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy at <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">https://policies.google.com/technologies/ads</a>.</p>
+    <table>
+      <thead>
+        <tr><th>How you sent it</th><th>Where the file goes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Devices on your Wi-Fi</strong></td>
+          <td>Directly from one browser to the other over an encrypted connection. The file never reaches our servers and there is nothing for us to store, read or delete.</td>
+        </tr>
+        <tr>
+          <td><strong>Room</strong></td>
+          <td>The same: browser to browser. Our server only introduces the two devices to each other.</td>
+        </tr>
+        <tr>
+          <td><strong>Share link</strong></td>
+          <td>Uploaded to our storage, because the recipient may open it hours later. Encrypted with AES-256-GCM before it is written, and deleted on expiry.</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <h2>4. GDPR &amp; CCPA Compliance</h2>
-    <p>We do not sell personal data. We do not require user accounts or email addresses to use our service.</p>
+    <h2>3. How link shares are encrypted, precisely</h2>
+    <p>
+      Your file is uploaded in pieces. Each piece is encrypted with AES-256-GCM <strong>on our server,
+      as it arrives</strong>, before it is written to storage. Each file gets its own key, derived from
+      a master secret we hold, and each piece gets its own initialisation vector.
+    </p>
+    <p>
+      <strong>To be clear about what this does and does not mean:</strong> encryption protects your file
+      against anyone who obtains the stored data without our key, including our storage provider. It is
+      not end-to-end encryption, and it is not zero-knowledge. We hold the key, so we are technically
+      capable of decrypting a stored file. We do not do so in the ordinary course of running the
+      service, but you should know it is possible.
+    </p>
+    <p>
+      If that matters for what you are sending, use the Wi-Fi or room modes instead. In those, the file
+      genuinely never reaches us.
+    </p>
 
-    <h2>5. Contact Us</h2>
-    <p>If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us at support@dropitover.com.</p>
+    <h2>4. What we store, and for how long</h2>
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Why</th><th>Kept for</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Encrypted file contents (link shares only)</td>
+          <td>So the recipient can download later</td>
+          <td>Until expiry: 1 hour to 7 days, your choice, 24 hours by default. Sooner if you enable delete-after-download or delete it yourself.</td>
+        </tr>
+        <tr>
+          <td>File names, sizes, types, and any message you typed</td>
+          <td>To show the recipient what they are getting</td>
+          <td>Deleted with the share</td>
+        </tr>
+        <tr>
+          <td>A one-way hash of your IP address</td>
+          <td>To group devices on the same network, and to enforce the daily upload limit</td>
+          <td>Up to 2 days for the limit counter. The address itself is never stored.</td>
+        </tr>
+        <tr>
+          <td>The display name you choose</td>
+          <td>So other devices can tell which one is yours</td>
+          <td>Stored in your own browser only. It never leaves your device except to be shown to devices you are transferring with.</td>
+        </tr>
+        <tr>
+          <td>Room membership</td>
+          <td>To connect people in the same room</td>
+          <td>The room record expires 12 hours after the last person joins</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Deletion is automatic: a scheduled job removes expired shares every ten minutes, and an expired
+      link stops working the moment it is opened.
+    </p>
 
-    <div style="margin-top:24px;">
-      <a href="/" class="btn btn-primary">Back to Home</a>
+    <h2>5. What we do not collect</h2>
+    <ul>
+      <li>No accounts, email addresses or passwords.</li>
+      <li>No analytics or tracking scripts.</li>
+      <li>No profiles, no selling of data, and no sharing with anyone except the providers listed below.</li>
+      <li>We do not read your files or your messages.</li>
+    </ul>
+
+    <h2>6. Cookies and advertising</h2>
+    <p>
+      DropItOver itself sets no cookies. It stores your chosen device name in your browser's local
+      storage, which stays on your device.
+    </p>
+    <p>
+      This site may display advertising supplied by Google. Google and its partners use cookies to serve
+      ads based on your visits to this and other sites. You can opt out of personalised advertising in
+      <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Google Ads Settings</a>,
+      and read how Google uses this data at
+      <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">policies.google.com/technologies/partner-sites</a>.
+      Third-party vendors may also be opted out of at
+      <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info/choices</a>.
+    </p>
+
+    <h2>7. Service providers</h2>
+    <p>
+      The service runs on <strong>Cloudflare</strong>, which processes requests and stores encrypted
+      link-share files on our behalf. Connections between devices may use a relay operated by Cloudflare
+      when a direct connection is impossible; relayed traffic stays encrypted end to end and the relay
+      cannot read it. Advertising, where shown, is supplied by <strong>Google</strong>.
+    </p>
+
+    <h2>8. Your rights</h2>
+    <p>
+      Because we hold no account and nothing that identifies you, there is normally no personal data of
+      yours for us to look up, export or erase. If you created a share link, you can delete it yourself
+      at any time from the page where you created it, or simply let it expire. If you believe we hold
+      data about you and want it removed, contact us and we will act on it.
+    </p>
+    <p>
+      Where the GDPR or CCPA applies, our lawful basis for the limited processing described above is our
+      legitimate interest in operating and protecting the service. We do not sell personal information.
+    </p>
+
+    <h2>9. Children</h2>
+    <p>
+      DropItOver is not directed at children under 13, and we do not knowingly collect information from
+      them. Because no account is required, we cannot identify a user's age.
+    </p>
+
+    <h2>10. Changes</h2>
+    <p>
+      If this policy changes, the date at the top changes with it. Material changes will be summarised
+      here rather than made silently.
+    </p>
+
+    <h2>11. Contact</h2>
+    <p>
+      Questions, or a request to remove something: <a href="mailto:support@dropitover.com">support@dropitover.com</a>.
+    </p>
+
+    <div class="row mt">
+      <a href="/" class="btn btn-primary">Back to DropItOver</a>
+      <a href="/terms.html" class="btn">Terms of Service</a>
     </div>
   </section>
 </div>
