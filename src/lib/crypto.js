@@ -45,7 +45,7 @@ export function randomSalt() {
  * raw address is never stored or sent to any client.
  */
 export async function hashNetworkId(ip) {
-  const digest = await crypto.subtle.digest('SHA-256', encoder.encode(`sharebeam:${ip}`));
+  const digest = await crypto.subtle.digest('SHA-256', encoder.encode(`dropitover:${ip}`));
   return toHex(new Uint8Array(digest)).slice(0, 32);
 }
 

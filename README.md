@@ -24,8 +24,8 @@ npx wrangler login
 ### 1. Create the storage
 
 ```bash
-npm run r2:create                 # creates the R2 bucket "sharebeam-files"
-npm run db:create                 # creates the D1 database "sharebeam"
+npm run r2:create                 # creates the R2 bucket "dropitover-files"
+npm run db:create                 # creates the D1 database "dropitover"
 ```
 
 `db:create` prints a `database_id`. Paste it into `wrangler.toml` over `REPLACE_WITH_YOUR_D1_DATABASE_ID`, then create the tables:
@@ -35,26 +35,31 @@ npm run db:apply                  # remote (production)
 npm run db:apply:local            # local, for `wrangler dev`
 ```
 
-### 2. Set the encryption key
-
-```bash
-node -e "process.stdout.write(require('crypto').randomBytes(32).toString('hex'))" | npx wrangler secret put MASTER_KEY
-```
-
-Piping it avoids a paste picking up stray characters — the key must be exactly 64 hex
-characters. `GET /api/health` reports `encryptionKey: "ok" | "malformed" | "missing"`
-if you ever need to check.
-
-Losing this key makes every stored Mode 2 share permanently unreadable. Modes 1 and 3 don't use it — they store nothing.
-
-For local development, copy `.dev.vars.example` to `.dev.vars` and put the same key there.
-
-### 3. Ship it
+### 2. Ship it
 
 ```bash
 npm run dev                       # http://localhost:8787
 npm run deploy                    # live on <name>.<account>.workers.dev
 ```
+
+### 3. Set the secrets
+
+Deploy first, then run this — `wrangler secret put` interrupts with a "create this
+Worker?" prompt if the Worker doesn't exist yet, which collides with the piped input:
+
+```bash
+npm run setup
+```
+
+It generates `MASTER_KEY` itself (32 random bytes, never printed, never written to
+disk) and asks only for the optional TURN credentials. Secrets apply immediately;
+no redeploy needed. `GET /api/health` reports `encryptionKey: "ok" | "malformed" |
+"missing"` if you ever need to check.
+
+Losing `MASTER_KEY` makes every stored Mode 2 share permanently unreadable. Modes 1
+and 3 don't use it — they store nothing.
+
+For local development, copy `.dev.vars.example` to `.dev.vars` and put a key there.
 
 ### 4. Point your domain at it
 
@@ -172,7 +177,7 @@ tls-listening-port=5349
 fingerprint
 lt-cred-mech
 realm=share.example.com
-user=sharebeam:CHANGE_ME_STRONG_SECRET
+user=dropitover:CHANGE_ME_STRONG_SECRET
 external-ip=203.0.113.10
 no-multicast-peers
 cert=/etc/letsencrypt/live/share.example.com/fullchain.pem

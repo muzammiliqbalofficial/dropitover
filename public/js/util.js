@@ -55,7 +55,7 @@ export function detectDeviceType() {
   return 'desktop';
 }
 
-const NAME_KEY = 'sharebeam:name';
+const NAME_KEY = 'dropitover:name';
 
 // In-app browsers (WhatsApp, Instagram) and private modes can make localStorage
 // throw on access, not just on write. Reading it at startup therefore has to be

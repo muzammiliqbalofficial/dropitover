@@ -8,11 +8,11 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "test": "node --test \"tests/*.test.js\"",
-    "db:create": "wrangler d1 create sharebeam",
-    "db:apply": "wrangler d1 execute sharebeam --remote --file=./schema.sql -y",
-    "db:apply:local": "wrangler d1 execute sharebeam --local --file=./schema.sql -y",
-    "r2:create": "wrangler r2 bucket create sharebeam-files",
-    "setup:turn": "node scripts/setup-turn.mjs",
+    "db:create": "wrangler d1 create dropitover",
+    "db:apply": "wrangler d1 execute dropitover --remote --file=./schema.sql -y",
+    "db:apply:local": "wrangler d1 execute dropitover --local --file=./schema.sql -y",
+    "r2:create": "wrangler r2 bucket create dropitover-files",
+    "setup": "node scripts/setup-secrets.mjs",
     "tail": "wrangler tail"
   },
   "engines": {

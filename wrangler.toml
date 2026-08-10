@@ -1,4 +1,4 @@
-name = "sharebeam"
+name = "dropitover"
 main = "src/index.js"
 compatibility_date = "2025-09-01"
 workers_dev = true
@@ -13,12 +13,12 @@ binding = "ASSETS"
 # Encrypted file bodies live in R2; metadata and expiry live in D1.
 [[r2_buckets]]
 binding = "BUCKET"
-bucket_name = "sharebeam-files"
+bucket_name = "dropitover-files"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "sharebeam"
-database_id = "7fb5568d-5d43-4c60-bd06-3b7dbeebe1d5"
+database_name = "dropitover"
+database_id = "585a5186-eaff-47c5-947a-c7be10f9adae"
 
 # --- Signaling (Modes 1 and 3) ----------------------------------------------
 # NetworkHub: one instance per hashed public IP, for same-network discovery.
