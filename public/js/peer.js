@@ -23,10 +23,7 @@ function uid() {
 
 /** Turns a bare failure into something the user can act on. */
 function relayHint(lead) {
-  return (
-    `${lead} Mobile networks often block direct device-to-device connections. ` +
-    'Put both devices on the same Wi‑Fi, or use "Send via link" instead — that works on any network.'
-  );
+  return `${lead} Try putting both devices on the same Wi‑Fi, or send a link instead. That works anywhere.`;
 }
 
 /**
@@ -62,7 +59,7 @@ export class PeerLink extends Emitter {
       if (state === 'connected') this.clearStallTimer();
       if (state === 'failed') {
         this.clearStallTimer();
-        this.emit('error', new Error(relayHint('This network blocked the direct connection.')));
+        this.emit('error', new Error(relayHint("Couldn't connect on this network.")));
         this.close();
       } else if (state === 'closed') {
         // `disconnected` is often transient — ICE recovers on its own, so only a
@@ -85,7 +82,7 @@ export class PeerLink extends Emitter {
 
     this.stallTimer = setTimeout(() => {
       if (this.isOpen || this.closed) return;
-      this.emit('stall', new Error(relayHint('Still trying to connect.')));
+      this.emit('stall', new Error(relayHint('Still trying to connect…')));
     }, STALL_AFTER_MS);
 
     if (this.initiator) {

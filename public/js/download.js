@@ -30,9 +30,9 @@ function render(share) {
   if (share.files.length) {
     parts.push(`${share.files.length} file${share.files.length === 1 ? '' : 's'} · ${formatBytes(share.totalSize)}`);
   }
-  if (share.text) parts.push('a text note');
+  if (share.text) parts.push('a message');
   $('#share-sub').textContent = parts.join(' and ');
-  $('#share-expiry').textContent = `Expires in ${formatRelative(share.expiresAt)}`;
+  $('#share-expiry').textContent = `Works for ${formatRelative(share.expiresAt)}`;
   $('#burn-warning').hidden = !share.burnAfterRead;
 
   const list = $('#share-items');
@@ -48,7 +48,7 @@ function render(share) {
       $('#state-expired').hidden = false;
       return;
     }
-    $('#share-expiry').textContent = `Expires in ${formatRelative(share.expiresAt)}`;
+    $('#share-expiry').textContent = `Works for ${formatRelative(share.expiresAt)}`;
   }, 30_000);
 }
 
@@ -59,7 +59,7 @@ function textItem(text) {
     <div class="line">
       <span class="icon">📝</span>
       <div class="meta" style="min-width:0">
-        <div class="title">Text note</div>
+        <div class="title">Message</div>
         <div class="note">${text.length} characters</div>
       </div>
       <div class="spacer"></div>
@@ -103,7 +103,7 @@ function fileItem(share, file) {
       const res = await fetch(url);
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body.message || `Download failed (${res.status})`);
+        throw new Error(body.message || `Couldn't download that (${res.status})`);
       }
 
       if (!res.body) {
@@ -130,10 +130,10 @@ function fileItem(share, file) {
       note.textContent = formatBytes(file.size);
       saveBlob(assembler.toBlob(file.mime), file.name);
       button.textContent = 'Saved';
-      toast(`${file.name} saved.`, 'success');
+      toast(`Saved ${file.name}.`, 'success');
 
       if (share.burnAfterRead) {
-        note.textContent = `${formatBytes(file.size)} · removed from the server`;
+        note.textContent = `${formatBytes(file.size)}, now deleted`;
       }
     } catch (err) {
       bar.classList.add('failed');

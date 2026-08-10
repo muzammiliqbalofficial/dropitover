@@ -93,7 +93,7 @@ export class TransferLog {
   addText({ id, content, from, direction = 'in' }) {
     const entry = this.ensure(id);
     entry.icon.textContent = '📝';
-    entry.title.textContent = direction === 'in' ? `Text from ${from}` : `Text sent to ${from}`;
+    entry.title.textContent = direction === 'in' ? `Message from ${from}` : `Message sent to ${from}`;
     entry.note.textContent = `${content.length} characters`;
     entry.bar.hidden = true;
 

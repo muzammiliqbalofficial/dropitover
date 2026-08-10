@@ -55,8 +55,8 @@ async function init() {
   if (!supportsWebRtc()) {
     showState('state-offline');
     $('#offline-note').textContent =
-      "This browser can't make direct device-to-device connections. Open the link in Chrome or Safari, " +
-      'or ask the sender to use "Send via link" instead — that works everywhere.';
+      "This browser can't talk to other devices directly. Open the link in Chrome or Safari, " +
+      'or ask them to send you a link instead.';
     markBooted();
     return;
   }
@@ -128,7 +128,7 @@ function wireSignaling() {
     peer.link?.close();
     state.peers.delete(id);
     renderParticipants();
-    toast(`${name || 'A participant'} left the room.`, 'warn');
+    toast(`${name || 'Someone'} left.`, 'warn');
   });
 }
 
@@ -138,7 +138,7 @@ async function joinRoom() {
     result = await signaling.request('hello', state.identity);
   } catch (err) {
     showState('state-offline');
-    $('#offline-note').textContent = `The room didn't respond: ${err.message}`;
+    $('#offline-note').textContent = `The room didn't answer. ${err.message}`;
     return;
   }
 
@@ -152,8 +152,8 @@ async function joinRoom() {
   state.selfId = result.self.id;
   showState(null);
   $('#room-expiry').textContent =
-    `This room link stays valid for about ${formatRelative(result.expiresAt)} after the last person joins. ` +
-    'Nothing shared here is stored — it goes straight between browsers.';
+    `This link works for about ${formatRelative(result.expiresAt)} after the last person joins. ` +
+    'Nothing you send here is stored.';
 
   // We are the newcomer: open a connection to everyone already here.
   for (const info of result.peers) addPeer(info, true);
@@ -182,7 +182,7 @@ function addPeer(info, initiator) {
   link.on('open', () => {
     peer.connState = 'connected';
     renderParticipants();
-    toast(`Connected to ${info.name}.`, 'success', 2400);
+    toast(`${info.name} is connected.`, 'success', 2400);
   });
   link.on('progress', (p) => transfers.progress({ ...p, peer: peer.info.name }));
   link.on('file', (f) => transfers.completeFile({ ...f, direction: 'in' }));
@@ -224,14 +224,14 @@ function renderParticipants() {
       const li = document.createElement('li');
       li.className = 'peer self';
       const [dot, label] = {
-        connected: ['on', 'Connected · direct'],
+        connected: ['on', 'Connected'],
         connecting: ['warn', 'Connecting…'],
         new: ['warn', 'Connecting…'],
-        checking: ['warn', 'Negotiating…'],
+        checking: ['warn', 'Connecting…'],
         disconnected: ['warn', 'Reconnecting…'],
-        stalled: ['off', 'Blocked by this network'],
-        failed: ['off', 'Blocked by this network'],
-        closed: ['off', 'Disconnected'],
+        stalled: ['off', "Can't connect here"],
+        failed: ['off', "Can't connect here"],
+        closed: ['off', 'Left'],
       }[peer.connState] || ['warn', 'Connecting…'];
 
       li.innerHTML = `
@@ -255,7 +255,7 @@ function renderParticipants() {
 async function sendFiles(files) {
   const targets = connectedPeers();
   if (!targets.length) {
-    toast('Nobody is connected yet — share the room link first.', 'warn');
+    toast('Nobody has joined yet. Send them the link first.', 'warn');
     return;
   }
 
@@ -264,7 +264,7 @@ async function sendFiles(files) {
       try {
         await peer.link.sendFile(file);
       } catch (err) {
-        toast(`Could not send ${file.name} to ${peer.info.name}: ${err.message}`, 'error', 6000);
+        toast(`Couldn't send ${file.name} to ${peer.info.name}. ${err.message}`, 'error', 6000);
       }
     }
   }
@@ -277,7 +277,7 @@ async function sendText() {
 
   const targets = connectedPeers();
   if (!targets.length) {
-    toast('Nobody is connected yet — share the room link first.', 'warn');
+    toast('Nobody has joined yet. Send them the link first.', 'warn');
     return;
   }
 
@@ -285,7 +285,7 @@ async function sendText() {
     try {
       await peer.link.sendText(text);
     } catch (err) {
-      toast(`Could not send text to ${peer.info.name}: ${err.message}`, 'error');
+      toast(`Couldn't send that to ${peer.info.name}. ${err.message}`, 'error');
     }
   }
   transfers.addText({ id: `local-${Date.now()}`, content: text, from: 'everyone', direction: 'out' });

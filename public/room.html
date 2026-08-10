@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
 <meta name="robots" content="noindex, nofollow">
-<title>DropItOver room</title>
+<title>Room | DropItOver</title>
 <link rel="stylesheet" href="/css/styles.css">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 </head>
@@ -16,7 +16,7 @@
   <header class="topbar">
     <a class="brand" href="/">
       <img class="mark" src="/favicon.svg" alt="" width="38" height="38">
-      <span>DropItOver<small>room · two-way, peer to peer</small></span>
+      <span>DropItOver<small>share both ways</small></span>
     </a>
     <div class="identity">
       <label for="device-name">You</label>
@@ -24,46 +24,43 @@
     </div>
   </header>
 
-  <!-- Shown by the boot watchdog below if the page scripts never start. -->
   <section class="card state" id="boot-error" hidden>
     <div class="glyph">🧩</div>
-    <h2>This browser couldn't start DropItOver</h2>
+    <h2>This page won't run here</h2>
     <p>
-      In-app browsers inside WhatsApp, Instagram or Messenger block features this page needs.
-      Tap the ⋯ menu and choose <b>Open in browser</b>, or paste the link into Chrome or Safari.
+      You're probably opening it inside WhatsApp or Instagram. Tap the ⋯ menu and choose
+      <b>Open in browser</b>, or paste the link into Chrome or Safari.
     </p>
     <p class="footnote" id="boot-error-detail"></p>
   </section>
 
-  <!-- Loading / error states -->
   <section class="card state" id="state-loading">
     <div class="glyph">⏳</div>
-    <h2>Joining room…</h2>
-    <p>Setting up a direct connection.</p>
+    <h2>Joining…</h2>
+    <p>One moment.</p>
   </section>
 
   <section class="card state" id="state-offline" hidden>
     <div class="glyph">📡</div>
-    <h2>Couldn't reach the room</h2>
-    <p id="offline-note">The connection to the server didn't complete. Some networks block this kind of connection.</p>
+    <h2>Couldn't join</h2>
+    <p id="offline-note">Something is blocking the connection. Try again, or ask them to send you a link instead.</p>
     <button class="btn-primary" id="retry-join">Try again</button>
   </section>
 
   <section class="card state" id="state-missing" hidden>
     <div class="glyph">🚪</div>
-    <h2>Room not found</h2>
-    <p>This room has expired or never existed. Rooms stay open for a while after the last person joins.</p>
-    <a class="btn btn-primary" href="/">Create a new room</a>
+    <h2>This room is gone</h2>
+    <p>It ran out, or the link is wrong. Rooms stay open for a while after the last person joins.</p>
+    <a class="btn btn-primary" href="/">Start a new one</a>
   </section>
 
   <section class="card state" id="state-full" hidden>
     <div class="glyph">🧍‍♂️🧍‍♀️</div>
-    <h2>Room is full</h2>
-    <p>Everyone allowed in this room has already joined.</p>
-    <a class="btn btn-primary" href="/">Start your own room</a>
+    <h2>This room is full</h2>
+    <p>Everyone it can hold has already joined.</p>
+    <a class="btn btn-primary" href="/">Start your own</a>
   </section>
 
-  <!-- Room -->
   <div id="room" hidden>
     <div class="modes">
       <section class="card span-2">
@@ -71,7 +68,7 @@
           <span class="tile">🔄</span>
           <div>
             <h2>Room <span id="room-code" style="font-family:var(--mono);font-weight:600"></span></h2>
-            <p class="sub">Share this link or QR code. Everything sent here goes peer to peer.</p>
+            <p class="sub">Send them this link, or let them scan the code.</p>
           </div>
           <span class="badge p2p" id="room-status">Waiting</span>
         </header>
@@ -85,7 +82,7 @@
             <ul class="peer-list mt" id="participants"></ul>
             <p class="footnote" id="room-expiry"></p>
           </div>
-          <img class="qr" id="room-qr" alt="QR code for the room link">
+          <img class="qr" id="room-qr" alt="Scan to join the room">
         </div>
       </section>
 
@@ -94,33 +91,33 @@
           <span class="tile">📤</span>
           <div>
             <h2>Send</h2>
-            <p class="sub">Files go to everyone connected, both directions, for as long as the room is open.</p>
+            <p class="sub">Goes to everyone in the room, and they can send back.</p>
           </div>
         </header>
 
         <div class="dropzone" id="room-drop" tabindex="0" role="button" aria-label="Choose files to send">
           <strong>Drop files to send</strong>
-          <span>or tap to choose — they start sending immediately</span>
+          <span>or tap to choose, they go right away</span>
         </div>
         <input id="room-files" type="file" multiple hidden>
 
         <div class="mt">
-          <label class="field" for="room-text">Text</label>
-          <textarea id="room-text" rows="3" placeholder="Type or paste text, then hit Send text…"></textarea>
+          <label class="field" for="room-text">Message</label>
+          <textarea id="room-text" rows="3" placeholder="Type or paste something…"></textarea>
         </div>
-        <button class="btn-primary mt" id="send-text">Send text</button>
+        <button class="btn-primary mt" id="send-text">Send message</button>
       </section>
 
       <section class="card span-2">
         <header>
           <span class="tile">📨</span>
           <div>
-            <h2>Shared in this room</h2>
-            <p class="sub">Received files stay on your device — save the ones you want.</p>
+            <h2>Shared here</h2>
+            <p class="sub">What you receive stays on your device. Tap Save to keep it.</p>
           </div>
         </header>
         <ul class="items" id="transfers"></ul>
-        <div class="empty" id="transfers-empty">Nothing shared yet.</div>
+        <div class="empty" id="transfers-empty">Nothing yet.</div>
       </section>
     </div>
   </div>
@@ -128,8 +125,7 @@
 
 <div id="toasts"></div>
 
-<!-- Boot watchdog: a module that fails to parse or throws on load would
-     otherwise leave "Joining room…" on screen forever with no explanation. -->
+<!-- If the page scripts never start, say so instead of showing a dead page. -->
 <script>
 (function () {
   function fail(detail) {
@@ -146,7 +142,7 @@
   window.addEventListener('unhandledrejection', function (e) {
     fail(e && e.reason ? String(e.reason.message || e.reason) : '');
   });
-  setTimeout(function () { fail('Startup timed out.'); }, 10000);
+  setTimeout(function () { fail('Took too long to start.'); }, 10000);
 })();
 </script>
 <script type="module" src="/js/room.js"></script>

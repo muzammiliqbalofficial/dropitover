@@ -36,18 +36,14 @@ async function init() {
 
   $('#device-name').value = state.identity.name;
   $('#link-limits').textContent =
-    `or tap to choose — up to ${formatBytes(state.config.maxFileSize)} per file, no limit on how many`;
-  $('#ice-note').textContent = state.config.hasTurn ? 'STUN + TURN' : 'STUN only';
+    `or tap to choose. Up to ${formatBytes(state.config.maxFileSize)} each, as many as you like`;
 
   $('#link-expiry').replaceChildren(
     ...state.config.expiryOptions.map((option) => {
       const el = document.createElement('option');
       el.value = option;
       el.textContent = EXPIRY_LABELS[option] || option;
-      if (option === state.config.defaultExpiry) {
-        el.selected = true;
-        el.textContent += ' (default)';
-      }
+      if (option === state.config.defaultExpiry) el.selected = true;
       return el;
     })
   );
@@ -60,11 +56,10 @@ async function init() {
   if (supportsWebRtc()) {
     wireSignaling();
   } else {
-    $('#peer-count').textContent = 'Unavailable';
+    $('#peer-count').textContent = 'Not available';
     $('#peers-empty').textContent =
-      "This browser can't make direct device-to-device connections — that's usually an in-app browser " +
-      'like WhatsApp or Instagram. Open DropItOver in Chrome or Safari for nearby devices and rooms. ' +
-      '"Send via link" below works here either way.';
+      "This browser can't talk to other devices directly. That usually means you're inside WhatsApp " +
+      'or Instagram. Open the page in Chrome or Safari. Sending a link still works here.';
   }
 
   markBooted();
@@ -80,7 +75,7 @@ function wireIdentity() {
     }
     state.identity.name = name;
     signaling.send('identity', { name });
-    toast(`Other devices now see you as ${name}`, 'success', 2200);
+    toast(`Others now see you as ${name}`, 'success', 2200);
   });
 }
 
@@ -131,7 +126,7 @@ function wireSignaling() {
     state.outgoing.delete(transferId);
 
     if (!accepted) {
-      toast(`${fromName} declined the transfer.`, 'warn');
+      toast(`${fromName} said no thanks.`, 'warn');
       return;
     }
 
@@ -188,7 +183,7 @@ function describeSummary(summary = {}) {
   if (summary.fileCount) {
     bits.push(`${summary.fileCount} file${summary.fileCount === 1 ? '' : 's'} (${formatBytes(summary.totalSize || 0)})`);
   }
-  if (summary.hasText) bits.push('a text note');
+  if (summary.hasText) bits.push('a message');
   return bits.length ? `They want to send ${bits.join(' and ')}.` : 'They want to send you something.';
 }
 
@@ -198,7 +193,7 @@ function openSendSheet(peer) {
   backdrop.innerHTML = `
     <div class="modal" role="dialog" aria-modal="true">
       <h3>Send to ${escapeHtml(peer.name)}</h3>
-      <p>Files stream directly to that device — nothing is uploaded to the server.</p>
+      <p>Goes straight to that device.</p>
       <div class="dropzone" tabindex="0" role="button">
         <strong>Choose files</strong>
         <span class="chosen">or drop them here</span>
@@ -206,7 +201,7 @@ function openSendSheet(peer) {
       <input type="file" multiple hidden>
       <div class="mt">
         <label class="field">Or send text</label>
-        <textarea rows="3" placeholder="Type or paste text…"></textarea>
+        <textarea rows="3" placeholder="Type or paste something…"></textarea>
       </div>
       <div class="row mt">
         <button class="cancel">Cancel</button>
@@ -257,7 +252,7 @@ async function requestTransfer(peer, files, text) {
   try {
     const result = await signaling.request('transfer:offer', { to: peer.id, summary });
     if (!result?.ok) {
-      toast('That device is no longer reachable.', 'error');
+      toast('That device went offline.', 'error');
       return;
     }
     state.outgoing.set(result.transferId, { peerId: peer.id, files, text });
@@ -312,7 +307,7 @@ function addFiles(files) {
   const tooBig = files.filter((f) => f.size > state.config.maxFileSize);
   if (tooBig.length) {
     toast(
-      `${tooBig[0].name} is ${formatBytes(tooBig[0].size)} — the limit is ${formatBytes(state.config.maxFileSize)} per file.`,
+      `${tooBig[0].name} is ${formatBytes(tooBig[0].size)}. The most you can send is ${formatBytes(state.config.maxFileSize)} a file.`,
       'error',
       6000
     );
@@ -349,7 +344,7 @@ function renderSelection() {
 async function createShare() {
   const text = $('#link-text').value.trim();
   if (!state.selection.length && !text) {
-    toast('Add a file or some text first.', 'warn');
+    toast('Add a file or type something first.', 'warn');
     return;
   }
 
@@ -361,7 +356,7 @@ async function createShare() {
   $('#upload-wrap').hidden = false;
   $('#link-result').hidden = true;
   fill.style.width = '0%';
-  note.textContent = state.selection.length ? 'Uploading — each chunk is encrypted server-side…' : 'Saving…';
+  note.textContent = state.selection.length ? 'Sending…' : 'Saving…';
 
   try {
     const share = await uploadShare({
@@ -372,12 +367,12 @@ async function createShare() {
       onProgress: ({ sent, total }) => {
         if (!total) return;
         fill.style.width = `${Math.min(100, (sent / total) * 100)}%`;
-        note.textContent = `${formatBytes(sent)} of ${formatBytes(total)} uploaded`;
+        note.textContent = `${formatBytes(sent)} of ${formatBytes(total)} sent`;
       },
     });
 
     fill.style.width = '100%';
-    note.textContent = 'Done — encrypted with AES-256-GCM and stored.';
+    note.textContent = 'Done. Your link is ready.';
     showShare(share);
   } catch (err) {
     $('#upload-wrap').hidden = true;
@@ -413,8 +408,8 @@ function resetShareForm() {
 async function revokeShare() {
   if (!state.share) return;
   const ok = await confirmModal({
-    title: 'Delete this share?',
-    message: 'The link stops working immediately and the encrypted chunks are removed from storage.',
+    title: 'Delete this?',
+    message: 'The link stops working right away and the files are removed.',
     confirmLabel: 'Delete',
     cancelLabel: 'Keep',
     danger: true,
@@ -426,10 +421,10 @@ async function revokeShare() {
     headers: { 'x-owner-token': state.share.ownerToken },
   });
   if (res.ok) {
-    toast('Share deleted.', 'success');
+    toast('Deleted.', 'success');
     resetShareForm();
   } else {
-    toast('Could not delete the share.', 'error');
+    toast("Couldn't delete it.", 'error');
   }
 }
 

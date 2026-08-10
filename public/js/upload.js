@@ -72,13 +72,13 @@ function putPart(url, ownerToken, blob, onChunkProgress) {
         return;
       }
       const body = safeJson(xhr.responseText);
-      const error = new Error(body.message || `Chunk upload failed (${xhr.status})`);
+      const error = new Error(body.message || `Upload failed (${xhr.status})`);
       error.status = xhr.status;
       reject(error);
     });
 
-    xhr.addEventListener('error', () => reject(new Error('Network error while uploading a chunk.')));
-    xhr.addEventListener('abort', () => reject(new Error('Upload cancelled.')));
+    xhr.addEventListener('error', () => reject(new Error('Lost connection while sending.')));
+    xhr.addEventListener('abort', () => reject(new Error('Sending cancelled.')));
     xhr.send(blob);
   });
 }

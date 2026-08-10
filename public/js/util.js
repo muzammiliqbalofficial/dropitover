@@ -126,7 +126,7 @@ export function toast(message, type = 'info', ms = 4200) {
 export async function copyText(text) {
   try {
     await navigator.clipboard.writeText(text);
-    toast('Copied to clipboard', 'success', 2000);
+    toast('Copied', 'success', 2000);
     return true;
   } catch {
     // Clipboard API needs a secure context; fall back to a hidden textarea.
@@ -139,7 +139,7 @@ export async function copyText(text) {
     area.select();
     const ok = document.execCommand('copy');
     area.remove();
-    toast(ok ? 'Copied to clipboard' : 'Copy failed — select the link manually', ok ? 'success' : 'error', 2600);
+    toast(ok ? 'Copied' : 'Copy it by hand instead', ok ? 'success' : 'error', 2600);
     return ok;
   }
 }
