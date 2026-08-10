@@ -71,30 +71,44 @@ export class UsageTracker {
    */
   async reserve(ipHash, incoming, now = Date.now()) {
     const day = dayKey(now);
-    const row = await this.db
-      .prepare('SELECT shares, bytes FROM usage WHERE ip_hash = ? AND day = ?')
-      .bind(ipHash, day)
-      .first();
 
-    const used = { shares: row?.shares || 0, bytes: row?.bytes || 0 };
-    const verdict = evaluateQuota(used, incoming, this.limits);
-    if (!verdict.ok) return { ...verdict, retryAfterMs: msUntilReset(now) };
+    try {
+      const row = await this.db
+        .prepare('SELECT shares, bytes FROM usage WHERE ip_hash = ? AND day = ?')
+        .bind(ipHash, day)
+        .first();
 
-    await this.db
-      .prepare(
-        `INSERT INTO usage (ip_hash, day, shares, bytes) VALUES (?, ?, ?, ?)
-         ON CONFLICT (ip_hash, day) DO UPDATE SET shares = shares + ?, bytes = bytes + ?`
-      )
-      .bind(ipHash, day, incoming.shares, incoming.bytes, incoming.shares, incoming.bytes)
-      .run();
+      const used = { shares: row?.shares || 0, bytes: row?.bytes || 0 };
+      const verdict = evaluateQuota(used, incoming, this.limits);
+      if (!verdict.ok) return { ...verdict, retryAfterMs: msUntilReset(now) };
 
-    return { ok: true, used: { shares: used.shares + incoming.shares, bytes: used.bytes + incoming.bytes } };
+      await this.db
+        .prepare(
+          `INSERT INTO usage (ip_hash, day, shares, bytes) VALUES (?, ?, ?, ?)
+           ON CONFLICT (ip_hash, day) DO UPDATE SET shares = shares + ?, bytes = bytes + ?`
+        )
+        .bind(ipHash, day, incoming.shares, incoming.bytes, incoming.shares, incoming.bytes)
+        .run();
+
+      return { ok: true, used: { shares: used.shares + incoming.shares, bytes: used.bytes + incoming.bytes } };
+    } catch (err) {
+      // Fail open. Quotas are abuse control, not access control — a missing
+      // `usage` table (schema not applied yet) or a transient D1 error must not
+      // take sharing down. The log is the signal that protection is off.
+      console.error('[limits] quota check failed, allowing this upload:', err.message);
+      return { ok: true, degraded: true };
+    }
   }
 
   /** Drops counters older than yesterday; called from the cron sweep. */
   async sweep(now = Date.now()) {
     const cutoff = dayKey(now - 2 * 24 * 60 * 60 * 1000);
-    const result = await this.db.prepare('DELETE FROM usage WHERE day < ?').bind(cutoff).run();
-    return result.meta?.changes || 0;
+    try {
+      const result = await this.db.prepare('DELETE FROM usage WHERE day < ?').bind(cutoff).run();
+      return result.meta?.changes || 0;
+    } catch (err) {
+      console.error('[limits] counter sweep failed:', err.message);
+      return 0;
+    }
   }
 }

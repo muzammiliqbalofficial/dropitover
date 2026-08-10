@@ -9,8 +9,8 @@
     "deploy": "wrangler deploy",
     "test": "node --test \"tests/*.test.js\"",
     "db:create": "wrangler d1 create sharebeam",
-    "db:apply": "wrangler d1 execute sharebeam --remote --file=./schema.sql",
-    "db:apply:local": "wrangler d1 execute sharebeam --local --file=./schema.sql",
+    "db:apply": "wrangler d1 execute sharebeam --remote --file=./schema.sql -y",
+    "db:apply:local": "wrangler d1 execute sharebeam --local --file=./schema.sql -y",
     "r2:create": "wrangler r2 bucket create sharebeam-files",
     "tail": "wrangler tail"
   },
