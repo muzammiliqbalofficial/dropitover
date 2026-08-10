@@ -1,0 +1,1051 @@
+<title>DropItOver — Complete Project Documentation</title>
+<style>
+  /* ---- Tokens: complete light palette on bare :root ---------------------- */
+  :root {
+    color-scheme: light;
+
+    --paper: #fbfbfe;
+    --surface: #ffffff;
+    --surface-2: #f4f6fc;
+    --ink: #141929;
+    --ink-soft: #333c56;
+    --muted: #5d6784;
+    --faint: #8791ab;
+    --rule: #e3e7f2;
+    --rule-strong: #ced5e8;
+
+    --accent: #4a5fe0;
+    --accent-ink: #3346c9;
+    --accent-soft: rgba(74, 95, 224, 0.085);
+
+    /* Semantic, and separate from the accent: these encode whether a byte of
+       user data ever rests on a server. That distinction is the whole design. */
+    --never: #0c8f7f;
+    --never-soft: rgba(12, 143, 127, 0.1);
+    --stored: #a05a06;
+    --stored-soft: rgba(160, 90, 6, 0.1);
+
+    --shadow: 0 1px 2px rgba(20, 25, 41, 0.05), 0 8px 24px -16px rgba(20, 25, 41, 0.3);
+
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+
+      --paper: #090c16;
+      --surface: #101624;
+      --surface-2: #161e30;
+      --ink: #e9edf9;
+      --ink-soft: #c3ccdf;
+      --muted: #95a1c0;
+      --faint: #6f7c9c;
+      --rule: #212a40;
+      --rule-strong: #303b57;
+
+      --accent: #8298ff;
+      --accent-ink: #a3b3ff;
+      --accent-soft: rgba(130, 152, 255, 0.12);
+
+      --never: #34d3bd;
+      --never-soft: rgba(52, 211, 189, 0.12);
+      --stored: #f5b73f;
+      --stored-soft: rgba(245, 183, 63, 0.12);
+
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 10px 30px -18px rgba(0, 0, 0, 0.9);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --paper: #090c16;
+    --surface: #101624;
+    --surface-2: #161e30;
+    --ink: #e9edf9;
+    --ink-soft: #c3ccdf;
+    --muted: #95a1c0;
+    --faint: #6f7c9c;
+    --rule: #212a40;
+    --rule-strong: #303b57;
+
+    --accent: #8298ff;
+    --accent-ink: #a3b3ff;
+    --accent-soft: rgba(130, 152, 255, 0.12);
+
+    --never: #34d3bd;
+    --never-soft: rgba(52, 211, 189, 0.12);
+    --stored: #f5b73f;
+    --stored-soft: rgba(245, 183, 63, 0.12);
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 10px 30px -18px rgba(0, 0, 0, 0.9);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+
+  @media (min-width: 1080px) {
+    .shell {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 56px;
+      align-items: start;
+    }
+  }
+
+  /* ---- Masthead ---------------------------------------------------------- */
+
+  .masthead {
+    grid-column: 1 / -1;
+    padding: 56px 0 30px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+
+  h1 {
+    font-family: var(--sans);
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+    text-wrap: balance;
+    margin: 0 0 14px;
+  }
+
+  .standfirst {
+    font-size: clamp(1.02rem, 2.2vw, 1.2rem);
+    color: var(--ink-soft);
+    max-width: 40rem;
+    margin: 0 0 26px;
+  }
+
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 34px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: var(--sans);
+  }
+
+  .facts div {
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .facts b {
+    display: block;
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-transform: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .facts a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+  .facts a:hover { border-bottom-color: currentColor; }
+
+  /* ---- Section index ----------------------------------------------------- */
+
+  .index {
+    display: none;
+    font-family: var(--sans);
+    font-size: 0.83rem;
+    line-height: 1.5;
+    position: sticky;
+    top: 28px;
+    padding-top: 44px;
+  }
+
+  @media (min-width: 1080px) { .index { display: block; } }
+
+  .index p {
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin: 0 0 12px;
+  }
+
+  .index ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; counter-reset: idx; }
+
+  .index a {
+    color: var(--muted);
+    text-decoration: none;
+    display: block;
+    border-left: 2px solid var(--rule);
+    padding-left: 12px;
+  }
+
+  .index a:hover { color: var(--accent-ink); border-left-color: var(--accent); }
+
+  /* ---- Prose ------------------------------------------------------------- */
+
+  main { padding-top: 44px; min-width: 0; }
+
+  section { margin-bottom: 60px; scroll-margin-top: 24px; }
+
+  h2 {
+    font-family: var(--sans);
+    font-size: clamp(1.35rem, 3vw, 1.72rem);
+    font-weight: 750;
+    letter-spacing: -0.028em;
+    line-height: 1.15;
+    text-wrap: balance;
+    margin: 0 0 6px;
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 34px 0 8px;
+  }
+
+  h4 {
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 26px 0 8px;
+  }
+
+  .lede { color: var(--muted); font-size: 0.96rem; margin: 0 0 26px; max-width: 42rem; }
+
+  p { max-width: 40rem; margin: 0 0 17px; }
+
+  a { color: var(--accent-ink); }
+
+  ul, ol { max-width: 40rem; padding-left: 1.2em; margin: 0 0 17px; }
+  li { margin-bottom: 7px; }
+
+  strong { font-weight: 700; }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 0.08em 0.35em;
+  }
+
+  /* ---- Tables ------------------------------------------------------------ */
+
+  .scroll { overflow-x: auto; margin: 0 0 20px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+
+  table { border-collapse: collapse; width: 100%; font-family: var(--sans); font-size: 0.87rem; min-width: 460px; }
+
+  th, td { text-align: left; padding: 11px 15px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+
+  thead th {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 650;
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td code, th code { background: none; border: 0; padding: 0; }
+
+  /* ---- Storage badges (semantic, not accent) ----------------------------- */
+
+  .tag {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .tag.never { color: var(--never); background: var(--never-soft); border: 1px solid var(--never-soft); }
+  .tag.stored { color: var(--stored); background: var(--stored-soft); border: 1px solid var(--stored-soft); }
+
+  /* ---- Mode cards -------------------------------------------------------- */
+
+  .mode {
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    background: var(--surface);
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .mode-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+  .mode-head h3 { margin: 0; font-size: 1.12rem; }
+  .mode-num {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--faint);
+    letter-spacing: 0.06em;
+  }
+  .mode .when { font-size: 0.93rem; color: var(--muted); margin: 0 0 16px; }
+
+  /* Flow strip: built from tokens so it themes correctly, and scrolls rather
+     than squashing on a phone. */
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    font-family: var(--sans);
+  }
+
+  .flow .step {
+    flex: 0 0 auto;
+    min-width: 116px;
+    max-width: 170px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 8px;
+    background: var(--surface-2);
+    padding: 9px 12px;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+
+  .flow .step b {
+    display: block;
+    font-size: 0.66rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-bottom: 3px;
+    font-weight: 650;
+  }
+
+  .flow .step.p2p { border-color: var(--never); background: var(--never-soft); }
+  .flow .step.srv { border-color: var(--stored); background: var(--stored-soft); }
+
+  .flow .arrow {
+    flex: 0 0 auto;
+    align-self: center;
+    padding: 0 9px;
+    color: var(--faint);
+    font-size: 0.9rem;
+  }
+
+  /* ---- Code blocks / file tree ------------------------------------------- */
+
+  pre {
+    font-family: var(--mono);
+    font-size: 0.79rem;
+    line-height: 1.65;
+    background: var(--surface-2);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 15px 17px;
+    overflow-x: auto;
+    margin: 0 0 20px;
+    color: var(--ink-soft);
+  }
+
+  pre b { color: var(--ink); font-weight: 700; }
+  pre i { color: var(--faint); font-style: normal; }
+
+  /* ---- Callout ----------------------------------------------------------- */
+
+  .note {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 0 0 20px;
+    max-width: 42rem;
+  }
+
+  .note p:last-child { margin-bottom: 0; }
+  .note h4 { margin-top: 0; color: var(--accent-ink); }
+
+  footer {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--rule);
+    padding-top: 22px;
+    color: var(--faint);
+    font-family: var(--sans);
+    font-size: 0.8rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="shell">
+
+  <header class="masthead">
+    <p class="eyebrow">Project documentation</p>
+    <h1>DropItOver</h1>
+    <p class="standfirst">
+      A web app for moving files and text between devices: phone to laptop, laptop to a friend across
+      the country. No account, no install, and for most transfers, no server in the middle at all.
+    </p>
+    <ul class="facts">
+      <li><div>Live at</div><b><a href="https://dropitover.muzammiliqbalofficial.workers.dev">dropitover…workers.dev</a></b></li>
+      <li><div>Runtime</div><b>Cloudflare Workers</b></li>
+      <li><div>Code</div><b>~5,200 lines</b></li>
+      <li><div>Runtime deps</div><b>1</b></li>
+      <li><div>Tests</div><b>51 unit · 41 live</b></li>
+    </ul>
+  </header>
+
+  <nav class="index" aria-label="Sections">
+    <p>Contents</p>
+    <ol>
+      <li><a href="#problem">The problem</a></li>
+      <li><a href="#what">What it does</a></li>
+      <li><a href="#where">Where data lives</a></li>
+      <li><a href="#internals">How each mode works</a></li>
+      <li><a href="#stack">Technology used</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#limits">Limits &amp; settings</a></li>
+      <li><a href="#infra">What's deployed</a></li>
+      <li><a href="#code">Code structure</a></li>
+      <li><a href="#testing">Testing</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#honest">Known limits</a></li>
+      <li><a href="#history">How it got here</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <!-- ============================================================ -->
+    <section id="problem">
+      <h2>The problem it solves</h2>
+      <p class="lede">Sending a file to a device sitting next to you is absurdly harder than it should be.</p>
+
+      <p>
+        The usual options all cost something. Email caps attachments around 25 MB. WhatsApp compresses
+        your photos and refuses large files. Cloud drives make you upload the whole file to a company's
+        server, wait, share a link, then remember to delete it. AirDrop works beautifully and only
+        between Apple devices. Existing web tools that promise to fix this tend to arrive with a free
+        tier so thin it's a demo: a handful of files, ten megabytes each, deleted within the hour, with
+        the actually-useful behaviour behind a subscription.
+      </p>
+
+      <p>This project was built against that specific list. Each row below is a constraint it removes.</p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Typical limitation</th><th>What DropItOver does</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Free tier capped at ~5 files, 10 MB each</td><td>2 GB per file, no cap on how many</td></tr>
+            <tr><td>Files auto-deleted in 30 minutes</td><td>You choose: 1 hour to 7 days, 24 hours by default</td></tr>
+            <tr><td>Real usage locked behind a subscription</td><td>Every feature works free, there is no paid tier</td></tr>
+            <tr><td>Everything relayed through the company's server</td><td>Same-network and room transfers go browser to browser</td></tr>
+            <tr><td>Only works when devices share Wi-Fi</td><td>Links and rooms work across any two networks</td></tr>
+            <tr><td>Files sit on a third-party server unencrypted</td><td>Stored files are encrypted before they touch storage</td></tr>
+            <tr><td>Sign-up required to do anything</td><td>No account, no email, no install</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="what">
+      <h2>What it does</h2>
+      <p class="lede">
+        Three ways to send something, because "send a file" means three genuinely different situations.
+      </p>
+
+      <div class="mode">
+        <div class="mode-head">
+          <h3>Devices on your Wi-Fi</h3>
+          <span class="mode-num">Mode 1</span>
+          <span class="tag never">Nothing stored</span>
+        </div>
+        <p class="when">
+          Both devices are on the same network. Open the page on each one and they find each other
+          automatically, like AirDrop. Tap a device, pick files, the other side accepts, and the transfer
+          runs directly between the two browsers.
+        </p>
+        <div class="flow">
+          <div class="step"><b>Browser A</b>Picks files, taps a device</div>
+          <span class="arrow">→</span>
+          <div class="step srv"><b>Server</b>Passes the request and connection details</div>
+          <span class="arrow">→</span>
+          <div class="step"><b>Browser B</b>Accepts or declines</div>
+          <span class="arrow">→</span>
+          <div class="step p2p"><b>Direct</b>File bytes travel A to B, never through the server</div>
+        </div>
+      </div>
+
+      <div class="mode">
+        <div class="mode-head">
+          <h3>Send a link</h3>
+          <span class="mode-num">Mode 2</span>
+          <span class="tag stored">Stored, encrypted</span>
+        </div>
+        <p class="when">
+          The other person is somewhere else, or asleep. You upload once and get a link plus a QR code.
+          They open it whenever, from any network. This is the only mode where files rest on a server,
+          because it has to work when only one person is online.
+        </p>
+        <div class="flow">
+          <div class="step"><b>Browser</b>Cuts the file into 8 MB pieces</div>
+          <span class="arrow">→</span>
+          <div class="step srv"><b>Worker</b>Encrypts each piece as it arrives</div>
+          <span class="arrow">→</span>
+          <div class="step srv"><b>Storage</b>Holds ciphertext until expiry</div>
+          <span class="arrow">→</span>
+          <div class="step srv"><b>Recipient</b>Worker decrypts on the way out</div>
+        </div>
+      </div>
+
+      <div class="mode">
+        <div class="mode-head">
+          <h3>Share both ways</h3>
+          <span class="mode-num">Mode 3</span>
+          <span class="tag never">Nothing stored</span>
+        </div>
+        <p class="when">
+          Both people are online but on different networks. One creates a room and shares the link or QR
+          code. Once the other joins, either side can send files and messages back and forth for as long
+          as the page stays open.
+        </p>
+        <div class="flow">
+          <div class="step"><b>Host</b>Creates a room, shares the link</div>
+          <span class="arrow">→</span>
+          <div class="step srv"><b>Server</b>Introduces the two browsers</div>
+          <span class="arrow">→</span>
+          <div class="step p2p"><b>Direct</b>Both sides send files and messages, either direction</div>
+        </div>
+      </div>
+
+      <h3>In every mode</h3>
+      <ul>
+        <li>Text and messages work, not just files.</li>
+        <li>Drag and drop, or tap to choose. Multiple files at once.</li>
+        <li>A progress bar for every transfer, in both directions.</li>
+        <li>Works on a phone. The layout, tap targets and inputs are built for it.</li>
+        <li>No account, no email address, nothing to install.</li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="where">
+      <h2>Where data lives</h2>
+      <p class="lede">
+        The single most important thing to understand about this project: two of the three modes never
+        put your file on a server, and the third encrypts it before it lands.
+      </p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Mode</th><th>File bytes</th><th>What the server sees</th><th>Deleted when</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1</b> Same Wi-Fi <span class="tag never">Never stored</span></td>
+              <td>Browser to browser</td>
+              <td>Device names, connection setup messages</td>
+              <td>Nothing to delete</td>
+            </tr>
+            <tr>
+              <td><b>2</b> Link <span class="tag stored">Stored</span></td>
+              <td>Encrypted in object storage</td>
+              <td>File names, sizes, types, your message</td>
+              <td>At expiry, or after download if chosen</td>
+            </tr>
+            <tr>
+              <td><b>3</b> Room <span class="tag never">Never stored</span></td>
+              <td>Browser to browser</td>
+              <td>Room id, display names, connection setup</td>
+              <td>Room record expires after 12 hours</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <h4>Why the server is involved at all in modes 1 and 3</h4>
+        <p>
+          Two browsers cannot find each other unaided. Something has to introduce them and pass along the
+          technical details of how to connect. That introduction is all the server does here, and the
+          messages it carries are capped at 128 KB precisely so the channel can never be quietly used to
+          push a file through.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="internals">
+      <h2>How each mode works internally</h2>
+      <p class="lede">The mechanism behind each of the three, in order.</p>
+
+      <h3>Mode 1 — finding devices on the same network</h3>
+      <p>
+        A browser cannot scan the local network, so discovery happens one level up. When a page connects,
+        the server reads the public IP the connection arrived from, hashes it, and routes that connection
+        to a small coordinator object dedicated to that hash. Every device behind the same router shares
+        one public IP, so they all land in the same coordinator and see each other. Nobody else does. The
+        raw IP is never stored or shown to anyone.
+      </p>
+      <ol>
+        <li>Both devices connect and appear in each other's list within about a second.</li>
+        <li>Tapping a device sends a request naming the files, count and total size.</li>
+        <li>The receiver gets an accept or decline prompt before anything is negotiated.</li>
+        <li>On accept, the two browsers exchange connection details through the server.</li>
+        <li>A direct channel opens and the file streams across it in chunks.</li>
+      </ol>
+      <p>
+        Sending pauses automatically when the channel's buffer fills and resumes when it drains, and the
+        receiver folds incoming pieces into storage every 16 MB. That is what keeps a 2 GB transfer from
+        exhausting the browser's memory.
+      </p>
+
+      <h3>Mode 2 — the link share</h3>
+      <p>
+        This is the only path that persists anything, and it is built around a hard constraint: the code
+        runs on Cloudflare's edge, where a single request body is limited to roughly 100 MB. A 2 GB upload
+        therefore cannot be one request.
+      </p>
+      <ol>
+        <li>The browser first sends a manifest: names, sizes, types, chosen expiry, burn flag.</li>
+        <li>The server plans each file into fixed 8 MB pieces and generates the encryption parameters.</li>
+        <li>The browser uploads pieces one at a time. Each is encrypted server-side before it reaches storage, so plaintext is never written.</li>
+        <li>A finalize step seals the share and starts the expiry clock. Only then does the link resolve.</li>
+        <li>Downloads run in reverse: pieces are read back in order, decrypted one at a time, and streamed out.</li>
+      </ol>
+      <p>
+        Chunking pays for itself twice. It makes multi-gigabyte uploads possible at all, and a failed
+        piece retries on its own instead of restarting a two-gigabyte transfer.
+      </p>
+
+      <h4>Delete after first download</h4>
+      <p>
+        When enabled, the share is destroyed once <em>everything</em> has been collected, not after the
+        first click. A share with four files survives until the fourth is downloaded. Deletion is also
+        triggered by the last byte leaving, never mid-transfer, so the file cannot vanish out from under
+        a download in progress.
+      </p>
+
+      <h3>Mode 3 — rooms</h3>
+      <p>
+        Creating a room mints a short id and a coordinator object that stores only when it was created
+        and when it expires. Joining opens a connection to it; the object checks capacity and expiry, then
+        hands the newcomer the list of people already inside.
+      </p>
+      <p>
+        One rule keeps the group connections orderly: <strong>the newcomer always initiates</strong>, and
+        everyone already present answers. Without a rule like this, two browsers can call each other
+        simultaneously and both connections collapse. Every join also extends the room's life by a full
+        twelve hours, so refreshing the page or briefly losing signal never kills the link.
+      </p>
+
+      <h3>Cleanup</h3>
+      <p>
+        A scheduled job runs every ten minutes. It deletes shares whose time has run out, clears uploads
+        abandoned more than an hour ago, and trims old rate-limit counters. Expiry is also checked on
+        read, so an expired link stops working immediately rather than waiting for the next sweep.
+      </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="stack">
+      <h2>Technology used</h2>
+      <p class="lede">
+        Everything runs on Cloudflare's edge. There is no server to patch, no container, no always-on
+        process.
+      </p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Layer</th><th>Technology</th><th>Why this one</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Application runtime</td>
+              <td><b>Cloudflare Workers</b></td>
+              <td>Runs at the edge with no server to maintain, and scales to zero when nobody is using it</td>
+            </tr>
+            <tr>
+              <td>Device-to-device transfer</td>
+              <td><b>WebRTC data channels</b></td>
+              <td>The only way for two browsers to move bytes directly, with encryption built in</td>
+            </tr>
+            <tr>
+              <td>Introducing the browsers</td>
+              <td><b>Durable Objects</b> + WebSockets</td>
+              <td>Each network group and each room gets its own coordinator with consistent state</td>
+            </tr>
+            <tr>
+              <td>File storage (Mode 2)</td>
+              <td><b>Cloudflare R2</b></td>
+              <td>Object storage with no charge for data leaving it, which is most of the traffic here</td>
+            </tr>
+            <tr>
+              <td>Share records &amp; expiry</td>
+              <td><b>Cloudflare D1</b> (SQLite)</td>
+              <td>Strongly consistent, so a deleted link is dead immediately everywhere</td>
+            </tr>
+            <tr>
+              <td>Encryption</td>
+              <td><b>AES-256-GCM</b> via WebCrypto</td>
+              <td>Standard authenticated encryption, available natively in the runtime</td>
+            </tr>
+            <tr>
+              <td>Connecting across networks</td>
+              <td><b>Cloudflare Realtime TURN</b></td>
+              <td>Relays when a direct path is impossible, using credentials that expire in hours</td>
+            </tr>
+            <tr>
+              <td>Frontend</td>
+              <td><b>Plain HTML, CSS, JavaScript</b></td>
+              <td>No framework, no build step, no bundle to ship. The browser gets exactly what was written</td>
+            </tr>
+            <tr>
+              <td>Static files</td>
+              <td><b>Workers Static Assets</b></td>
+              <td>Pages served from the edge without touching application code</td>
+            </tr>
+            <tr>
+              <td>Scheduled cleanup</td>
+              <td><b>Cron Triggers</b></td>
+              <td>Runs every ten minutes without an always-on process to host it</td>
+            </tr>
+            <tr>
+              <td>QR codes</td>
+              <td><code>qrcode-generator</code></td>
+              <td>The one runtime dependency in the whole project. Rendered as SVG, server-side</td>
+            </tr>
+            <tr>
+              <td>Tests</td>
+              <td>Node's built-in test runner</td>
+              <td>No test framework to install or configure</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <h4>One dependency</h4>
+        <p>
+          The entire application ships with a single runtime package, for drawing QR codes. Everything
+          else — encryption, transfers, the interface, routing, storage — is written directly against the
+          platform. Less to install, less to break, nothing to keep patched.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="security">
+      <h2>Security and privacy</h2>
+
+      <h3>Files kept on the server</h3>
+      <p>
+        Only Mode 2 stores anything. Every piece of every file is encrypted with AES-256-GCM inside the
+        Worker before it reaches storage, so plaintext is never written to disk.
+      </p>
+      <ul>
+        <li><strong>A separate key per file.</strong> Each file's key is derived from a master secret and its own random salt, so no two files share a key.</li>
+        <li><strong>A separate initialisation vector per piece.</strong> Every 8 MB piece gets its own.</li>
+        <li><strong>Order is authenticated.</strong> Each piece's position is bound into its encryption, so pieces cannot be reordered, duplicated or dropped without the decryption failing outright.</li>
+        <li><strong>Tampering fails loudly.</strong> A single altered byte causes the download to error rather than return corrupt data. This is covered by a test.</li>
+        <li><strong>The master secret lives outside the code.</strong> It is stored as a platform secret, never in the repository, and cannot be read back once set.</li>
+      </ul>
+
+      <h3>Transfers between browsers</h3>
+      <p>
+        Modes 1 and 3 use browser data channels, which are encrypted by the standard itself. Nothing is
+        stored anywhere, so there is nothing to leak later. When a network makes a direct connection
+        impossible and a relay is used instead, the traffic still stays encrypted end to end; the relay
+        moves it without being able to read it.
+      </p>
+
+      <h3>What is deliberately not collected</h3>
+      <ul>
+        <li>No accounts, no email addresses, no passwords.</li>
+        <li>No analytics, no tracking, no third-party scripts. The page loads nothing from another domain.</li>
+        <li>IP addresses are hashed for grouping devices and for rate limiting, and are never stored raw or sent to any browser.</li>
+        <li>Device names are whatever you type. They stay in your own browser.</li>
+      </ul>
+
+      <h3>Abuse protection</h3>
+      <p>
+        Uploads are anonymous by design, which leaves storage as the one thing a stranger could run up.
+        Each IP is allowed 10 shares and 5 GB per day. Going over returns a clear message and points at
+        the peer-to-peer modes, which cost nothing to host and are never limited. If the counter itself
+        ever fails, it deliberately allows the upload rather than taking sharing down with it — a quota is
+        abuse control, not access control.
+      </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="limits">
+      <h2>Limits and settings</h2>
+      <p class="lede">Every one of these is a configuration value, not something baked into the code.</p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Setting</th><th class="num">Value</th><th>Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Maximum file size</td><td class="num">2 GB</td><td>Per file. No limit on how many files</td></tr>
+            <tr><td>Maximum share size</td><td class="num">8 GB</td><td>Everything in one link, combined</td></tr>
+            <tr><td>Message length</td><td class="num">200,000</td><td>Characters of text in a share</td></tr>
+            <tr><td>Upload piece size</td><td class="num">8 MB</td><td>How the file is cut up for upload and encryption</td></tr>
+            <tr><td>Expiry choices</td><td class="num">1h · 6h · 24h · 3d · 7d</td><td>24 hours unless changed</td></tr>
+            <tr><td>Room lifetime</td><td class="num">12 hours</td><td>Reset every time somebody joins</td></tr>
+            <tr><td>People per room</td><td class="num">8</td><td>Everyone connected to everyone else</td></tr>
+            <tr><td>Daily limit per IP</td><td class="num">10 shares · 5 GB</td><td>Link shares only. Direct transfers are unlimited</td></tr>
+            <tr><td>Cleanup interval</td><td class="num">10 minutes</td><td>How often expired shares are swept</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="infra">
+      <h2>What's deployed</h2>
+      <p class="lede">Five pieces, all on one Cloudflare account, all within free tiers.</p>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr><th>Resource</th><th>Name</th><th>Job</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Worker</td><td><code>dropitover</code></td><td>Everything: pages, API, connections, cleanup</td></tr>
+            <tr><td>R2 bucket</td><td><code>dropitover-files</code></td><td>Encrypted file pieces</td></tr>
+            <tr><td>D1 database</td><td><code>dropitover</code></td><td>Share records, expiry, daily counters</td></tr>
+            <tr><td>Durable Object</td><td><code>NetworkHub</code></td><td>One per network, for finding nearby devices</td></tr>
+            <tr><td>Durable Object</td><td><code>Room</code></td><td>One per room</td></tr>
+            <tr><td>Cron trigger</td><td>every 10 min</td><td>Deletes expired shares</td></tr>
+            <tr><td>Secrets</td><td>3</td><td>Encryption key, plus two for the relay service</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Storage, database and the coordinator objects all sit inside Cloudflare's free allowances at this
+        scale, and data leaving R2 is not billed at all. The tighter ceiling in practice is the free plan's
+        100,000 requests per day, since each 8 MB upload piece counts as one request.
+      </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="code">
+      <h2>Code structure</h2>
+      <p class="lede">About 5,200 lines: 1,500 of server code, 2,800 of frontend, 500 of tests.</p>
+
+<pre><b>src/</b>                    <i>server, runs on Cloudflare</i>
+  index.js              <i>routing: pages, API, connections, cleanup job</i>
+  <b>do/</b>
+    network-hub.js      <i>finds devices sharing a network</i>
+    room.js             <i>one room: who's in it, when it expires</i>
+  <b>routes/</b>
+    api.js              <i>the HTTP endpoints</i>
+  <b>lib/</b>
+    links.js            <i>link shares: pieces, encryption, storage, expiry</i>
+    crypto.js           <i>encryption, key derivation, id generation</i>
+    expiry.js           <i>expiry maths and file-piece planning</i>
+    rooms.js            <i>room rules: joining, capacity, lifetime</i>
+    limits.js           <i>daily per-IP quota</i>
+    turn.js             <i>relay credentials for hard networks</i>
+    config.js           <i>settings and secrets</i>
+    protocol.js         <i>message format for browser connections</i>
+    qr.js               <i>QR codes as SVG</i>
+
+<b>public/</b>                 <i>frontend, no build step</i>
+  index.html            <i>home: nearby devices, links, rooms</i>
+  room.html             <i>a room</i>
+  download.html         <i>what the recipient sees</i>
+  404.html
+  favicon.svg  logo.svg
+  css/styles.css
+  <b>js/</b>
+    app.js              <i>home page</i>
+    room.js             <i>room page</i>
+    download.js         <i>download page, with progress</i>
+    peer.js             <i>the transfer engine between browsers</i>
+    upload.js           <i>chunked upload with retries</i>
+    ws.js               <i>connection to the server</i>
+    ui.js               <i>transfer list, dialogs, drop zones</i>
+    util.js             <i>formatting, device name, notifications</i>
+
+<b>tests/</b>                  <i>51 tests, no framework</i>
+<b>scripts/</b>setup-secrets.mjs
+schema.sql  wrangler.toml  README.md</pre>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="testing">
+      <h2>Testing</h2>
+
+      <h3>51 unit tests</h3>
+      <ul>
+        <li><strong>Expiry:</strong> every time window, the exact instant a link dies, delete-after-download across multiple files, and the arithmetic for splitting a file into pieces — including a zero-byte file and a full 2 GB one.</li>
+        <li><strong>Encryption:</strong> round trips, tamper detection, reorder detection, one file's key failing to open another's, and the wrong master key failing.</li>
+        <li><strong>Rooms:</strong> joining, capacity, duplicate joins, leaving, lifetime extension, expiry.</li>
+        <li><strong>Quotas:</strong> counting, per-IP isolation, daily reset, and failing open when the database is unreachable.</li>
+        <li><strong>Relay credentials:</strong> response parsing and graceful degradation when the service is down.</li>
+      </ul>
+
+      <h3>41 checks against the live site</h3>
+      <p>
+        A separate script exercises the deployed app end to end: it uploads a 10 MB file in pieces,
+        downloads it and compares it byte for byte against the original; opens two connections and walks
+        through discovery, the accept prompt and the connection handshake; creates a room, joins from a
+        second connection, and confirms both sides are notified; then deletes everything it made.
+      </p>
+
+      <h3>What tests cannot cover</h3>
+      <p>
+        The final hop — actual file bytes moving between two real browsers over a direct connection —
+        needs two real devices and cannot be automated from a script. Everything leading up to it is
+        verified; that last step is confirmed by hand.
+      </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="commands">
+      <h2>Commands</h2>
+
+<pre>npm install              <i>install wrangler and the one dependency</i>
+npm test                 <i>run the 51 unit tests</i>
+npm run dev              <i>run locally at localhost:8787</i>
+npm run deploy           <i>publish to Cloudflare</i>
+
+npm run setup            <i>generate and store the secrets</i>
+npm run db:apply         <i>create the database tables</i>
+npm run r2:create        <i>create the storage bucket</i>
+npx wrangler tail        <i>watch live logs</i></pre>
+
+      <p>
+        Deploying takes about twenty seconds and replaces the running version atomically. Secrets apply
+        immediately without a redeploy.
+      </p>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="honest">
+      <h2>Known limits</h2>
+      <p class="lede">Things that are true about this build and worth knowing before relying on it.</p>
+
+      <ul>
+        <li>
+          <strong>Some networks block direct connections.</strong> Mobile carriers in particular. A relay
+          service is configured to handle this, but on a badly behaved network a direct transfer can still
+          fail. The interface says so plainly and points at link sharing, which always works.
+        </li>
+        <li>
+          <strong>Nearby discovery is by public IP, not true local networking.</strong> Browsers cannot
+          scan a network. Devices behind the same router see each other; devices on different networks
+          never will, by design. On some corporate or carrier networks that share one address across many
+          customers, unrelated people could appear in the same list — which is why nothing sends without
+          the receiver accepting first.
+        </li>
+        <li>
+          <strong>Per-IP limits are a speed bump, not a wall.</strong> They stop casual abuse and runaway
+          scripts. They do not stop someone with many addresses.
+        </li>
+        <li>
+          <strong>The free plan allows 100,000 requests a day.</strong> Each 8 MB upload piece is one
+          request, so a 2 GB file costs 256 of them. Comfortable for personal use, finite under load.
+        </li>
+        <li>
+          <strong>Losing the encryption key is unrecoverable.</strong> By design there is no way to read
+          it back or reset it. If it is lost, stored shares are permanently unreadable.
+        </li>
+        <li>
+          <strong>Downloads assemble in browser memory.</strong> Very large files on a low-memory phone
+          may struggle, since the browser holds the file as it arrives.
+        </li>
+        <li>
+          <strong>In-app browsers are restricted.</strong> Opening a link inside WhatsApp or Instagram
+          blocks the features direct transfers need. The page detects this and tells the reader to open it
+          in a real browser instead of failing silently.
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="history">
+      <h2>How it got here</h2>
+      <p class="lede">
+        Two decisions shaped the code more than anything else, and both were reversals.
+      </p>
+
+      <p>
+        <strong>It was first built as a conventional Node server</strong> — Express, Socket.IO, files on
+        disk. That version worked, with all three modes running. Then the target changed to Cloudflare,
+        where none of it could run: Workers execute neither Express nor Socket.IO, and there is no
+        filesystem to write to. The server was rewritten against the platform instead: hand-rolled
+        WebSocket handling, coordinator objects in place of in-memory state, object storage in place of
+        disk. The frontend survived almost intact. The original still sits in the project's history.
+      </p>
+
+      <p>
+        <strong>The 100 MB request limit forced the upload design.</strong> A 2 GB file cannot be one
+        request at the edge. Rather than lower the promise to fit the platform, the upload was split into
+        8 MB pieces with encryption applied per piece. That single constraint is why the encryption is
+        piece-based, why order is authenticated, and why a failed upload retries one piece instead of
+        starting over.
+      </p>
+
+      <p>
+        The project was also renamed once. It shipped as ShareBeam until an existing site turned up under
+        that name, so the name, logo and every user-facing word were replaced. The interface text was then
+        rewritten a second time to strip out engineering vocabulary — protocol names and encryption jargon
+        that told a visitor nothing about which button to press.
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    DropItOver · Files and text between devices, free and account-free · Documentation generated from the
+    deployed build
+  </footer>
+</div>
