@@ -19,6 +19,12 @@ routes = [
 [assets]
 directory = "./public"
 binding = "ASSETS"
+# Static files are normally served before the Worker runs, which meant the
+# canonical redirect never fired on the page people actually land on. Routing
+# just the HTML entry points through the Worker fixes that. Stylesheets, scripts
+# and images still come straight from the asset layer, so they stay fast and
+# free of Worker invocations.
+run_worker_first = ["/", "/index.html"]
 
 # --- Mode 2 storage ---------------------------------------------------------
 # Encrypted file bodies live in R2; metadata and expiry live in D1.
