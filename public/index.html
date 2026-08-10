@@ -4,8 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#070a12">
 <title>ShareBeam — send files & text between devices</title>
-<meta name="description" content="Send files and text device to device: automatic discovery on the same network, expiring links for anywhere else, and live rooms. Free, no account.">
+<meta name="description" content="Send files and text device to device: automatic discovery on the same network, expiring encrypted links for anywhere else, and live rooms. Free, no account, up to 2 GB per file.">
 <link rel="stylesheet" href="/css/styles.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📡</text></svg>">
 </head>
@@ -23,38 +24,51 @@
     </div>
   </header>
 
+  <section class="hero">
+    <h1>Move files between<br><span class="grad">any two devices</span></h1>
+    <p>Same Wi‑Fi transfers go straight device to device. Everything else gets an encrypted link or a live room. No account, no app, no waiting.</p>
+    <ul class="pills">
+      <li><b>2 GB</b> per file</li>
+      <li><b>No</b> file-count limit</li>
+      <li>Expiry up to <b>7 days</b></li>
+      <li><b>AES‑256</b> encrypted at rest</li>
+      <li><b>Free</b>, no sign-up</li>
+    </ul>
+  </section>
+
   <div class="modes">
 
     <!-- Mode 1 ------------------------------------------------------------ -->
     <section class="card span-2">
       <header>
+        <span class="tile">📶</span>
         <div>
           <h2>Nearby devices</h2>
-          <p class="sub">Same network, discovered automatically. Files go straight device to device.</p>
+          <p class="sub">Same network, found automatically. Files travel straight between browsers — nothing is uploaded.</p>
         </div>
         <span class="badge p2p" id="peer-count">Looking…</span>
       </header>
 
       <ul class="peer-list" id="peers"></ul>
       <div class="empty" id="peers-empty">
-        No other devices yet. Open this page on your phone or another computer on the same Wi‑Fi and it will show up here.
+        No other devices yet. Open this page on your phone or another computer on the same Wi‑Fi and it appears here within a second.
       </div>
-      <p class="footnote" id="net-note">Devices reaching the internet through the same connection see each other. Nothing is uploaded — transfers use an encrypted WebRTC channel.</p>
+      <p class="footnote">Devices reaching the internet through the same connection see each other. Transfers use an encrypted WebRTC channel — the server only introduces the two devices.</p>
     </section>
 
     <!-- Mode 2 ------------------------------------------------------------ -->
     <section class="card">
       <header>
+        <span class="tile">🔗</span>
         <div>
           <h2>Send via link</h2>
           <p class="sub">For anyone, any network, any time before it expires.</p>
         </div>
-        <span class="badge">Mode 2</span>
       </header>
 
       <div class="dropzone" id="link-drop" tabindex="0" role="button" aria-label="Choose files to share by link">
         <strong>Drop files here</strong>
-        <span id="link-limits">or tap to choose — no limit on how many</span>
+        <span id="link-limits">or tap to choose</span>
       </div>
       <input id="link-files" type="file" multiple hidden>
       <ul class="items" id="link-file-list"></ul>
@@ -69,7 +83,7 @@
           <label class="field" for="link-expiry">Expires after</label>
           <select id="link-expiry"></select>
         </div>
-        <div class="grow" style="align-self:flex-end;padding-bottom:10px">
+        <div class="grow" style="align-self:flex-end;padding-bottom:11px">
           <label class="check"><input type="checkbox" id="link-burn"> Delete after first download</label>
         </div>
       </div>
@@ -108,16 +122,16 @@
     <!-- Mode 3 ------------------------------------------------------------ -->
     <section class="card">
       <header>
+        <span class="tile">🔄</span>
         <div>
           <h2>Create a room</h2>
           <p class="sub">Two-way sharing with someone on any network, live.</p>
         </div>
-        <span class="badge">Mode 3</span>
       </header>
 
       <p class="sub" style="margin-top:0">
-        You get a link and QR code. Once the other person joins, both sides can send files and text
-        back and forth for as long as the room stays open — peer to peer, nothing stored on the server.
+        You get a link and a QR code. Once the other person joins, both sides can send files and text
+        back and forth for as long as the room stays open — peer to peer, nothing stored.
       </p>
 
       <button class="btn-primary btn-block mt" id="create-room">Create room &amp; get invite link</button>
@@ -133,6 +147,7 @@
     <!-- Activity ---------------------------------------------------------- -->
     <section class="card span-2">
       <header>
+        <span class="tile">📨</span>
         <div>
           <h2>Activity</h2>
           <p class="sub">Direct transfers with nearby devices show up here.</p>
@@ -145,9 +160,10 @@
 
   </div>
 
-  <p class="footnote center">
-    Free, no account, no file-count cap. Link shares are encrypted at rest with AES‑256 and deleted when they expire.
-  </p>
+  <footer class="page-foot">
+    <b>Nearby</b> and <b>Room</b> transfers never touch a server — the bytes go browser to browser over an encrypted WebRTC channel.<br>
+    <b>Link shares</b> are encrypted with AES‑256‑GCM before storage and deleted the moment they expire.
+  </footer>
 </div>
 
 <div id="toasts"></div>

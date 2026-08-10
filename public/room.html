@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#070a12">
+<meta name="robots" content="noindex, nofollow">
 <title>ShareBeam room</title>
 <link rel="stylesheet" href="/css/styles.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📡</text></svg>">
@@ -22,7 +24,7 @@
     </div>
   </header>
 
-  <!-- Error / loading states -->
+  <!-- Loading / error states -->
   <section class="card state" id="state-loading">
     <div class="glyph">⏳</div>
     <h2>Joining room…</h2>
@@ -45,59 +47,64 @@
 
   <!-- Room -->
   <div id="room" hidden>
-    <section class="card">
-      <header>
-        <div>
-          <h2>Room <span id="room-code" style="font-family:var(--mono)"></span></h2>
-          <p class="sub">Share this link or QR code. Everything sent here goes peer to peer.</p>
-        </div>
-        <span class="badge p2p" id="room-status">Waiting</span>
-      </header>
-
-      <div class="share-result">
-        <div>
-          <div class="link-box">
-            <code id="room-url"></code>
-            <button class="btn-sm" id="copy-room">Copy</button>
+    <div class="modes">
+      <section class="card span-2">
+        <header>
+          <span class="tile">🔄</span>
+          <div>
+            <h2>Room <span id="room-code" style="font-family:var(--mono);font-weight:600"></span></h2>
+            <p class="sub">Share this link or QR code. Everything sent here goes peer to peer.</p>
           </div>
-          <ul class="peer-list mt" id="participants"></ul>
-          <p class="footnote" id="room-expiry"></p>
+          <span class="badge p2p" id="room-status">Waiting</span>
+        </header>
+
+        <div class="share-result">
+          <div>
+            <div class="link-box">
+              <code id="room-url"></code>
+              <button class="btn-sm" id="copy-room">Copy</button>
+            </div>
+            <ul class="peer-list mt" id="participants"></ul>
+            <p class="footnote" id="room-expiry"></p>
+          </div>
+          <img class="qr" id="room-qr" alt="QR code for the room link">
         </div>
-        <img class="qr" id="room-qr" alt="QR code for the room link">
-      </div>
-    </section>
+      </section>
 
-    <section class="card">
-      <header>
-        <div>
-          <h2>Send</h2>
-          <p class="sub">Files go to everyone connected, in both directions, for as long as the room is open.</p>
+      <section class="card span-2">
+        <header>
+          <span class="tile">📤</span>
+          <div>
+            <h2>Send</h2>
+            <p class="sub">Files go to everyone connected, both directions, for as long as the room is open.</p>
+          </div>
+        </header>
+
+        <div class="dropzone" id="room-drop" tabindex="0" role="button" aria-label="Choose files to send">
+          <strong>Drop files to send</strong>
+          <span>or tap to choose — they start sending immediately</span>
         </div>
-      </header>
+        <input id="room-files" type="file" multiple hidden>
 
-      <div class="dropzone" id="room-drop" tabindex="0" role="button" aria-label="Choose files to send">
-        <strong>Drop files to send</strong>
-        <span>or tap to choose — they start sending immediately</span>
-      </div>
-      <input id="room-files" type="file" multiple hidden>
-
-      <div class="mt">
-        <label class="field" for="room-text">Text</label>
-        <textarea id="room-text" rows="3" placeholder="Type or paste text, then hit Send text…"></textarea>
-      </div>
-      <button class="btn-primary mt" id="send-text">Send text</button>
-    </section>
-
-    <section class="card">
-      <header>
-        <div>
-          <h2>Shared in this room</h2>
-          <p class="sub">Received files stay on your device — save the ones you want.</p>
+        <div class="mt">
+          <label class="field" for="room-text">Text</label>
+          <textarea id="room-text" rows="3" placeholder="Type or paste text, then hit Send text…"></textarea>
         </div>
-      </header>
-      <ul class="items" id="transfers"></ul>
-      <div class="empty" id="transfers-empty">Nothing shared yet.</div>
-    </section>
+        <button class="btn-primary mt" id="send-text">Send text</button>
+      </section>
+
+      <section class="card span-2">
+        <header>
+          <span class="tile">📨</span>
+          <div>
+            <h2>Shared in this room</h2>
+            <p class="sub">Received files stay on your device — save the ones you want.</p>
+          </div>
+        </header>
+        <ul class="items" id="transfers"></ul>
+        <div class="empty" id="transfers-empty">Nothing shared yet.</div>
+      </section>
+    </div>
   </div>
 </div>
 
