@@ -5,10 +5,107 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>DropItOver | Send files between your devices</title>
-<meta name="description" content="Send files and text from one device to another. Nothing to install, no account to make, free.">
+
+<!-- Primary SEO Meta Tags -->
+<title>DropItOver - Fast &amp; Free Online File Transfer | P2P &amp; Encrypted Link Sharing</title>
+<meta name="title" content="DropItOver - Fast &amp; Free Online File Transfer | P2P &amp; Encrypted Link Sharing">
+<meta name="description" content="Transfer files and text between devices instantly with DropItOver. Free peer-to-peer Wi-Fi file sharing, end-to-end encrypted expiring links, and multi-device rooms. AirDrop alternative for Android, Windows, Mac &amp; iOS. No account required.">
+<meta name="keywords" content="file transfer, online file share, AirDrop for Windows, AirDrop for Android, send large files free, encrypted file sharing, P2P file transfer, cross platform file share, DropItOver">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="DropItOver">
+<meta name="google-site-verification" content="googleb8ed668ff7baf056">
+<link rel="canonical" href="https://dropitover.com/">
+<link rel="manifest" href="/manifest.json">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:site_name" content="DropItOver">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dropitover.com/">
+<meta property="og:title" content="DropItOver - Fast &amp; Free Online File Transfer | P2P &amp; Encrypted Sharing">
+<meta property="og:description" content="Send files &amp; text between devices instantly. Peer-to-peer Wi-Fi transfer, AES-256 encrypted links, and real-time rooms. AirDrop alternative for Windows, Android, Mac &amp; iOS.">
+<meta property="og:image" content="https://dropitover.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DropItOver: send files to any device">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://dropitover.com/">
+<meta name="twitter:title" content="DropItOver - Fast &amp; Free Online File Transfer">
+<meta name="twitter:description" content="Send files and text between devices instantly. AirDrop alternative for Android, Windows, Mac &amp; iOS. 100% Free &amp; Encrypted.">
+<meta name="twitter:image" content="https://dropitover.com/og.png">
+<meta name="twitter:image:alt" content="DropItOver: send files to any device">
+
+<!-- Structured Data / JSON-LD -->
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "DropItOver",
+    "url": "https://dropitover.com/",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Fast, free, and secure peer-to-peer file and text transfer between devices. Supports Wi-Fi P2P direct transfer, encrypted expiring share links, and multi-device rooms.",
+    "browserRequirements": "Requires JavaScript. Requires WebRTC support for P2P mode."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "DropItOver",
+    "url": "https://dropitover.com/",
+    "description": "Send files between your devices without login or installation. The free AirDrop alternative for Android, Windows, Mac, and iOS."
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I transfer files between Android, Windows, iPhone, and Mac?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simply open DropItOver on both devices. If they are on the same Wi-Fi network, they will discover each other automatically for direct peer-to-peer (P2P) file transfer. Alternatively, drag and drop your file to generate an encrypted link or start a room."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is DropItOver free and what is the file size limit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "DropItOver is 100% free with no account creation or subscription required. You can send files up to 2 GB per file, with no limit on how many files you send at once. A single share link can total up to 8 GB."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my transfers secure and private?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Direct Wi-Fi transfers and room shares use peer-to-peer WebRTC encryption, meaning your files pass directly between devices without ever reaching a server. Link shares are encrypted with AES-256-GCM before storage."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is DropItOver an alternative to Apple AirDrop?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "AirDrop is restricted to Apple hardware. DropItOver brings AirDrop-like simplicity to all operating systems: Android, Windows, Linux, macOS, and iOS, directly in your browser."
+        }
+      }
+    ]
+  }
+]
+</script>
+
 <link rel="stylesheet" href="/css/styles.css">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicon.svg">
 </head>
 <body>
 <div class="wrap">
@@ -164,6 +261,67 @@
       </header>
       <ul class="items" id="transfers"></ul>
       <div class="empty" id="transfers-empty">Nothing yet.</div>
+    </section>
+
+    <!-- SEO & FAQ Section --------------------------------------------------- -->
+    <section class="card span-2 seo-section" id="faq">
+      <header>
+        <span class="tile">⚡</span>
+        <div>
+          <h2>Cross-Platform File Sharing &amp; AirDrop Alternative</h2>
+          <p class="sub">Fast, encrypted, and private file transfer across Android, Windows, Mac, iOS, and Linux.</p>
+        </div>
+      </header>
+
+      <div class="seo-grid">
+        <div class="seo-card">
+          <h3>🚀 Instant P2P Wi-Fi Transfer</h3>
+          <p>Devices on the same Wi-Fi network discover each other automatically. Files travel browser-to-browser via WebRTC with zero cloud storage and maximum speed.</p>
+        </div>
+        <div class="seo-card">
+          <h3>🔒 AES-256 Encrypted Share Links</h3>
+          <p>Send files to anyone, anywhere. Files are encrypted with AES-256-GCM before upload and automatically self-destruct upon expiration or download.</p>
+        </div>
+        <div class="seo-card">
+          <h3>📱 AirDrop for Every Device</h3>
+          <p>No ecosystem limits. Easily share photos, 4K videos, documents, and code snippets between Windows PCs, Android phones, iPhones, and MacBooks.</p>
+        </div>
+      </div>
+
+      <hr class="hr">
+
+      <div class="seo-faq">
+        <h3>Frequently Asked Questions</h3>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>How do I transfer files between Android, Windows, iPhone, and Mac?</summary>
+            <div class="faq-answer">
+              Open <code>dropitover.com</code> on both devices. On the same Wi-Fi network, devices discover each other automatically under "Devices on your Wi-Fi". Select a file to send instantly. For remote devices, click "Get a link".
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Is DropItOver free and what is the file size limit?</summary>
+            <div class="faq-answer">
+              DropItOver is 100% free with no account creation or subscription required. You can send files up to <strong>2 GB per file</strong>, with no limit on how many files you send at once. A single share link can total up to 8 GB.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Are my transfers secure and private?</summary>
+            <div class="faq-answer">
+              Direct Wi-Fi transfers and room shares use peer-to-peer WebRTC encryption, meaning your files pass directly between devices without ever reaching a server. Link shares are encrypted with AES-256-GCM before storage.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How is DropItOver an alternative to Apple AirDrop?</summary>
+            <div class="faq-answer">
+              AirDrop is restricted to Apple hardware. DropItOver brings AirDrop-like simplicity to all operating systems: Android, Windows, Linux, macOS, and iOS, directly in your browser.
+            </div>
+          </details>
+        </div>
+      </div>
     </section>
 
   </div>

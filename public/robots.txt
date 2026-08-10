@@ -1,0 +1,16 @@
+# Robots.txt for DropItOver - https://dropitover.com/
+
+User-agent: *
+Allow: /
+Allow: /css/
+Allow: /js/
+Allow: /favicon.svg
+Allow: /logo.svg
+
+# Disallow dynamic API endpoints and private file/room transfer links
+Disallow: /api/
+Disallow: /d/
+Disallow: /r/
+Disallow: /ws/
+
+Sitemap: https://dropitover.com/sitemap.xml
