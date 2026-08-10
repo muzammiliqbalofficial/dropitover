@@ -3,7 +3,8 @@
 
 import { LinkStore, publicLink } from '../lib/links.js';
 import { masterKeyFrom, masterKeyStatus, readConfig } from '../lib/config.js';
-import { randomId, timingSafeEqual } from '../lib/crypto.js';
+import { hashNetworkId, randomId, timingSafeEqual } from '../lib/crypto.js';
+import { UsageTracker } from '../lib/limits.js';
 import { qrSvg } from '../lib/qr.js';
 
 const json = (data, init = {}) =>
@@ -119,6 +120,19 @@ async function handleLinks(request, env, ctx, url, config, segments) {
     }
     if (total > config.maxTotalSize) {
       return fail(413, 'share_too_large', `A single share is limited to ${config.maxTotalSize} bytes.`);
+    }
+
+    // Anonymous uploads are the one thing here that costs storage, so they are
+    // metered per IP per day. Charged from the declared sizes, which the
+    // part handler enforces exactly.
+    const usage = new UsageTracker(env.DB, config.dailyLimits);
+    const ipHash = await hashNetworkId(request.headers.get('CF-Connecting-IP') || 'local-dev');
+    const quota = await usage.reserve(ipHash, { shares: 1, bytes: total });
+    if (!quota.ok) {
+      return json(
+        { error: quota.error, message: quota.message },
+        { status: 429, headers: { 'retry-after': String(Math.ceil(quota.retryAfterMs / 1000)) } }
+      );
     }
 
     const created = await store.create({

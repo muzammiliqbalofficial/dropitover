@@ -50,6 +50,10 @@ MAX_TEXT_LENGTH = "200000"
 # and comfortably under the Workers request-body limit.
 PART_SIZE = "8388608"
 DEFAULT_EXPIRY = "24h"
+# Per-IP daily caps on link shares (Mode 2 only — peer-to-peer transfers are
+# never metered). Set either to "0" to disable that cap.
+DAILY_SHARE_LIMIT = "10"
+DAILY_BYTE_LIMIT = "5368709120"
 ROOM_TTL_SECONDS = "43200"
 ROOM_MAX_PARTICIPANTS = "8"
 STUN_URLS = "stun:stun.l.google.com:19302,stun:stun1.l.google.com:19302"

@@ -119,6 +119,8 @@ Plain values live in `[vars]` in `wrangler.toml`; secrets go through `wrangler s
 | `MAX_TEXT_LENGTH` | `200000` | Characters in a shared note |
 | `PART_SIZE` | `8388608` (8 MiB) | Upload/encryption chunk. Must be ≥ 5 MiB (R2 multipart minimum) |
 | `DEFAULT_EXPIRY` | `24h` | One of `1h`, `6h`, `24h`, `3d`, `7d` |
+| `DAILY_SHARE_LIMIT` | `10` | Link shares per IP per UTC day. `0` disables |
+| `DAILY_BYTE_LIMIT` | `5368709120` (5 GB) | Upload bytes per IP per UTC day. `0` disables |
 | `ROOM_TTL_SECONDS` | `43200` (12 h) | Refreshed on every join |
 | `ROOM_MAX_PARTICIPANTS` | `8` | Mesh size |
 | `STUN_URLS` | Google STUN | Comma separated |
@@ -127,6 +129,21 @@ Plain values live in `[vars]` in `wrangler.toml`; secrets go through `wrangler s
 | `TURN_CREDENTIAL` *(secret)* | — | Only with TURN |
 
 ---
+
+## Abuse limits
+
+Uploads are anonymous by design, so Mode 2 is metered per IP per UTC day — 10 shares and 5 GB by default. Going over returns `429` with a `Retry-After` header and a message pointing at the peer-to-peer modes instead.
+
+The counter is charged once per share from the manifest's declared sizes (which the part handler enforces byte for byte), so a 2 GB upload costs one row write, not 256. IPs are hashed before storage, one row per address per day, and the cron sweep drops rows older than two days.
+
+**Modes 1 and 3 are deliberately never metered.** They cost nothing to host — no storage, no egress, just a few KB of signaling — so there is no reason to cap them. Someone who hits the daily upload limit can still send unlimited files device to device.
+
+Two things worth knowing about what this does and doesn't cover:
+
+- A burst of simultaneous requests from one IP can slip slightly over the cap. That's a deliberate trade: the alternative is serialising every upload behind a lock, and being a few MB over is harmless for abuse control.
+- Per-IP limits are porous against anyone with a pool of addresses. This protects against casual abuse and runaway scripts, not a determined attacker. If you need more, put Cloudflare's WAF rate limiting in front of `/api/links` — it works at the edge, before the Worker runs.
+
+The tighter constraint in practice is the Workers free plan's **100,000 requests/day**, since every 8 MiB chunk is one request (a 2 GB file is 256 of them).
 
 ## Adding a TURN server
 

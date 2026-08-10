@@ -38,6 +38,11 @@ export function readConfig(env) {
     expiryOptions: Object.keys(EXPIRY_OPTIONS),
     roomTtlSeconds: int(env.ROOM_TTL_SECONDS, 12 * 60 * 60),
     roomMaxParticipants: int(env.ROOM_MAX_PARTICIPANTS, 8),
+    // Daily per-IP caps on Mode 2 uploads. 0 disables a cap.
+    dailyLimits: {
+      shares: int(env.DAILY_SHARE_LIMIT, 10),
+      bytes: int(env.DAILY_BYTE_LIMIT, 5 * 1024 * 1024 * 1024),
+    },
     iceServers,
     hasTurn: turnUrls.length > 0,
   };

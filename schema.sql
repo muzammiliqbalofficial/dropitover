@@ -41,3 +41,17 @@ CREATE TABLE IF NOT EXISTS files (
 );
 
 CREATE INDEX IF NOT EXISTS idx_files_link ON files (link_id);
+
+-- Per-IP daily quota for Mode 2 uploads. The IP is hashed (never stored raw),
+-- one row per address per UTC day, written once per share rather than per chunk.
+-- Modes 1 and 3 are peer-to-peer and cost nothing to host, so they are not
+-- metered here.
+CREATE TABLE IF NOT EXISTS usage (
+  ip_hash TEXT NOT NULL,
+  day     TEXT NOT NULL,
+  shares  INTEGER NOT NULL DEFAULT 0,
+  bytes   INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (ip_hash, day)
+);
+
+CREATE INDEX IF NOT EXISTS idx_usage_day ON usage (day);

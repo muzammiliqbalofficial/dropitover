@@ -16,6 +16,7 @@ import { Room } from './do/room.js';
 import { handleApi } from './routes/api.js';
 import { hashNetworkId } from './lib/crypto.js';
 import { LinkStore } from './lib/links.js';
+import { UsageTracker } from './lib/limits.js';
 import { masterKeyFrom, readConfig } from './lib/config.js';
 
 export { NetworkHub, Room };
@@ -61,12 +62,16 @@ export default {
 
   /** Cron trigger: delete expired shares and abandoned uploads. */
   async scheduled(event, env, ctx) {
-    const store = new LinkStore(env, readConfig(env), masterKeyFrom(env));
+    const config = readConfig(env);
+    const store = new LinkStore(env, config, masterKeyFrom(env));
+    const usage = new UsageTracker(env.DB, config.dailyLimits);
+
     ctx.waitUntil(
-      store
-        .sweep()
-        .then(({ expired, abandoned }) => {
-          if (expired || abandoned) console.log(`[cleanup] expired=${expired} abandoned=${abandoned}`);
+      Promise.all([store.sweep(), usage.sweep()])
+        .then(([{ expired, abandoned }, counters]) => {
+          if (expired || abandoned || counters) {
+            console.log(`[cleanup] expired=${expired} abandoned=${abandoned} counters=${counters}`);
+          }
         })
         .catch((err) => console.error('[cleanup]', err.message))
     );
