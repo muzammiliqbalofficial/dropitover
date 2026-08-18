@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#070a12">
+<title>Send Large Files Free, Without Email or an Account</title>
+<meta name="description" content="Most inboxes reject anything over 25MB. Here is how to send large files free, with no account and no size games, up to 2GB per file.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://dropitover.com/guides/send-large-files-without-email">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" href="/favicon.ico" sizes="192x192">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="DropItOver">
+<meta property="og:title" content="Send Large Files Free, Without Email">
+<meta property="og:description" content="Most inboxes reject anything over 25MB. Here is what to do instead.">
+<meta property="og:url" content="https://dropitover.com/guides/send-large-files-without-email">
+<meta property="og:image" content="https://dropitover.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <a class="brand" href="/">
+      <img class="mark" src="/favicon.svg" alt="" width="38" height="38">
+      <span>DropItOver<small>send files between devices</small></span>
+    </a>
+  </header>
+
+  <section class="card article">
+    <p class="eyebrow">Guide</p>
+    <h1>Send large files free, without email</h1>
+    <p class="dek">Gmail and Outlook cap attachments at 25MB. A short screen recording or a folder of
+    photos blows past that in seconds, and the error message never explains what to do next. Here's
+    what does work.</p>
+    <p class="updated">Last checked 19 August 2026</p>
+
+    <h2>Why email rejects the file in the first place</h2>
+    <p>Email attachments are base64-encoded, which inflates their size by roughly a third, and mail
+    servers were never designed to move gigabytes around. The 25MB figure isn't arbitrary meanness, it's
+    close to the practical ceiling for a protocol built in the 1980s. Nothing you do to the file will
+    talk your way past it, short of shrinking it.</p>
+
+    <h2>Send a link instead</h2>
+    <ol>
+      <li>Go to <a href="/">dropitover.com</a> and drop the file into "Send a link."</li>
+      <li>Pick how long the link should work: 1 hour up to 7 days. 24 hours is the default.</li>
+      <li>You get a link and a QR code. Send the link however you'd normally send anything: text,
+      email, chat, whatever the recipient actually checks.</li>
+      <li>They open it and download directly. No account, on either end.</li>
+    </ol>
+
+    <p>The file is encrypted before it's stored, and it's gone automatically once the link expires or,
+    if you turn that option on, the moment it's been downloaded once.</p>
+
+    <h2>What that gets you over email</h2>
+    <div class="scroll" style="overflow-x:auto">
+    <table class="compare">
+      <thead><tr><th>&nbsp;</th><th class="us">A DropItOver link</th><th>Email attachment</th></tr></thead>
+      <tbody>
+        <tr><td>Size limit</td><td class="us yes">2 GB per file</td><td class="no">~25 MB, usually</td></tr>
+        <tr><td>Multiple files</td><td class="us yes">No count limit</td><td class="no">Compounds the size problem</td></tr>
+        <tr><td>Stays in someone's inbox forever</td><td class="us yes">No, it expires</td><td class="no">Yes, unless manually deleted</td></tr>
+        <tr><td>Needs an account</td><td class="us yes">No</td><td class="yes">Already have one, usually</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2>If the other person is right next to you</h2>
+    <p>Skip the link entirely. Open the site on both devices on the same Wi-Fi and they'll find each
+    other automatically, sending the file straight from one browser to the other with no upload step at
+    all.</p>
+
+    <h2>What still won't fit</h2>
+    <p>2 GB covers nearly everything: video clips, large photo batches, zipped project folders,
+    uncompressed audio. A feature-length uncompressed video or a full disk image can exceed it. For
+    those, splitting the file with a zip tool into smaller parts, or sending as a room transfer where
+    size is limited only by the sending device's memory, are the practical options.</p>
+
+    <h2>Is it actually safe to use a link like this?</h2>
+    <p>The file is encrypted before it's written to storage, using a key that's different for every
+    file. Nobody can guess a link either: it's a long random string, not a sequential id, so there's
+    nothing to enumerate. The two things worth doing on your side are picking the shortest expiry that
+    still gives the recipient enough time, and turning on "delete after download" for anything you'd
+    rather not sit around even encrypted.</p>
+
+    <h2>What happens after the link expires</h2>
+    <p>The file is deleted automatically, not just hidden. A background job checks for expired shares
+    every few minutes and removes them, and opening an expired link returns nothing to recover, on
+    either end. There's no trace left to clean up afterward.</p>
+
+    <div class="cta">
+      <p class="lead" style="margin-bottom:14px">Stop fighting attachment limits.</p>
+      <a class="btn btn-primary" href="/">Send a file now</a>
+      <a class="btn" href="/guides/airdrop-for-windows">AirDrop for Windows →</a>
+    </div>
+  </section>
+
+  <footer class="page-foot">
+    <div class="resource-nav">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/guides/airdrop-for-windows">AirDrop for Windows</a><span class="sep">·</span>
+      <a href="/guides/wifi-file-transfer-android-to-pc">Android to PC</a><span class="sep">·</span>
+      <a href="/vs/snapdrop">vs Snapdrop</a><span class="sep">·</span>
+      <a href="/updates">Updates</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

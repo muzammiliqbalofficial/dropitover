@@ -20,11 +20,14 @@ routes = [
 directory = "./public"
 binding = "ASSETS"
 # Static files are normally served before the Worker runs, which meant the
-# canonical redirect never fired on the page people actually land on. Routing
-# just the HTML entry points through the Worker fixes that. Stylesheets, scripts
-# and images still come straight from the asset layer, so they stay fast and
-# free of Worker invocations.
-run_worker_first = ["/", "/index.html"]
+# canonical redirect only fired on paths listed here -- every other page
+# (privacy, terms, guides, comparisons) stayed reachable over http:// and
+# www., which is both a broken secure-context and duplicate-content problem.
+# Routing every request through the Worker first fixes that; the fetch
+# handler still falls through to the asset layer for anything it doesn't
+# handle itself, so this costs a Worker invocation per request, not a slower
+# response.
+run_worker_first = true
 
 # --- Mode 2 storage ---------------------------------------------------------
 # Encrypted file bodies live in R2; metadata and expiry live in D1.

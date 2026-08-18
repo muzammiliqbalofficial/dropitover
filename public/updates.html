@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#070a12">
+<title>Updates | DropItOver</title>
+<meta name="description" content="A running log of what changed in DropItOver and why: new capabilities, real fixes, and the reasoning behind each one. No marketing spin.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://dropitover.com/updates">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" href="/favicon.ico" sizes="192x192">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <a class="brand" href="/">
+      <img class="mark" src="/favicon.svg" alt="" width="38" height="38">
+      <span>DropItOver<small>send files between devices</small></span>
+    </a>
+  </header>
+
+  <section class="card article">
+    <p class="eyebrow">Updates</p>
+    <h1>What's changed</h1>
+    <p class="dek">A running log of what's new and what got fixed, in the order it happened. Nothing
+    here is a marketing announcement; most of these entries exist because something didn't work the way
+    it should have, and this says plainly what changed and why.</p>
+
+    <div class="changelog-entry">
+      <time>19 August 2026</time>
+      <h2>Rooms officially support up to 8 people</h2>
+      <p>The landing page used to describe rooms as "you and someone else," which undersold what they
+      actually did. Rooms have always supported group sessions; the page now says so, and shows how many
+      of the 8 slots are filled while you're in one. If a room shows as full, someone else joining a
+      moment earlier used the last slot; wait for one to leave, or start a second room.</p>
+    </div>
+
+    <div class="changelog-entry">
+      <time>11 August 2026</time>
+      <h2>Live on dropitover.com</h2>
+      <p>Moved off the temporary workers.dev address onto a proper domain, with a certificate issued
+      automatically. Plain http:// and the www. address now redirect to the canonical https address
+      instead of quietly serving a duplicate copy of the site.</p>
+    </div>
+
+    <div class="changelog-entry">
+      <time>10 August 2026</time>
+      <h2>Cross-network rooms actually connect</h2>
+      <p>Two devices on different networks, especially a phone on mobile data, often couldn't find a
+      direct path to each other and sat at "Connecting…" indefinitely. Added a relay for exactly that
+      case, reachable even on restrictive networks, so a phone on mobile data can now reliably join a
+      room with a laptop on Wi-Fi. Connections that still can't reach each other now say so, with a
+      concrete next step, instead of spinning forever.</p>
+    </div>
+
+    <div class="changelog-entry">
+      <time>9 August 2026</time>
+      <h2>Rebuilt to run on Cloudflare's edge</h2>
+      <p>Replaced the original server with one built directly on Cloudflare Workers, R2 and D1: no
+      server to patch, no container, nothing to keep running. Link shares are chunked into 8MB pieces
+      during upload and encrypted piece by piece, which is what makes a 2GB file possible at all under
+      the platform's per-request size limit.</p>
+    </div>
+
+    <div class="changelog-entry">
+      <time>9 August 2026</time>
+      <h2>Three modes, one page</h2>
+      <p>Same-network discovery, expiring links, and multi-person rooms shipped together as the initial
+      release, rather than adding them one at a time behind a paywall. All three are free with no file
+      count limit, which was the whole reason for building this instead of using an existing tool.</p>
+    </div>
+
+    <p style="font-size:0.85rem;color:var(--faint);margin-top:26px">
+      Found something that doesn't belong on this page, meaning a bug rather than a feature? Say so at
+      <a href="mailto:support@dropitover.com">support@dropitover.com</a> and it'll get looked at.
+    </p>
+
+    <div class="cta">
+      <a class="btn btn-primary" href="/">Back to DropItOver</a>
+    </div>
+  </section>
+
+  <footer class="page-foot">
+    <div class="resource-nav">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/vs/airdrop">vs AirDrop</a><span class="sep">·</span>
+      <a href="/vs/snapdrop">vs Snapdrop</a><span class="sep">·</span>
+      <a href="/privacy">Privacy</a><span class="sep">·</span>
+      <a href="/terms">Terms</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

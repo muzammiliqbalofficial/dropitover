@@ -1020,3 +1020,104 @@ label.field {
   font-size: 0.85em;
 }
 
+/* --- Article pages: comparisons, guides, updates ------------------------------------- */
+
+.article { max-width: 46rem; }
+
+.article .eyebrow {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 8px;
+}
+
+.article h1 {
+  font-size: clamp(1.7rem, 4.4vw, 2.3rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin: 0 0 10px;
+}
+
+.article .dek { font-size: 1rem; color: var(--muted); margin: 0 0 22px; max-width: 40rem; }
+.article .updated { font-size: 0.8rem; color: var(--faint); margin-bottom: 26px; }
+
+.article h2 {
+  font-size: 1.18rem;
+  letter-spacing: -0.02em;
+  margin: 34px 0 10px;
+}
+
+.article h3 { font-size: 1rem; letter-spacing: -0.01em; margin: 20px 0 8px; }
+
+.article p, .article li { color: var(--muted); font-size: 0.94rem; line-height: 1.68; }
+.article li { margin-bottom: 6px; }
+.article strong { color: var(--text); }
+.article a { color: var(--accent); }
+
+.article .lead { font-size: 1rem; color: var(--text); }
+
+/* Comparison table: DropItOver's column is highlighted, not the competitor's. */
+.compare { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 14px 0 6px; }
+.compare th, .compare td { text-align: left; padding: 11px 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.compare th { color: var(--text); font-weight: 650; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.compare td { color: var(--muted); }
+.compare td.us, .compare th.us { background: var(--accent-soft); color: var(--text); }
+.compare .yes { color: var(--success); font-weight: 650; }
+.compare .no { color: var(--faint); }
+
+.callout {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 14px 18px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin: 18px 0;
+}
+.callout p { color: var(--text); margin: 0; font-size: 0.92rem; }
+.callout p + p { margin-top: 8px; }
+
+.article .cta {
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+}
+
+/* Cross-links between related articles, and the resources footer nav. */
+.related-links { display: grid; gap: 8px; margin: 8px 0 0; padding: 0; list-style: none; }
+.related-links a {
+  display: block;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 550;
+}
+.related-links a:hover { border-color: var(--accent); background: var(--accent-soft); }
+.related-links span { display: block; font-weight: 400; color: var(--muted); font-size: 0.82rem; margin-top: 2px; }
+
+.resource-nav {
+  margin-top: 10px;
+  font-size: 0.85em;
+  color: var(--muted);
+  line-height: 2;
+}
+.resource-nav a { color: var(--accent); text-decoration: none; }
+.resource-nav a:hover { text-decoration: underline; }
+.resource-nav .sep { margin: 0 6px; color: var(--border-strong); }
+
+.changelog-entry { padding: 18px 0; border-bottom: 1px solid var(--border); }
+.changelog-entry:last-child { border-bottom: 0; }
+.changelog-entry time {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 6px;
+}
+.changelog-entry h2 { margin: 0 0 6px; font-size: 1.05rem; }
+

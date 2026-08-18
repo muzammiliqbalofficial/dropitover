@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#070a12">
+<title>DropItOver vs Snapdrop: Same-Network Transfer and Beyond</title>
+<meta name="description" content="Snapdrop and DropItOver both do the browser-to-browser Wi-Fi trick. Here is where they're alike, where DropItOver goes further, and when to use each.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://dropitover.com/vs/snapdrop">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" href="/favicon.ico" sizes="192x192">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="DropItOver">
+<meta property="og:title" content="DropItOver vs Snapdrop">
+<meta property="og:description" content="Both do same-network transfer in the browser. Here is where they differ.">
+<meta property="og:url" content="https://dropitover.com/vs/snapdrop">
+<meta property="og:image" content="https://dropitover.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <a class="brand" href="/">
+      <img class="mark" src="/favicon.svg" alt="" width="38" height="38">
+      <span>DropItOver<small>send files between devices</small></span>
+    </a>
+  </header>
+
+  <section class="card article">
+    <p class="eyebrow">Comparison</p>
+    <h1>DropItOver vs Snapdrop</h1>
+    <p class="dek">Snapdrop popularised a genuinely good idea: open a page on two devices on the same
+    Wi-Fi, and they find each other, no app and no account. DropItOver's same-network mode works the
+    same way, for the same reason it's a good idea. The difference shows up once the network changes.</p>
+    <p class="updated">Last checked 19 August 2026</p>
+
+    <p class="lead">Snapdrop and its forks (PairDrop and others in that family) are built specifically
+    for one situation: two devices on the same local network, both online right now. That's exactly
+    Mode 1 of DropItOver too, built the same way, for the same reason. The comparison that matters is
+    what happens outside that one situation.</p>
+
+    <h2>What's genuinely the same</h2>
+    <ul>
+      <li>Open a page on both devices, no install, no account.</li>
+      <li>Devices on the same Wi-Fi discover each other automatically.</li>
+      <li>The file goes straight from one browser to the other. Neither tool uploads it anywhere.</li>
+      <li>Free, with no file-count limit on that same-network transfer.</li>
+    </ul>
+
+    <h2>Where they diverge</h2>
+    <div class="scroll" style="overflow-x:auto">
+    <table class="compare">
+      <thead>
+        <tr><th>&nbsp;</th><th class="us">DropItOver</th><th>Snapdrop-family tools</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Same Wi-Fi, browser to browser</td><td class="us yes">Yes</td><td class="yes">Yes</td></tr>
+        <tr><td>Different networks, live (a room)</td><td class="us yes">Yes, up to 8 people</td><td class="no">No, same network only</td></tr>
+        <tr><td>Different networks, async (a link)</td><td class="us yes">Yes, works up to 7 days later</td><td class="no">No</td></tr>
+        <tr><td>Recipient can be offline when you send</td><td class="us yes">Yes, with a link</td><td class="no">No, both must be online at once</td></tr>
+        <tr><td>Files encrypted at rest for later pickup</td><td class="us yes">Yes, AES-256-GCM</td><td class="no">Nothing is stored to encrypt</td></tr>
+        <tr><td>Per-file size limit</td><td class="us">2 GB</td><td>Depends on the device's memory, not a set number</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h2>When Snapdrop (or a fork of it) is the right call</h2>
+    <p>If every transfer you ever do is between devices already on the same network, right now, a
+    same-network-only tool isn't missing anything. It's a smaller, more focused piece of software for
+    that one job, and there's nothing wrong with reaching for it.</p>
+
+    <h2>When it stops covering the case</h2>
+    <ul>
+      <li><strong>A friend on mobile data, you on Wi-Fi.</strong> Same-network tools can't see each other
+      across that boundary at all. DropItOver's room mode connects them directly, live, over the internet.</li>
+      <li><strong>You want to send something and walk away.</strong> Same-network tools need both browser
+      tabs open and both people present. A DropItOver link keeps working for up to 7 days, so the other
+      person opens it whenever they get to it.</li>
+      <li><strong>Sending to yourself, later, on another device.</strong> A link works here too, since it
+      doesn't need the sending device to still be connected.</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>In practice:</strong> Mode 1 of DropItOver is the Snapdrop case. Mode 2 (a link) and
+      Mode 3 (a room) are what to reach for the moment "same network, right now" stops being true,
+      without switching to a different tool.</p>
+    </div>
+
+    <div class="cta">
+      <p class="lead" style="margin-bottom:14px">Same idea, and it keeps working when the network doesn't line up.</p>
+      <a class="btn btn-primary" href="/">Open DropItOver</a>
+      <a class="btn" href="/vs/airdrop">Compare DropItOver vs AirDrop →</a>
+    </div>
+  </section>
+
+  <footer class="page-foot">
+    <div class="resource-nav">
+      <a href="/">Home</a><span class="sep">·</span>
+      <a href="/vs/airdrop">vs AirDrop</a><span class="sep">·</span>
+      <a href="/guides/wifi-file-transfer-android-to-pc">Wi-Fi transfer guide</a><span class="sep">·</span>
+      <a href="/updates">Updates</a><span class="sep">·</span>
+      <a href="/privacy">Privacy</a><span class="sep">·</span>
+      <a href="/terms">Terms</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
