@@ -12,7 +12,14 @@
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="author" content="DropItOver">
 <meta name="google-site-verification" content="googleb8ed668ff7baf056">
+<meta name="google-adsense-account" content="ca-pub-8645479142211810">
+<script async defer src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8645479142211810" crossorigin="anonymous"></script>
 <link rel="canonical" href="https://dropitover.com/">
+<link rel="alternate" hreflang="x-default" href="https://dropitover.com/">
+<link rel="alternate" hreflang="en-US" href="https://dropitover.com/">
+<link rel="alternate" hreflang="en-GB" href="https://dropitover.com/">
+<link rel="alternate" hreflang="en-CA" href="https://dropitover.com/">
+<link rel="alternate" hreflang="en-AU" href="https://dropitover.com/">
 <link rel="manifest" href="/manifest.json">
 
 <!-- Open Graph / Facebook -->
@@ -26,6 +33,9 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="DropItOver: send files to any device">
 <meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="en_GB">
+<meta property="og:locale:alternate" content="en_CA">
+<meta property="og:locale:alternate" content="en_AU">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
@@ -101,7 +111,14 @@
 ]
 </script>
 
-<link rel="stylesheet" href="/css/styles.css">
+<link rel="preload" href="/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/css/styles.css"></noscript>
+<link rel="modulepreload" href="/js/app.js">
+<link rel="modulepreload" href="/js/util.js">
+<link rel="modulepreload" href="/js/ui.js">
+<link rel="modulepreload" href="/js/ws.js">
+<link rel="modulepreload" href="/js/peer.js">
+<link rel="modulepreload" href="/js/upload.js">
 <!-- Search engines look for /favicon.ico first and several ignore SVG entirely,
      so the raster versions are declared alongside it. -->
 <link rel="icon" href="/favicon.ico" sizes="192x192">
@@ -121,8 +138,7 @@
       <label for="device-name">This device</label>
       <input id="device-name" type="text" maxlength="32" autocomplete="off" spellcheck="false">
     </div>
-  </header>
-
+  <main>
   <section class="hero">
     <h1>Send files to<br><span class="grad">any device</span></h1>
     <p>Phone to laptop. Laptop to a friend. Nothing to install, no account to make.</p>
@@ -233,13 +249,13 @@
         <span class="tile">🔄</span>
         <div>
           <h2>Share both ways</h2>
-          <p class="sub">You and someone else, sending back and forth.</p>
+          <p class="sub">Up to 8 people, sending back and forth.</p>
         </div>
       </header>
 
       <p class="sub" style="margin-top:0">
-        You get a link and a code they can scan. Once they join, both of you can send files
-        and messages for as long as you keep the page open.
+        You get a link and a code others can scan. Everyone who joins can send files
+        and messages to everyone else, for as long as the room stays open.
       </p>
 
       <button class="btn-primary btn-block mt" id="create-room">Start a room</button>
@@ -324,9 +340,7 @@
           </details>
         </div>
       </div>
-    </section>
-
-  </div>
+  </main>
 
   <footer class="page-foot">
     Files you send to nearby devices or inside a room go straight across, so nothing is kept.<br>

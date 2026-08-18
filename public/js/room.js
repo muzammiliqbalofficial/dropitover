@@ -23,6 +23,7 @@ const state = {
   peers: new Map(),
   joined: false,
   joinWatchdog: null,
+  maxParticipants: null,
 };
 
 const transfers = new TransferLog($('#transfers'), $('#transfers-empty'));
@@ -150,10 +151,11 @@ async function joinRoom() {
   state.joined = true;
   clearTimeout(state.joinWatchdog);
   state.selfId = result.self.id;
+  state.maxParticipants = result.maxParticipants || null;
   showState(null);
   $('#room-expiry').textContent =
-    `This link works for about ${formatRelative(result.expiresAt)} after the last person joins. ` +
-    'Nothing you send here is stored.';
+    `Up to ${state.maxParticipants || 8} people can be in this room at once. It works for about ` +
+    `${formatRelative(result.expiresAt)} after the last person joins, and nothing you send here is stored.`;
 
   // We are the newcomer: open a connection to everyone already here.
   for (const info of result.peers) addPeer(info, true);
@@ -245,8 +247,9 @@ function renderParticipants() {
   );
 
   const ready = connectedPeers().length;
+  const cap = state.maxParticipants ? ` of ${state.maxParticipants}` : '';
   $('#room-status').textContent = ready
-    ? `${ready} connected`
+    ? `${ready + 1}${cap} connected`
     : peers.length
       ? 'Connecting…'
       : 'Waiting for someone to join';
