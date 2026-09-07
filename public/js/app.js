@@ -329,7 +329,7 @@ function renderSelection() {
             <div class="note">${formatBytes(file.size)}</div>
           </div>
           <div class="spacer"></div>
-          <button class="btn-sm btn-ghost remove" aria-label="Remove">✕</button>
+          <button class="btn-sm btn-ghost remove" aria-label="Remove"><svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>`;
       $('.title', li).textContent = file.name;
       $('.remove', li).addEventListener('click', () => {

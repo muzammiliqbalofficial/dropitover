@@ -33,19 +33,35 @@ export function escapeHtml(value) {
 
 export function fileGlyph(mime = '', name = '') {
   const type = `${mime} ${name}`.toLowerCase();
-  if (/^image\//.test(mime) || /\.(png|jpe?g|gif|webp|svg|heic)$/.test(type)) return '🖼️';
-  if (/^video\//.test(mime) || /\.(mp4|mov|mkv|webm)$/.test(type)) return '🎬';
-  if (/^audio\//.test(mime) || /\.(mp3|wav|flac|m4a)$/.test(type)) return '🎵';
-  if (/pdf/.test(type)) return '📕';
-  if (/zip|rar|7z|tar|gz/.test(type)) return '🗜️';
-  if (/(text|json|xml|javascript)|\.(txt|md|csv|js|ts|py|java|css|html)$/.test(type)) return '📄';
-  return '📦';
+  if (/^image\//.test(mime) || /\.(png|jpe?g|gif|webp|svg|heic)$/.test(type)) {
+    return '<svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+  }
+  if (/^video\//.test(mime) || /\.(mp4|mov|mkv|webm)$/.test(type)) {
+    return '<svg class="icon" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>';
+  }
+  if (/^audio\//.test(mime) || /\.(mp3|wav|flac|m4a)$/.test(type)) {
+    return '<svg class="icon" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+  }
+  if (/pdf/.test(type)) {
+    return '<svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
+  }
+  if (/zip|rar|7z|tar|gz/.test(type)) {
+    return '<svg class="icon" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>';
+  }
+  if (/(text|json|xml|javascript)|\.(txt|md|csv|js|ts|py|java|css|html)$/.test(type)) {
+    return '<svg class="icon" viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>';
+  }
+  return '<svg class="icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>';
 }
 
 export function deviceGlyph(deviceType) {
-  if (deviceType === 'mobile') return '📱';
-  if (deviceType === 'tablet') return '💊';
-  return '💻';
+  if (deviceType === 'mobile') {
+    return '<svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>';
+  }
+  if (deviceType === 'tablet') {
+    return '<svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>';
+  }
+  return '<svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>';
 }
 
 export function detectDeviceType() {

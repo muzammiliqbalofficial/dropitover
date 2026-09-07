@@ -1121,3 +1121,25 @@ label.field {
 }
 .changelog-entry h2 { margin: 0 0 6px; font-size: 1.05rem; }
 
+
+
+/* SVG Icon Utilities */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke-width: 1.85;
+  stroke: currentColor;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+}
+.icon-sm { width: 1rem; height: 1rem; }
+.icon-lg { width: 1.5rem; height: 1.5rem; }
+.icon-xl { width: 2.2rem; height: 2.2rem; }
+.tile svg { width: 1.15rem; height: 1.15rem; }
+.glyph svg { width: 2.4rem; height: 2.4rem; color: var(--accent); }
+.avatar svg { width: 1rem; height: 1rem; }

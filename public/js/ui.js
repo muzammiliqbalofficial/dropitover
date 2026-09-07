@@ -60,7 +60,7 @@ export class TransferLog {
     const arrow = p.direction === 'in' ? '↓' : '↑';
     const who = p.peer ? ` ${p.direction === 'in' ? 'from' : 'to'} ${escapeHtml(p.peer)}` : '';
 
-    entry.icon.textContent = fileGlyph(p.mime, p.name);
+    entry.icon.innerHTML = fileGlyph(p.mime, p.name);
     entry.title.textContent = p.name;
     entry.note.innerHTML = `${arrow} ${formatBytes(p.transferred)} / ${formatBytes(p.size)}${who}`;
     entry.fill.style.width = `${pct}%`;
@@ -76,7 +76,7 @@ export class TransferLog {
   /** Marks a received file as complete and offers it for download. */
   completeFile({ id, name, size, blob, from, direction = 'in' }) {
     const entry = this.ensure(id);
-    entry.icon.textContent = fileGlyph(blob.type, name);
+    entry.icon.innerHTML = fileGlyph(blob.type, name);
     entry.title.textContent = name;
     entry.note.textContent = `${formatBytes(size)} · ${direction === 'in' ? `from ${from}` : `sent to ${from}`}`;
     entry.fill.style.width = '100%';
@@ -92,7 +92,7 @@ export class TransferLog {
   /** Renders a received or sent text snippet with a copy button. */
   addText({ id, content, from, direction = 'in' }) {
     const entry = this.ensure(id);
-    entry.icon.textContent = '📝';
+    entry.icon.innerHTML = '<svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
     entry.title.textContent = direction === 'in' ? `Message from ${from}` : `Message sent to ${from}`;
     entry.note.textContent = `${content.length} characters`;
     entry.bar.hidden = true;
