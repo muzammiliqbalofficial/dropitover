@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#070a12">
+<title>Contact DropItOver Support &amp; Engineering Team</title>
+<meta name="description" content="Get in touch with the DropItOver support and engineering team. Technical assistance, bug reports, feature suggestions, security disclosures, and partnership requests.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://dropitover.com/contact">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" href="/favicon.ico" sizes="192x192">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DropItOver">
+<meta property="og:title" content="Contact DropItOver Support &amp; Engineering Team">
+<meta property="og:description" content="Reach our technical support and developer team for assistance, bug reporting, or feedback.">
+<meta property="og:url" content="https://dropitover.com/contact">
+<meta property="og:image" content="https://dropitover.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<script async defer src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8645479142211810" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Contact DropItOver Support",
+  "url": "https://dropitover.com/contact",
+  "description": "Contact page for DropItOver peer-to-peer file transfer service.",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "DropItOver",
+    "url": "https://dropitover.com/",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "support@dropitover.com",
+      "contactType": "technical support",
+      "availableLanguage": ["English"]
+    }
+  }
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <a class="brand" href="/">
+      <img class="mark" src="/favicon.svg" alt="DropItOver Logo" width="38" height="38">
+      <span>DropItOver<small>Fast P2P File Transfer</small></span>
+    </a>
+    <nav class="top-nav" aria-label="Main Navigation">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/guides/" class="nav-link">Guides</a>
+      <a href="/about#how-it-works" class="nav-link">How It Works</a>
+      <a href="/about" class="nav-link">About</a>
+      <a href="/contact" class="nav-link active">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <article class="card article">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <span>Contact</span>
+      </nav>
+
+      <p class="eyebrow">Customer Support &amp; Developer Relations</p>
+      <h1>Contact Us &amp; Technical Support</h1>
+      <p class="dek">
+        Have a technical question about WebRTC peer discovery, encountering an enterprise firewall block, or wishing to report a bug? Our engineering team is here to assist.
+      </p>
+
+      <div class="article-meta">
+        <div class="author-badge">
+          <div class="avatar-circle">DS</div>
+          <span>Support Desk</span>
+        </div>
+        <span>Response SLA: &lt; 24 Hours</span>
+        <span>Direct Email: support@dropitover.com</span>
+      </div>
+
+      <div class="callout">
+        <p><strong>Official Support Email:</strong> <a href="mailto:support@dropitover.com">support@dropitover.com</a></p>
+        <p>Our team actively monitors support inquiries Monday through Friday, 9:00 AM – 6:00 PM UTC. Critical security vulnerability disclosures are handled with 24/7 priority.</p>
+      </div>
+
+      <h2>Send an Inquiry</h2>
+      <form class="contact-form" id="contactForm" onsubmit="handleContactSubmit(event)">
+        <div class="form-group">
+          <label for="contactName">Your Name</label>
+          <input type="text" id="contactName" name="name" required placeholder="Jane Doe" autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label for="contactEmail">Email Address</label>
+          <input type="email" id="contactEmail" name="email" required placeholder="jane@example.com" autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="contactCategory">Inquiry Category</label>
+          <select id="contactCategory" name="category">
+            <option value="General Support">General Support / Troubleshooting</option>
+            <option value="Bug Report">Bug Report / Technical Issue</option>
+            <option value="Feature Request">Feature Request &amp; Enhancement Idea</option>
+            <option value="Security Disclosure">Security &amp; Vulnerability Disclosure</option>
+            <option value="Business & Press">Business, Press &amp; Media Inquiries</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="contactSubject">Subject</label>
+          <input type="text" id="contactSubject" name="subject" required placeholder="Brief summary of your inquiry">
+        </div>
+
+        <div class="form-group">
+          <label for="contactMessage">Detailed Message</label>
+          <textarea id="contactMessage" name="message" rows="5" required placeholder="Please describe what you experienced, including your browser version and operating system if reporting a bug..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Send Message via Email Client</button>
+      </form>
+
+      <div id="contactSuccess" class="callout" style="display:none; margin-top:20px;">
+        <p><strong>Thank you for reaching out!</strong> Your message has been prepared for your default email client. If it did not open automatically, please send your email directly to <a href="mailto:support@dropitover.com">support@dropitover.com</a>.</p>
+      </div>
+
+      <script>
+      function handleContactSubmit(e) {
+        e.preventDefault();
+        var name = document.getElementById('contactName').value;
+        var email = document.getElementById('contactEmail').value;
+        var category = document.getElementById('contactCategory').value;
+        var subject = document.getElementById('contactSubject').value;
+        var message = document.getElementById('contactMessage').value;
+        
+        var body = "Name: " + name + "\n" +
+                   "Email: " + email + "\n" +
+                   "Category: " + category + "\n\n" +
+                   "Message:\n" + message;
+                   
+        var mailtoUrl = "mailto:support@dropitover.com?subject=" + encodeURIComponent("[" + category + "] " + subject) + "&body=" + encodeURIComponent(body);
+        window.location.href = mailtoUrl;
+        document.getElementById('contactSuccess').style.display = 'block';
+      }
+      </script>
+
+      <div class="ad-slot">
+        <div class="ad-label">Advertisement</div>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-8645479142211810"
+             data-ad-slot="auto"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+
+      <h2>Troubleshooting &amp; Support Knowledge Base</h2>
+      <div class="faq-list">
+        <details class="faq-item" open>
+          <summary>Why don't my devices see each other on Wi-Fi?</summary>
+          <div class="faq-answer">
+            Make sure both devices are connected to the exact same Wi-Fi network (and same subnet). In corporate or public networks with "Client Isolation" or "AP Isolation" enabled, direct device-to-device discovery is blocked by the router. In that situation, use our <strong>"Send a link"</strong> mode or <strong>"Start a room"</strong> to transfer files seamlessly.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>What is the maximum file size limit?</summary>
+          <div class="faq-answer">
+            For Link Sharing, you can upload files up to <strong>2 GB per file</strong>, and up to 8 GB per total link share. For direct Wi-Fi P2P and Room transfers, file size is limited only by your browser's RAM and storage capabilities.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Are my files scanned or stored permanently?</summary>
+          <div class="faq-answer">
+            No. Direct Wi-Fi transfers bypass our servers completely. Link shares are encrypted with AES-256-GCM, stored in temporary cloud cache, and automatically wiped the moment they expire or when the recipient downloads them (if "burn after download" is enabled).
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Do I need to keep the browser tab open during transfer?</summary>
+          <div class="faq-answer">
+            For direct Wi-Fi P2P transfers, yes—both browser tabs must stay open while the transfer progress bar completes. For Link Shares, the sender can close their browser as soon as the upload completes, and the recipient can download at their convenience.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>How do I report a security vulnerability?</summary>
+          <div class="faq-answer">
+            Security researchers can email vulnerability disclosures directly to <code>support@dropitover.com</code> with "[SECURITY]" in the subject line. We practice responsible disclosure and review reports within 24 hours.
+          </div>
+        </details>
+      </div>
+
+      <div class="cta">
+        <p class="lead" style="margin-bottom:14px">Ready to start sending files?</p>
+        <a class="btn btn-primary" href="/">Open DropItOver</a>
+        <a class="btn" href="/about">Learn More About Us &rarr;</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3>Product &amp; Features</h3>
+        <ul>
+          <li><a href="/">Direct Wi-Fi P2P Transfer</a></li>
+          <li><a href="/">AES-256 Encrypted Links</a></li>
+          <li><a href="/">Live Multi-Device Rooms</a></li>
+          <li><a href="/about#how-it-works">How It Works</a></li>
+          <li><a href="/updates">Changelog &amp; Updates</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Guides &amp; Resources</h3>
+        <ul>
+          <li><a href="/guides/">All Guides &amp; Tutorials</a></li>
+          <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
+          <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
+          <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Comparisons</h3>
+        <ul>
+          <li><a href="/vs/airdrop">DropItOver vs Apple AirDrop</a></li>
+          <li><a href="/vs/snapdrop">DropItOver vs Snapdrop</a></li>
+          <li><a href="/guides/p2p-vs-cloud-storage">P2P vs Cloud Storage</a></li>
+          <li><a href="/guides/snapdrop-alternatives-local-sharing">Snapdrop Alternatives Review</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company &amp; Legal</h3>
+        <ul>
+          <li><a href="/about">About DropItOver</a></li>
+          <li><a href="/contact">Contact &amp; Support</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
+      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

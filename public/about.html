@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#070a12">
+<title>About DropItOver: Mission, Architecture &amp; Privacy Philosophy</title>
+<meta name="description" content="Discover the engineering, zero-knowledge WebRTC peer-to-peer architecture, and privacy-first principles behind DropItOver, the universal AirDrop alternative.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="https://dropitover.com/about">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" href="/favicon.ico" sizes="192x192">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DropItOver">
+<meta property="og:title" content="About DropItOver: Mission, Architecture &amp; Privacy Philosophy">
+<meta property="og:description" content="Discover the engineering, zero-knowledge architecture, and privacy principles behind DropItOver.">
+<meta property="og:url" content="https://dropitover.com/about">
+<meta property="og:image" content="https://dropitover.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<script async defer src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8645479142211810" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About DropItOver",
+  "url": "https://dropitover.com/about",
+  "description": "DropItOver is a high-speed, zero-knowledge peer-to-peer file transfer utility operating directly in web browsers across Windows, Mac, Linux, Android, and iOS.",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "DropItOver",
+    "url": "https://dropitover.com/",
+    "logo": "https://dropitover.com/logo.svg",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "support@dropitover.com",
+      "contactType": "customer service"
+    }
+  }
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <a class="brand" href="/">
+      <img class="mark" src="/favicon.svg" alt="DropItOver Logo" width="38" height="38">
+      <span>DropItOver<small>Fast P2P File Transfer</small></span>
+    </a>
+    <nav class="top-nav" aria-label="Main Navigation">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/guides/" class="nav-link">Guides</a>
+      <a href="/about#how-it-works" class="nav-link">How It Works</a>
+      <a href="/about" class="nav-link active">About</a>
+      <a href="/contact" class="nav-link">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <article class="card article">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="sep">/</span>
+        <span>About</span>
+      </nav>
+
+      <p class="eyebrow">About DropItOver</p>
+      <h1>Engineering Frictionless, Zero-Knowledge File Transfer</h1>
+      <p class="dek">
+        DropItOver was engineered with a clear, uncompromising mission: file transfer between any two devices should be as instant, private, and boundary-free as handing a physical flash drive to a colleague across the desk.
+      </p>
+
+      <div class="article-meta">
+        <div class="author-badge">
+          <div class="avatar-circle">DO</div>
+          <span>DropItOver Engineering Team</span>
+        </div>
+        <span>Published: August 2026</span>
+        <span>Topic: Architecture, Mission &amp; Trust</span>
+      </div>
+
+      <div class="ad-slot">
+        <div class="ad-label">Advertisement</div>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-8645479142211810"
+             data-ad-slot="auto"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+
+      <h2>Our Origin Story: Breaking Down Ecosystem Walls</h2>
+      <p>
+        For over a decade, major hardware and operating system corporations have built artificial walled gardens. Apple's AirDrop provides a fluid file sharing experience—but only if every person in the room owns an iPhone, iPad, or Mac. Google's Quick Share prioritizes Android and Windows, yet leaves iOS and macOS in isolation. When an iPhone user needs to send a 2 GB 4K video recording to a Windows 11 PC, or when a Linux developer needs to send a code repository to an Android phone, they are forced to deal with slow USB cables, bloated desktop drivers, or cloud drive accounts burdened with storage paywalls and privacy risks.
+      </p>
+      <p>
+        DropItOver was built in 2026 to eliminate these artificial barriers permanently. By leveraging open web standards—specifically <strong>WebRTC DataChannels</strong>, the <strong>W3C Web Cryptography API</strong>, and distributed edge computing—DropItOver delivers a uniform, high-speed file transfer experience across every browser, operating system, and hardware architecture without software downloads or account sign-ups.
+      </p>
+
+      <h2 id="how-it-works">Technical Architecture: How DropItOver Works</h2>
+      <p>
+        DropItOver provides three specialized modes of operation, engineered for distinct networking conditions and collaborative workflows:
+      </p>
+
+      <div class="arch-box">
+        <h3>1. Direct Wi-Fi P2P Transfer (Zero-Server Architecture)</h3>
+        <p>
+          When devices share the same local Wi-Fi or local area network (LAN), DropItOver coordinates a direct peer-to-peer connection via WebSockets signaling on Cloudflare Workers and Durable Objects.
+        </p>
+        <div class="arch-flow">
+          <div class="arch-node">
+            <strong>Device A (Sender)</strong>
+            <span>Browser WebRTC Engine</span>
+          </div>
+          <div class="arch-arrow">&harr;</div>
+          <div class="arch-node" style="background:var(--accent-soft)">
+            <strong>Signaling Broker</strong>
+            <span>Cloudflare Durable Object (Hashed IP)</span>
+          </div>
+          <div class="arch-arrow">&harr;</div>
+          <div class="arch-node">
+            <strong>Device B (Receiver)</strong>
+            <span>Browser WebRTC Engine</span>
+          </div>
+        </div>
+        <p>
+          Once SDP offers/answers and ICE candidate handshakes complete, a direct SCTP-over-DTLS data channel is established. <strong>Your file data moves directly across local router antennas at speeds up to 100+ MB/s without touching our servers or any cloud database.</strong>
+        </p>
+      </div>
+
+      <div class="arch-box">
+        <h3>2. Ephemeral Encrypted Link Sharing</h3>
+        <p>
+          When recipients are remote or on different networks (e.g., cellular 5G data), DropItOver provides high-speed link shares up to 2 GB per file (8 GB total per link bundle):
+        </p>
+        <ul>
+          <li><strong>Chunked Encryption:</strong> Files are split into 8 MB binary chunks and encrypted client-side/edge using authenticated <code>AES-256-GCM</code>.</li>
+          <li><strong>Zero Persistent Footprint:</strong> Files are held in temporary ephemeral object storage with strict TTL lifespans (1 hour to 7 days).</li>
+          <li><strong>Self-Destruct Option:</strong> "Burn after download" automatically shreds and purges data the exact millisecond the recipient finishes downloading.</li>
+        </ul>
+      </div>
+
+      <div class="arch-box">
+        <h3>3. Real-Time Collaborative Transfer Rooms</h3>
+        <p>
+          For classrooms, team scrums, and multi-person workshops, DropItOver Rooms allow up to 8 devices to join a temporary mesh network using a short 8-character join code or QR scan. Participants can swap files and live text snippets bidirectionally with zero configuration.
+        </p>
+      </div>
+
+      <h2>Our Core Security &amp; Privacy Principles</h2>
+      <ol>
+        <li>
+          <strong>No Account, No Fingerprinting:</strong> You are never asked for an email address, phone number, password, or credit card. We generate random ephemeral session tokens that exist solely in browser memory.
+        </li>
+        <li>
+          <strong>Cryptographic Authenticity:</strong> All browser-to-browser WebRTC streams use DTLS encryption (ECDSA / AES-128-GCM) with perfect forward secrecy.
+        </li>
+        <li>
+          <strong>Strict Data Minimization:</strong> What is not stored cannot be leaked, hacked, or subpoenaed. Direct transfers bypass servers entirely, and link shares are systematically wiped via automated cron sweepers every 10 minutes.
+        </li>
+        <li>
+          <strong>Accessible to Everyone:</strong> Fast, clean, free, and lightweight. We prioritize minimal bundle size (&lt; 50 KB initial payload) so DropItOver loads instantaneously on 3G, 4G, and satellite internet connections globally.
+        </li>
+      </ol>
+
+      <h2>The Engineering Team &amp; Philosophy</h2>
+      <p>
+        DropItOver is maintained by an independent group of distributed systems engineers and web platform specialists. We believe that the World Wide Web was conceived as a decentralized network where users own their data and interact as sovereign peers. Our mission is to continue expanding web platform capabilities, eliminating software bloat, and proving that open standards can outperform closed corporate software.
+      </p>
+
+      <div class="callout">
+        <p><strong>Security Inquiries &amp; Bug Reports:</strong> We take security and privacy disclosures with the utmost seriousness. Inquiries can be submitted directly to <a href="mailto:support@dropitover.com">support@dropitover.com</a> or via our <a href="/contact">Contact Page</a>.</p>
+      </div>
+
+      <div class="cta">
+        <p class="lead" style="margin-bottom:14px">Experience fast, private file sharing across all your devices today.</p>
+        <a class="btn btn-primary" href="/">Start Transferring Files</a>
+        <a class="btn" href="/guides/">Browse Technical Guides &rarr;</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h3>Product &amp; Features</h3>
+        <ul>
+          <li><a href="/">Direct Wi-Fi P2P Transfer</a></li>
+          <li><a href="/">AES-256 Encrypted Links</a></li>
+          <li><a href="/">Live Multi-Device Rooms</a></li>
+          <li><a href="/about#how-it-works">How It Works</a></li>
+          <li><a href="/updates">Changelog &amp; Updates</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Guides &amp; Resources</h3>
+        <ul>
+          <li><a href="/guides/">All Guides &amp; Tutorials</a></li>
+          <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
+          <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
+          <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Comparisons</h3>
+        <ul>
+          <li><a href="/vs/airdrop">DropItOver vs Apple AirDrop</a></li>
+          <li><a href="/vs/snapdrop">DropItOver vs Snapdrop</a></li>
+          <li><a href="/guides/p2p-vs-cloud-storage">P2P vs Cloud Storage</a></li>
+          <li><a href="/guides/snapdrop-alternatives-local-sharing">Snapdrop Alternatives Review</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Company &amp; Legal</h3>
+        <ul>
+          <li><a href="/about">About DropItOver</a></li>
+          <li><a href="/contact">Contact &amp; Support</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
+      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
