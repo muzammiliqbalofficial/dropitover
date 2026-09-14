@@ -59,7 +59,7 @@ export function masterKeyFrom(env) {
   if (!raw) {
     throw new Error(
       'MASTER_KEY is not set. Generate one and store it as a secret:\n' +
-        '  node -e "process.stdout.write(require(\'crypto\').randomBytes(32).toString(\'hex\'))" | npx wrangler secret put MASTER_KEY'
+        ' node -e "process.stdout.write(require(\'crypto\').randomBytes(32).toString(\'hex\'))" | npx wrangler secret put MASTER_KEY'
     );
   }
   if (!HEX_64.test(raw)) {
@@ -67,7 +67,7 @@ export function masterKeyFrom(env) {
     throw new Error(
       `MASTER_KEY must be exactly 64 hex characters (32 bytes) but has ${problem}. ` +
         'Re-set it without pasting stray characters:\n' +
-        '  node -e "process.stdout.write(require(\'crypto\').randomBytes(32).toString(\'hex\'))" | npx wrangler secret put MASTER_KEY'
+        ' node -e "process.stdout.write(require(\'crypto\').randomBytes(32).toString(\'hex\'))" | npx wrangler secret put MASTER_KEY'
     );
   }
   return fromHex(raw);

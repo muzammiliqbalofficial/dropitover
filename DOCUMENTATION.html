@@ -879,44 +879,44 @@
       <h2>Code structure</h2>
       <p class="lede">About 5,200 lines: 1,500 of server code, 2,800 of frontend, 500 of tests.</p>
 
-<pre><b>src/</b>                    <i>server, runs on Cloudflare</i>
-  index.js              <i>routing: pages, API, connections, cleanup job</i>
+<pre><b>src/</b> <i>server, runs on Cloudflare</i>
+  index.js <i>routing: pages, API, connections, cleanup job</i>
   <b>do/</b>
-    network-hub.js      <i>finds devices sharing a network</i>
-    room.js             <i>one room: who's in it, when it expires</i>
+    network-hub.js <i>finds devices sharing a network</i>
+    room.js <i>one room: who's in it, when it expires</i>
   <b>routes/</b>
-    api.js              <i>the HTTP endpoints</i>
+    api.js <i>the HTTP endpoints</i>
   <b>lib/</b>
-    links.js            <i>link shares: pieces, encryption, storage, expiry</i>
-    crypto.js           <i>encryption, key derivation, id generation</i>
-    expiry.js           <i>expiry maths and file-piece planning</i>
-    rooms.js            <i>room rules: joining, capacity, lifetime</i>
-    limits.js           <i>daily per-IP quota</i>
-    turn.js             <i>relay credentials for hard networks</i>
-    config.js           <i>settings and secrets</i>
-    protocol.js         <i>message format for browser connections</i>
-    qr.js               <i>QR codes as SVG</i>
+    links.js <i>link shares: pieces, encryption, storage, expiry</i>
+    crypto.js <i>encryption, key derivation, id generation</i>
+    expiry.js <i>expiry maths and file-piece planning</i>
+    rooms.js <i>room rules: joining, capacity, lifetime</i>
+    limits.js <i>daily per-IP quota</i>
+    turn.js <i>relay credentials for hard networks</i>
+    config.js <i>settings and secrets</i>
+    protocol.js <i>message format for browser connections</i>
+    qr.js <i>QR codes as SVG</i>
 
-<b>public/</b>                 <i>frontend, no build step</i>
-  index.html            <i>home: nearby devices, links, rooms</i>
-  room.html             <i>a room</i>
-  download.html         <i>what the recipient sees</i>
+<b>public/</b> <i>frontend, no build step</i>
+  index.html <i>home: nearby devices, links, rooms</i>
+  room.html <i>a room</i>
+  download.html <i>what the recipient sees</i>
   404.html
-  favicon.svg  logo.svg
+  favicon.svg logo.svg
   css/styles.css
   <b>js/</b>
-    app.js              <i>home page</i>
-    room.js             <i>room page</i>
-    download.js         <i>download page, with progress</i>
-    peer.js             <i>the transfer engine between browsers</i>
-    upload.js           <i>chunked upload with retries</i>
-    ws.js               <i>connection to the server</i>
-    ui.js               <i>transfer list, dialogs, drop zones</i>
-    util.js             <i>formatting, device name, notifications</i>
+    app.js <i>home page</i>
+    room.js <i>room page</i>
+    download.js <i>download page, with progress</i>
+    peer.js <i>the transfer engine between browsers</i>
+    upload.js <i>chunked upload with retries</i>
+    ws.js <i>connection to the server</i>
+    ui.js <i>transfer list, dialogs, drop zones</i>
+    util.js <i>formatting, device name, notifications</i>
 
-<b>tests/</b>                  <i>51 tests, no framework</i>
+<b>tests/</b> <i>51 tests, no framework</i>
 <b>scripts/</b>setup-secrets.mjs
-schema.sql  wrangler.toml  README.md</pre>
+schema.sql wrangler.toml README.md</pre>
     </section>
 
     <!-- ============================================================ -->
@@ -952,15 +952,15 @@ schema.sql  wrangler.toml  README.md</pre>
     <section id="commands">
       <h2>Commands</h2>
 
-<pre>npm install              <i>install wrangler and the one dependency</i>
-npm test                 <i>run the 51 unit tests</i>
-npm run dev              <i>run locally at localhost:8787</i>
-npm run deploy           <i>publish to Cloudflare</i>
+<pre>npm install <i>install wrangler and the one dependency</i>
+npm test <i>run the 51 unit tests</i>
+npm run dev <i>run locally at localhost:8787</i>
+npm run deploy <i>publish to Cloudflare</i>
 
-npm run setup            <i>generate and store the secrets</i>
-npm run db:apply         <i>create the database tables</i>
-npm run r2:create        <i>create the storage bucket</i>
-npx wrangler tail        <i>watch live logs</i></pre>
+npm run setup <i>generate and store the secrets</i>
+npm run db:apply <i>create the database tables</i>
+npm run r2:create <i>create the storage bucket</i>
+npx wrangler tail <i>watch live logs</i></pre>
 
       <p>
         Deploying takes about twenty seconds and replaces the running version atomically. Secrets apply

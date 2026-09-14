@@ -1,12 +1,12 @@
 # DropItOver
 
-Send files and text between devices three ways, from one page — running entirely on Cloudflare's edge. No servers to babysit, no account, no paywall, no file-count cap, up to **2 GB per file**, expiry from **1 hour to 7 days** (24 hours by default).
+Send files and text between devices three ways, from one page - running entirely on Cloudflare's edge. No servers to babysit, no account, no paywall, no file-count cap, up to **2 GB per file**, expiry from **1 hour to 7 days** (24 hours by default).
 
 | Mode | Use it when | How the bytes travel |
 |---|---|---|
-| **1 — Nearby devices** | Both devices are behind the same router | WebRTC data channel, browser to browser. Nothing is stored. |
-| **2 — Link share** | The other person is elsewhere, or offline right now | Chunked into R2, AES‑256‑GCM encrypted inside the Worker, deleted at expiry |
-| **3 — Room** | Both online, different networks, swapping things back and forth | WebRTC data channel, browser to browser. Nothing is stored. |
+| **1 - Nearby devices** | Both devices are behind the same router | WebRTC data channel, browser to browser. Nothing is stored. |
+| **2 - Link share** | The other person is elsewhere, or offline right now | Chunked into R2, AES‑256‑GCM encrypted inside the Worker, deleted at expiry |
+| **3 - Room** | Both online, different networks, swapping things back and forth | WebRTC data channel, browser to browser. Nothing is stored. |
 
 **Stack:** Cloudflare Workers (API + routing) · Durable Objects (signaling, rooms) · R2 (encrypted chunks) · D1 (share metadata + expiry) · Workers Static Assets (frontend) · Cron Triggers (expiry sweeper). Frontend is dependency-free ES modules.
 
@@ -14,7 +14,7 @@ Send files and text between devices three ways, from one page — running entire
 
 ## Deploy it
 
-You need Node.js installed **locally** — not to host anything, but because `wrangler`, Cloudflare's CLI, is an npm package. (Alternative: push this repo to GitHub and use **Workers → Create → Connect to Git** in the dashboard, which builds and deploys without a local toolchain.)
+You need Node.js installed **locally** - not to host anything, but because `wrangler`, Cloudflare's CLI, is an npm package. (Alternative: push this repo to GitHub and use **Workers → Create → Connect to Git** in the dashboard, which builds and deploys without a local toolchain.)
 
 ```bash
 npm install
@@ -24,27 +24,27 @@ npx wrangler login
 ### 1. Create the storage
 
 ```bash
-npm run r2:create                 # creates the R2 bucket "dropitover-files"
-npm run db:create                 # creates the D1 database "dropitover"
+npm run r2:create # creates the R2 bucket "dropitover-files"
+npm run db:create # creates the D1 database "dropitover"
 ```
 
 `db:create` prints a `database_id`. Paste it into `wrangler.toml` over `REPLACE_WITH_YOUR_D1_DATABASE_ID`, then create the tables:
 
 ```bash
-npm run db:apply                  # remote (production)
-npm run db:apply:local            # local, for `wrangler dev`
+npm run db:apply # remote (production)
+npm run db:apply:local # local, for `wrangler dev`
 ```
 
 ### 2. Ship it
 
 ```bash
-npm run dev                       # http://localhost:8787
-npm run deploy                    # live on <name>.<account>.workers.dev
+npm run dev # http://localhost:8787
+npm run deploy # live on <name>.<account>.workers.dev
 ```
 
 ### 3. Set the secrets
 
-Deploy first, then run this — `wrangler secret put` interrupts with a "create this
+Deploy first, then run this - `wrangler secret put` interrupts with a "create this
 Worker?" prompt if the Worker doesn't exist yet, which collides with the piped input:
 
 ```bash
@@ -57,7 +57,7 @@ no redeploy needed. `GET /api/health` reports `encryptionKey: "ok" | "malformed"
 "missing"` if you ever need to check.
 
 Losing `MASTER_KEY` makes every stored Mode 2 share permanently unreadable. Modes 1
-and 3 don't use it — they store nothing.
+and 3 don't use it - they store nothing.
 
 For local development, copy `.dev.vars.example` to `.dev.vars` and put a key there.
 
@@ -75,35 +75,35 @@ and `npm run deploy` again. Cloudflare provisions the certificate; DNS, TLS, HTT
 
 ### Costs
 
-R2 and D1 both have free tiers that comfortably cover personal use (10 GB stored, 5 GB database). Durable Objects run on the Workers free plan with SQLite-backed classes — which is what `wrangler.toml` declares. If your account is on the free plan and a deploy complains about Durable Objects, the Workers Paid plan is $5/month and lifts every limit here.
+R2 and D1 both have free tiers that comfortably cover personal use (10 GB stored, 5 GB database). Durable Objects run on the Workers free plan with SQLite-backed classes - which is what `wrangler.toml` declares. If your account is on the free plan and a deploy complains about Durable Objects, the Workers Paid plan is $5/month and lifts every limit here.
 
 ---
 
 ## How each mode works internally
 
-### Mode 1 — same-network discovery (no server storage)
+### Mode 1 - same-network discovery (no server storage)
 
 Browsers can't scan a LAN, so discovery happens at the signaling layer:
 
-1. The browser opens a WebSocket to `/ws/net`. The Worker reads `CF-Connecting-IP`, hashes it (SHA-256, truncated) and routes the socket to `env.NETWORK_HUB.idFromName(hash)` — so **every device behind the same public IP lands in the same Durable Object** and nobody else does. The raw IP is never stored or sent to a client.
+1. The browser opens a WebSocket to `/ws/net`. The Worker reads `CF-Connecting-IP`, hashes it (SHA-256, truncated) and routes the socket to `env.NETWORK_HUB.idFromName(hash)` - so **every device behind the same public IP lands in the same Durable Object** and nobody else does. The raw IP is never stored or sent to a client.
 2. That object keeps the peer list and pushes `peers` updates. Connections use the **WebSocket Hibernation API**, so an idle group costs nothing while staying connected.
 3. Tapping a peer sends a `transfer:offer` (file names, count, total size). The receiver sees an accept/decline prompt before anything is negotiated.
 4. On accept, both sides build an `RTCPeerConnection`; the Durable Object relays only SDP and ICE candidates.
-5. Files stream over an ordered `RTCDataChannel`: a JSON `file-start` header, binary chunks sized from `sctp.maxMessageSize` (64 KB–256 KB), then `file-end`. Sending pauses above 8 MB of buffered data and resumes on `bufferedamountlow`; the receiver folds chunks into `Blob` parts every 16 MB, so a 2 GB transfer never balloons in memory.
+5. Files stream over an ordered `RTCDataChannel`: a JSON `file-start` header, binary chunks sized from `sctp.maxMessageSize` (64 KB-256 KB), then `file-end`. Sending pauses above 8 MB of buffered data and resumes on `bufferedamountlow`; the receiver folds chunks into `Blob` parts every 16 MB, so a 2 GB transfer never balloons in memory.
 
 Signaling messages are capped at 128 KB precisely so the socket can't be abused as a file relay.
 
-### Mode 2 — link share (the only mode that stores anything)
+### Mode 2 - link share (the only mode that stores anything)
 
-1. `POST /api/links` sends a **manifest** — names, sizes, MIME types, expiry, burn flag. The Worker plans each file into fixed 8 MB parts, generates one IV per part plus a per-file HKDF salt, opens an R2 multipart upload for multi-part files, and returns an `ownerToken`.
-2. The browser `PUT`s each part to `/api/links/:id/files/:fileId/parts/:index`. The Worker **encrypts the part with AES-256-GCM before it reaches R2** — plaintext is never written. Each part's key comes from HKDF‑SHA256 over the master key with the file's salt; the part index is authenticated as additional data, so parts can't be reordered, duplicated or dropped without the tag failing.
+1. `POST /api/links` sends a **manifest** - names, sizes, MIME types, expiry, burn flag. The Worker plans each file into fixed 8 MB parts, generates one IV per part plus a per-file HKDF salt, opens an R2 multipart upload for multi-part files, and returns an `ownerToken`.
+2. The browser `PUT`s each part to `/api/links/:id/files/:fileId/parts/:index`. The Worker **encrypts the part with AES-256-GCM before it reaches R2** - plaintext is never written. Each part's key comes from HKDF‑SHA256 over the master key with the file's salt; the part index is authenticated as additional data, so parts can't be reordered, duplicated or dropped without the tag failing.
 3. Chunking is what makes 2 GB possible at all: a Workers request body is limited to ~100 MB, and Cloudflare's proxy caps free-plan uploads at 100 MB. 8 MB parts sit far below both, and failed chunks retry individually instead of restarting a multi-GB upload.
 4. `POST /api/links/:id/finalize` completes the R2 multipart upload, flips the row to `ready` and starts the expiry clock. Only then does the link resolve.
-5. Downloads stream back through ranged R2 reads — one part fetched, decrypted and enqueued at a time, so Worker memory stays flat regardless of file size. `Content-Length` is the plaintext size. Range requests are deliberately unsupported, because a GCM stream has to be verified end to end.
-6. **Delete after first download** destroys the share once every file *and* the note have been collected — a multi-file burn share isn't lost after the first click. Deletion is triggered when the last byte leaves, never mid-stream.
+5. Downloads stream back through ranged R2 reads - one part fetched, decrypted and enqueued at a time, so Worker memory stays flat regardless of file size. `Content-Length` is the plaintext size. Range requests are deliberately unsupported, because a GCM stream has to be verified end to end.
+6. **Delete after first download** destroys the share once every file *and* the note have been collected - a multi-file burn share isn't lost after the first click. Deletion is triggered when the last byte leaves, never mid-stream.
 7. A **Cron Trigger** runs every 10 minutes, deleting expired shares and reaping abandoned uploads (pending for over an hour), R2 objects and dangling multipart uploads included.
 
-### Mode 3 — rooms (no server storage)
+### Mode 3 - rooms (no server storage)
 
 1. `POST /api/rooms` mints an 8-character id and initializes a **Room Durable Object**, which stores only `{createdAt, expiresAt, maxParticipants}` and sets an alarm at the expiry.
 2. Joining opens a WebSocket to `/ws/room/<id>`. The object checks capacity and expiry, then hands the newcomer the list of people already inside.
@@ -130,29 +130,29 @@ Plain values live in `[vars]` in `wrangler.toml`; secrets go through `wrangler s
 | `ROOM_MAX_PARTICIPANTS` | `8` | Mesh size |
 | `STUN_URLS` | Google STUN | Comma separated |
 | `TURN_URLS` / `TURN_USERNAME` | *(empty)* | See below |
-| `MASTER_KEY` *(secret)* | — | 64 hex chars, required |
-| `TURN_CREDENTIAL` *(secret)* | — | Only with TURN |
+| `MASTER_KEY` *(secret)* | - | 64 hex chars, required |
+| `TURN_CREDENTIAL` *(secret)* | - | Only with TURN |
 
 ---
 
 ## Abuse limits
 
-Uploads are anonymous by design, so Mode 2 is metered per IP per UTC day — 10 shares and 5 GB by default. Going over returns `429` with a `Retry-After` header and a message pointing at the peer-to-peer modes instead.
+Uploads are anonymous by design, so Mode 2 is metered per IP per UTC day - 10 shares and 5 GB by default. Going over returns `429` with a `Retry-After` header and a message pointing at the peer-to-peer modes instead.
 
 The counter is charged once per share from the manifest's declared sizes (which the part handler enforces byte for byte), so a 2 GB upload costs one row write, not 256. IPs are hashed before storage, one row per address per day, and the cron sweep drops rows older than two days.
 
-**Modes 1 and 3 are deliberately never metered.** They cost nothing to host — no storage, no egress, just a few KB of signaling — so there is no reason to cap them. Someone who hits the daily upload limit can still send unlimited files device to device.
+**Modes 1 and 3 are deliberately never metered.** They cost nothing to host - no storage, no egress, just a few KB of signaling - so there is no reason to cap them. Someone who hits the daily upload limit can still send unlimited files device to device.
 
 Two things worth knowing about what this does and doesn't cover:
 
 - A burst of simultaneous requests from one IP can slip slightly over the cap. That's a deliberate trade: the alternative is serialising every upload behind a lock, and being a few MB over is harmless for abuse control.
-- Per-IP limits are porous against anyone with a pool of addresses. This protects against casual abuse and runaway scripts, not a determined attacker. If you need more, put Cloudflare's WAF rate limiting in front of `/api/links` — it works at the edge, before the Worker runs.
+- Per-IP limits are porous against anyone with a pool of addresses. This protects against casual abuse and runaway scripts, not a determined attacker. If you need more, put Cloudflare's WAF rate limiting in front of `/api/links` - it works at the edge, before the Worker runs.
 
 The tighter constraint in practice is the Workers free plan's **100,000 requests/day**, since every 8 MiB chunk is one request (a 2 GB file is 256 of them).
 
 ## Adding a TURN server
 
-STUN alone gets a direct connection through most home routers. It fails on **symmetric NAT, which is what most mobile carriers use** — so a phone on mobile data talking to a laptop on Wi-Fi will typically never connect. Symptom: Modes 1 and 3 sit at "Connecting…" and then report *"This network blocked the direct connection."* TURN relays the (still end-to-end encrypted) stream when no direct path exists.
+STUN alone gets a direct connection through most home routers. It fails on **symmetric NAT, which is what most mobile carriers use** - so a phone on mobile data talking to a laptop on Wi-Fi will typically never connect. Symptom: Modes 1 and 3 sit at "Connecting…" and then report *"This network blocked the direct connection."* TURN relays the (still end-to-end encrypted) stream when no direct path exists.
 
 **Cloudflare Realtime TURN** is the least-effort fix and needs no server of your own:
 
@@ -167,9 +167,9 @@ npm run deploy
 
 `/api/config` then mints **short-lived** credentials per fetch (cached per isolate, 2 h TTL) so no long-lived password ever reaches a browser, and the landing page badge flips from "STUN only" to "STUN + TURN". If the credential API is unreachable the app quietly falls back to STUN rather than failing.
 
-Note that TURN relays *do* carry the traffic, so those connections stop being strictly peer-to-peer — the data stays DTLS-encrypted end to end and the relay can't read it, but it does pass through. Relay minutes are metered by Cloudflare; direct connections (the common case) never touch it.
+Note that TURN relays *do* carry the traffic, so those connections stop being strictly peer-to-peer - the data stays DTLS-encrypted end to end and the relay can't read it, but it does pass through. Relay minutes are metered by Cloudflare; direct connections (the common case) never touch it.
 
-Self-hosting [coturn](https://github.com/coturn/coturn) works too — set `TURN_URLS` / `TURN_USERNAME` in `[vars]` and `TURN_CREDENTIAL` as a secret:
+Self-hosting [coturn](https://github.com/coturn/coturn) works too - set `TURN_URLS` / `TURN_USERNAME` in `[vars]` and `TURN_CREDENTIAL` as a secret:
 
 ```conf
 listening-port=3478
@@ -189,7 +189,7 @@ npx wrangler secret put TURN_CREDENTIAL
 # and set TURN_URLS / TURN_USERNAME in wrangler.toml
 ```
 
-Open UDP/TCP 3478 and 5349 plus the relay range (49152–65535). Prefer short-lived credentials minted per session over a static password in production.
+Open UDP/TCP 3478 and 5349 plus the relay range (49152-65535). Prefer short-lived credentials minted per session over a static password in production.
 
 ---
 
@@ -225,43 +225,43 @@ Expired or already-consumed link · room not found · room full · room expired 
 npm test
 ```
 
-- `tests/expiry.test.js` — expiry windows and fallbacks, the exact expiry boundary, burn-after-read across multiple files and notes, part planning (including 0-byte and 2 GB files), and the ciphertext range maths that ranged downloads depend on.
-- `tests/rooms.test.js` — creation, joining, peer lists, duplicate joins, capacity, expiry, leaving, TTL extension, and the Durable Object storage round-trip.
-- `tests/crypto.test.js` — AES-256-GCM round-trips, tamper detection, part-reorder detection, per-file key isolation, wrong-master-key rejection, and IP hashing.
+- `tests/expiry.test.js` - expiry windows and fallbacks, the exact expiry boundary, burn-after-read across multiple files and notes, part planning (including 0-byte and 2 GB files), and the ciphertext range maths that ranged downloads depend on.
+- `tests/rooms.test.js` - creation, joining, peer lists, duplicate joins, capacity, expiry, leaving, TTL extension, and the Durable Object storage round-trip.
+- `tests/crypto.test.js` - AES-256-GCM round-trips, tamper detection, part-reorder detection, per-file key isolation, wrong-master-key rejection, and IP hashing.
 
-Everything under test is pure logic with injected clocks — no sleeping, no bindings, no network.
+Everything under test is pure logic with injected clocks - no sleeping, no bindings, no network.
 
 ---
 
 ## Project layout
 
 ```
-wrangler.toml          Bindings: assets, R2, D1, two Durable Objects, cron
-schema.sql             D1 tables for Mode 2 metadata
+wrangler.toml Bindings: assets, R2, D1, two Durable Objects, cron
+schema.sql D1 tables for Mode 2 metadata
 src/
-  index.js             Router: pages, API, WebSocket upgrades, cron handler
-  do/network-hub.js    Mode 1 presence + signaling (one instance per hashed IP)
-  do/room.js           Mode 3 room: membership, TTL alarm, signaling
-  routes/api.js        HTTP API
-  lib/links.js         Mode 2: manifest, chunked encryption, R2, expiry, burn
-  lib/crypto.js        WebCrypto: HKDF, AES-256-GCM parts, ids, IP hashing
-  lib/expiry.js        Pure expiry + chunk-planning maths (unit tested)
-  lib/rooms.js         Pure room state machine (unit tested)
-  lib/config.js        Vars/secrets parsing, ICE server list
-  lib/protocol.js      WebSocket envelope helpers
-  lib/qr.js            SVG QR rendering
+  index.js Router: pages, API, WebSocket upgrades, cron handler
+  do/network-hub.js Mode 1 presence + signaling (one instance per hashed IP)
+  do/room.js Mode 3 room: membership, TTL alarm, signaling
+  routes/api.js HTTP API
+  lib/links.js Mode 2: manifest, chunked encryption, R2, expiry, burn
+  lib/crypto.js WebCrypto: HKDF, AES-256-GCM parts, ids, IP hashing
+  lib/expiry.js Pure expiry + chunk-planning maths (unit tested)
+  lib/rooms.js Pure room state machine (unit tested)
+  lib/config.js Vars/secrets parsing, ICE server list
+  lib/protocol.js WebSocket envelope helpers
+  lib/qr.js SVG QR rendering
 public/
-  index.html           Landing: nearby devices, link share, room entry
-  room.html            Mode 3 room
-  download.html        Mode 2 recipient page
-  js/peer.js           WebRTC wrapper + chunked file protocol with backpressure
-  js/ws.js             Signaling client (ack semantics, auto-reconnect)
-  js/upload.js         Chunked Mode 2 uploader with retries
-  js/app.js            Landing page logic
-  js/room.js           Room logic (mesh)
-  js/download.js       Streaming download with progress
-  js/ui.js             Transfer log, modals, drop zones
-  js/util.js           Formatting, identity, toasts, blob assembly
+  index.html Landing: nearby devices, link share, room entry
+  room.html Mode 3 room
+  download.html Mode 2 recipient page
+  js/peer.js WebRTC wrapper + chunked file protocol with backpressure
+  js/ws.js Signaling client (ack semantics, auto-reconnect)
+  js/upload.js Chunked Mode 2 uploader with retries
+  js/app.js Landing page logic
+  js/room.js Room logic (mesh)
+  js/download.js Streaming download with progress
+  js/ui.js Transfer log, modals, drop zones
+  js/util.js Formatting, identity, toasts, blob assembly
 tests/
 ```
 

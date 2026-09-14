@@ -1,7 +1,7 @@
 // Tiny JSON envelope shared by the browser client and both Durable Objects.
 //
-//   client -> server: {"t": "hello", "d": {...}, "ack": 7}
-//   server -> client: {"t": "peers", "d": [...]}  |  {"t": "ack", "id": 7, "d": {...}}
+// client -> server: {"t": "hello", "d": {...}, "ack": 7}
+// server -> client: {"t": "peers", "d": [...]} |  {"t": "ack", "id": 7, "d": {...}}
 //
 // Signaling only ever carries SDP, ICE candidates and small control messages —
 // file bytes travel over the WebRTC data channel, never over this socket.

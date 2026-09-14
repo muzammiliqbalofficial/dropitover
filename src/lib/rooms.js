@@ -4,7 +4,7 @@
 export class RoomState {
   /**
    * @param {{id: string, name?: string|null, createdAt: number, expiresAt: number,
-   *          ttlSeconds?: number, maxParticipants?: number}} init
+   * ttlSeconds?: number, maxParticipants?: number}} init
    */
   constructor({ id, name = null, createdAt, expiresAt, ttlSeconds = 12 * 60 * 60, maxParticipants = 8 }) {
     this.id = id;

@@ -34,7 +34,7 @@ function relayHint(lead) {
 export class PeerLink extends Emitter {
   /**
    * @param {{peerId: string, peerName: string, initiator: boolean,
-   *          iceServers: RTCIceServer[], sendSignal: (msg: object) => void}} opts
+   * iceServers: RTCIceServer[], sendSignal: (msg: object) => void}} opts
    */
   constructor({ peerId, peerName, initiator, iceServers, sendSignal }) {
     super();

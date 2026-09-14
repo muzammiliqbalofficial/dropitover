@@ -1,11 +1,11 @@
 // DropItOver on Cloudflare Workers.
 //
-//   /                     static assets (served before this Worker runs)
-//   /r/<roomId>           room page          -> public/room.html
-//   /d/<linkId>           recipient page     -> public/download.html
-//   /api/*                HTTP API           -> src/routes/api.js
-//   /ws/net               Mode 1 signaling   -> NetworkHub Durable Object
-//   /ws/room/<roomId>     Mode 3 signaling   -> Room Durable Object
+// /                     static assets (served before this Worker runs)
+// /r/<roomId> room page -> public/room.html
+// /d/<linkId> recipient page -> public/download.html
+// /api/* HTTP API -> src/routes/api.js
+// /ws/net Mode 1 signaling -> NetworkHub Durable Object
+// /ws/room/<roomId> Mode 3 signaling -> Room Durable Object
 //
 // Modes 1 and 3 never store anything: the Durable Objects relay SDP/ICE and the
 // browsers move the bytes themselves. Mode 2 is the only path that persists, and

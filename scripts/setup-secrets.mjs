@@ -5,7 +5,7 @@
 // named, empty secrets. This asks for what it needs, generates what it can, and
 // stores everything under the exact names the Worker reads.
 //
-//   npm run setup
+// npm run setup
 
 import { createInterface } from 'node:readline/promises';
 import { spawn } from 'node:child_process';
@@ -37,25 +37,25 @@ try {
 
   // The encryption key never needs a human: generate it here.
   secrets.push({ name: 'MASTER_KEY', value: randomBytes(32).toString('hex'), note: 'generated' });
-  console.log('  MASTER_KEY      generated (32 random bytes — never shown, never stored on disk)');
-  console.log('                  Files encrypted with an older key become unreadable. That is');
-  console.log('                  expected on a fresh Worker with nothing stored yet.\n');
+  console.log(' MASTER_KEY generated (32 random bytes — never shown, never stored on disk)');
+  console.log(' Files encrypted with an older key become unreadable. That is');
+  console.log(' expected on a fresh Worker with nothing stored yet.\n');
 
-  console.log('  TURN relay lets rooms work across different networks (phone data <-> Wi-Fi).');
-  console.log('  Get these from: Cloudflare dashboard -> Realtime -> TURN Keys');
-  console.log('  Press Enter on both to skip — everything else still works.\n');
+  console.log(' TURN relay lets rooms work across different networks (phone data <-> Wi-Fi).');
+  console.log(' Get these from: Cloudflare dashboard -> Realtime -> TURN Keys');
+  console.log(' Press Enter on both to skip — everything else still works.\n');
 
-  const keyId = (await rl.question('  TURN Key ID (Enter to skip): ')).trim();
-  const token = keyId ? (await rl.question('  TURN API Token: ')).trim() : '';
+  const keyId = (await rl.question(' TURN Key ID (Enter to skip): ')).trim();
+  const token = keyId ? (await rl.question(' TURN API Token: ')).trim() : '';
   console.log('');
 
   if (keyId && token) {
     secrets.push({ name: 'TURN_KEY_ID', value: keyId });
     secrets.push({ name: 'TURN_API_TOKEN', value: token });
   } else if (keyId && !token) {
-    console.error('  Key ID given but no token — skipping TURN. Run this again to set both.\n');
+    console.error(' Key ID given but no token — skipping TURN. Run this again to set both.\n');
   } else {
-    console.log('  Skipping TURN. Rooms will work on the same Wi-Fi; across networks they may not.\n');
+    console.log(' Skipping TURN. Rooms will work on the same Wi-Fi; across networks they may not.\n');
   }
 
   rl.close();

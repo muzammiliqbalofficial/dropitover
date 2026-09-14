@@ -10,7 +10,7 @@ const MAX_ATTEMPTS = 3;
 
 /**
  * @param {{files: File[], text: string, expiry: string, burnAfterRead: boolean,
- *          onProgress?: (p: {sent: number, total: number, label: string}) => void}} options
+ * onProgress?: (p: {sent: number, total: number, label: string}) => void}} options
  * @returns {Promise<object>} the finalized share (url, qrUrl, expiresAt, ownerToken…)
  */
 export async function uploadShare({ files, text, expiry, burnAfterRead, onProgress = () => {} }) {

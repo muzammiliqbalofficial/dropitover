@@ -22,9 +22,9 @@ export function msUntilReset(now) {
 
 /**
  * Pure quota decision.
- * @param {{shares: number, bytes: number}} used     already spent today
+ * @param {{shares: number, bytes: number}} used already spent today
  * @param {{shares: number, bytes: number}} incoming this request
- * @param {{shares: number, bytes: number}} limits   daily caps (0 = unlimited)
+ * @param {{shares: number, bytes: number}} limits daily caps (0 = unlimited)
  * @returns {{ok: true} | {ok: false, error: string, message: string}}
  */
 export function evaluateQuota(used, incoming, limits) {

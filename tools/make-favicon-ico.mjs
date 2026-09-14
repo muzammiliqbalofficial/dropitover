@@ -5,7 +5,7 @@
 // search engines and older browsers. An ICO can carry a PNG payload directly,
 // so this is a header wrapped around the file we already have, not a re-encode.
 //
-//   node tools/make-favicon-ico.mjs
+// node tools/make-favicon-ico.mjs
 
 import { readFileSync, writeFileSync } from 'node:fs';
 

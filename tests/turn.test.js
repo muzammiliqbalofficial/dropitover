@@ -55,7 +55,7 @@ test('minting is skipped when the TURN secrets are absent', async () => {
   assert.equal(await mintCloudflareTurn({}), null);
   assert.equal(await mintCloudflareTurn({ TURN_KEY_ID: 'key' }), null, 'token also required');
   assert.equal(await mintCloudflareTurn({ TURN_API_TOKEN: 'tok' }), null, 'key id also required');
-  assert.equal(await mintCloudflareTurn({ TURN_KEY_ID: '  ', TURN_API_TOKEN: ' ' }), null, 'blank counts as unset');
+  assert.equal(await mintCloudflareTurn({ TURN_KEY_ID: ' ', TURN_API_TOKEN: ' ' }), null, 'blank counts as unset');
 });
 
 test('a failing credential API degrades to STUN instead of throwing', async () => {

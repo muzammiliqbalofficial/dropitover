@@ -3,9 +3,9 @@
 
 # AES-256-GCM root key for files at rest. 64 hex characters.
 # Generate one with:
-#   node -e "console.log(crypto.randomUUID().replace(/-/g,'') + crypto.randomUUID().replace(/-/g,''))"
+# node -e "console.log(crypto.randomUUID().replace(/-/g,'') + crypto.randomUUID().replace(/-/g,''))"
 # or, better:
-#   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+# node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 MASTER_KEY=
 
 # Only needed if you run a TURN server (see README).
