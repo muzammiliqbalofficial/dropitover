@@ -269,14 +269,15 @@ function openSendSheet(peer) {
     <div class="modal" role="dialog" aria-modal="true">
       <h3>Send to ${escapeHtml(peer.name)}</h3>
       <p>Goes straight to that device.</p>
-      <div class="dropzone" tabindex="0" role="button">
+      <div class="dropzone" tabindex="0" role="button" aria-label="Choose files to send to ${escapeHtml(peer.name)}">
         <strong>Choose files</strong>
         <span class="chosen">or drop them here</span>
       </div>
-      <input type="file" multiple hidden>
+      <label for="sheet-files" class="sr-only">Choose files to send</label>
+      <input id="sheet-files" type="file" multiple class="sr-only" aria-label="Choose files to send">
       <div class="mt">
-        <label class="field">Or send text</label>
-        <textarea rows="3" placeholder="Type or paste something…"></textarea>
+        <label class="field" for="sheet-text">Or send text</label>
+        <textarea id="sheet-text" rows="3" placeholder="Type or paste something…"></textarea>
       </div>
       <div class="row mt">
         <button class="cancel">Cancel</button>
@@ -373,7 +374,18 @@ function ensureLink(peerId, initiator, peerName) {
 function wireLinkShare() {
   wireDropzone($('#link-drop'), $('#link-files'), addFiles);
   $('#link-send').addEventListener('click', createShare);
-  $('#copy-url').addEventListener('click', () => copyText(state.share.url));
+  $('#copy-url').addEventListener('click', async () => {
+    if (!state.share?.url) return;
+    await copyText(state.share.url);
+    const btn = $('#copy-url');
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.classList.add('btn-copied');
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.classList.remove('btn-copied');
+    }, 2000);
+  });
   $('#result-new').addEventListener('click', resetShareForm);
   $('#result-revoke').addEventListener('click', revokeShare);
 }
@@ -404,7 +416,7 @@ function renderSelection() {
             <div class="note">${formatBytes(file.size)}</div>
           </div>
           <div class="spacer"></div>
-          <button class="btn-sm btn-ghost remove" aria-label="Remove"><svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+          <button class="btn-sm btn-ghost remove" aria-label="Remove ${escapeHtml(file.name)}"><svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>`;
       $('.title', li).textContent = file.name;
       $('.remove', li).addEventListener('click', () => {
@@ -428,10 +440,11 @@ async function createShare() {
   const note = $('#upload-note');
 
   button.disabled = true;
+  button.textContent = 'Encrypting & uploading…';
   $('#upload-wrap').hidden = false;
   $('#link-result').hidden = true;
   fill.style.width = '0%';
-  note.textContent = state.selection.length ? 'Sending…' : 'Saving…';
+  note.textContent = state.selection.length ? 'Encrypting & sending…' : 'Saving…';
 
   try {
     const share = await uploadShare({
@@ -448,9 +461,12 @@ async function createShare() {
 
     fill.style.width = '100%';
     note.textContent = 'Done. Your link is ready.';
+    button.textContent = 'Create Encrypted Link';
     showShare(share);
   } catch (err) {
-    $('#upload-wrap').hidden = true;
+    fill.style.width = '0%';
+    note.textContent = 'Upload interrupted. Tap retry to send again.';
+    button.textContent = 'Retry Encrypted Link';
     toast(err.message, 'error', 7000);
   } finally {
     button.disabled = false;
@@ -475,6 +491,7 @@ function resetShareForm() {
   state.selection = [];
   state.share = null;
   renderSelection();
+  $('#link-send').textContent = 'Create Encrypted Link';
   $('#link-text').value = '';
   $('#link-result').hidden = true;
   $('#upload-wrap').hidden = true;
@@ -509,18 +526,27 @@ function wireRooms() {
   $('#create-room').addEventListener('click', async () => {
     const button = $('#create-room');
     button.disabled = true;
+    button.textContent = 'Starting room…';
     try {
       const room = await fetchJson('/api/rooms', { method: 'POST' });
       window.location.href = `/r/${room.roomId}`;
     } catch (err) {
       toast(err.message, 'error');
       button.disabled = false;
+      button.textContent = 'Start a Room';
     }
   });
 
   const join = () => {
     const raw = $('#join-code').value.trim();
-    if (!raw) return;
+    if (!raw) {
+      toast('Please enter a room code or paste a room link.', 'warn');
+      $('#join-code').focus();
+      return;
+    }
+    const joinBtn = $('#join-room');
+    joinBtn.disabled = true;
+    joinBtn.textContent = 'Joining…';
     const code = raw.split('/').filter(Boolean).pop().split('?')[0];
     window.location.href = `/r/${encodeURIComponent(code)}`;
   };
