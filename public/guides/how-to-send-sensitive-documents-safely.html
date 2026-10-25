@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>How to Safely Send Sensitive Documents and Passwords Over the Internet | DropItOver</title>
-<meta name="description" content="The definitive guide to securely transmitting confidential documents, contracts, passwords, and identity records without cloud data leaks or compliance violations.">
+<title>Send sensitive documents with a clear threat model | DropItOver</title>
+<meta name="description" content="Before choosing a transfer button, decide who must be prevented from reading the document and what happens after the recipient saves it. A bank statement s">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/how-to-send-sensitive-documents-safely">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="How to Safely Send Sensitive Documents and Passwords Over the Internet">
+<meta property="og:title" content="Send sensitive documents with a clear threat model">
 <meta property="og:description" content="The definitive guide to securely transmitting confidential documents, contracts, passwords, and identity records without cloud data leaks or compliance violations.">
 <meta property="og:url" content="https://dropitover.com/guides/how-to-send-sensitive-documents-safely">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "How to Safely Send Sensitive Documents and Passwords Over the Internet",
-    "description": "The definitive guide to securely transmitting confidential documents, contracts, passwords, and identity records without cloud data leaks or compliance violations.",
+    "headline": "Send sensitive documents with a clear threat model",
+    "description": "Before choosing a transfer button, decide who must be prevented from reading the document and what happens after the recipient saves it. A bank statement s",
     "url": "https://dropitover.com/guides/how-to-send-sensitive-documents-safely",
     "datePublished": "2026-08-23",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Security Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,63 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "How to Safely Send Sensitive Documents and Passwords Over the Internet",
+        "name": "Send sensitive documents with a clear threat model",
         "item": "https://dropitover.com/guides/how-to-send-sensitive-documents-safely"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is it safe to send passwords or API keys in text files?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, provided you use an ephemeral, encrypted link with 'Burn after download' enabled, or transfer the text directly over a local WebRTC P2P DataChannel. Once downloaded, the record vanishes completely."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does DropItOver prevent unauthorized scraping of share links?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Share links use high-entropy random identifiers (cryptographically unpredictable) and are served with strict <code>X-Robots-Tag: noindex</code> headers to prevent search engine indexing."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I revoke a link immediately if I accidentally send it to the wrong recipient?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Click 'Delete now' on your transfer summary screen to immediately purge the file and cryptographic keys from storage."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are files scanned by automated AI or content indexing bots?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. DropItOver does not inspect, parse, analyze, or feed user files into machine learning models or advertising databases."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What happens if a recipient forwards the download link to someone else?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "If you enabled 'Delete once they download it', the link becomes permanently invalid the moment the first recipient finishes downloading. Any subsequent attempt to open the link returns a 404 expired error."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I encrypt text notes or messages without sending a file?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. In DropItOver's link creator, you can type confidential notes or passwords directly into the 'Message' box without attaching a file."
-          }
-        }
     ]
   }
 ]
@@ -144,236 +90,36 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>How to Safely Send Sensitive Documents and Passwords Over the Internet</span>
-      </nav>
-
-      <p class="eyebrow">Security & Best Practices</p>
-      <h1>How to Safely Send Sensitive Documents and Passwords Over the Internet</h1>
-      <p class="dek">Protect your confidential data. Discover the five golden rules of secure document transmission using ephemeral links, AES-256 encryption, and out-of-band delivery.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Security Team</span>
-        </div>
-        <span>11 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>The Digital Threat Landscape for Sensitive Personal and Corporate Documents</h2>
-      <p>
-        In our connected economy, individuals and organizations must routinely transmit highly confidential files over the internet. These documents include:
-      </p>
-      <ul>
-        <li>Government-issued identity documents (passports, driver's licenses, social security cards).</li>
-        <li>Financial statements, mortgage applications, tax returns (W-2s, 1099s), and bank account records.</li>
-        <li>Legal contracts, merger agreements, non-disclosure agreements (NDAs), and board resolutions.</li>
-        <li>Software development credentials (API keys, private SSH/PGP keys, environment variable configs).</li>
-      </ul>
-      <p>
-        Unfortunately, the most common methods people use to send these documents—such as unencrypted email attachments, chat messaging apps (Slack, Discord, Teams), or open cloud storage links—leave permanent digital footprints across dozens of third-party servers, creating severe risks of identity theft, corporate espionage, and regulatory non-compliance (GDPR, HIPAA, SOC 2).
-      </p>
-
-      <h2>The Five Golden Rules of Secure Document Transmission</h2>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">1</div>
-          <span>Never Transmit Sensitive Passwords and Files in Plaintext</span>
-        </div>
-        <p>
-          Standard email protocols (SMTP/IMAP) transmit message bodies and attachments in format that intermediate mail transfer agents and corporate email administrators can inspect. Always enforce end-to-end encryption or authenticated client-side encryption.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">2</div>
-          <span>Enforce Ephemeral Retention (Zero Permanent Footprint)</span>
-        </div>
-        <p>
-          A document stored permanently on a server is an eventual data breach liability. Once the recipient has downloaded the required file, the copy at rest must be cryptographically wiped. Use ephemeral links with short lifespans (1 hour to 24 hours) or single-use "burn after download" triggers.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">3</div>
-          <span>Practice Out-of-Band (OOB) Channel Separation</span>
-        </div>
-        <p>
-          If you send a file link via email, transmit the notification or confirmation through a completely separate communication channel (e.g., an encrypted Signal message or SMS). If an attacker intercepts one communication vector, they cannot compromise the complete transaction.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">4</div>
-          <span>Verify Encryption Ciphers and Authenticity</span>
-        </div>
-        <p>
-          Ensure the sharing platform uses modern authenticated ciphers like <strong>AES-256-GCM</strong> or <strong>ChaCha20-Poly1305</strong>. These AEAD ciphers guarantee both confidentiality (keeping contents secret) and integrity (preventing unauthorized tampering).
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">5</div>
-          <span>Use Direct P2P Channels for In-Person / Same-Office Exchanges</span>
-        </div>
-        <p>
-          When sharing sensitive database dumps, production logs, or HR records with a colleague in the same room or office, use direct WebRTC P2P transfers. The data never leaves your local network router and never touches any external cloud server.
-        </p>
-      </div>
-
-      <h2>Step-by-Step: Sending a Confidential File via DropItOver</h2>
-      <ol>
-        <li>Open <strong><a href="/">dropitover.com</a></strong> in your browser.</li>
-        <li>Under <strong>"Send a link"</strong>, drop your sensitive PDF or password archive.</li>
-        <li>Set the expiry dropdown to <strong>1 hour</strong>.</li>
-        <li>Check the box for <strong>"Delete once they download it"</strong>.</li>
-        <li>Click <strong>Get a link</strong>. Copy the generated URL and send it to your recipient.</li>
-        <li>Once your recipient downloads the document, the file is instantly shredded from storage.</li>
-      </ol>
-
-      <h2>Security Protocol Comparison</h2>
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Transmission Method</th>
-            <th>Encryption at Rest</th>
-            <th>Self-Destruct Capability</th>
-            <th>Protection Against Server Subpoena</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="us"><strong>DropItOver (Ephemeral Link / P2P)</strong></td>
-            <td class="us yes">AES-256-GCM / Zero Stored</td>
-            <td class="us yes">1-Hour to 7-Day / 1-Click Burn</td>
-            <td class="us yes">Maximum (No logs/data retained)</td>
-          </tr>
-          <tr>
-            <td><strong>Standard Email (Gmail / Outlook)</strong></td>
-            <td class="no">Provider Managed</td>
-            <td class="no">None (Stored indefinitely)</td>
-            <td class="no">Low (Full inbox records)</td>
-          </tr>
-          <tr>
-            <td><strong>Slack / Microsoft Teams</strong></td>
-            <td>Provider Managed</td>
-            <td class="no">Retained in workspace logs</td>
-            <td class="no">Low (Corporate discovery)</td>
-          </tr>
-          <tr>
-            <td><strong>Google Drive Public Link</strong></td>
-            <td>Google Managed</td>
-            <td class="no">Manual deletion required</td>
-            <td class="no">Low (Tied to user identity)</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Enterprise &amp; Compliance Considerations (GDPR, HIPAA, SOC 2)</h2>
-      <p>
-        For consultants, accountants, and medical professionals, regulatory frameworks mandate strict data protection standards:
-      </p>
-      <ul>
-        <li><strong>Data Minimization:</strong> Storing user files only as long as necessary. DropItOver's automated 10-minute cron sweeps ensure compliance with GDPR Article 5(1)(e) (storage limitation).</li>
-        <li><strong>Confidentiality by Design:</strong> AES-256-GCM encryption with decoupled master keys satisfies HIPAA technical safeguard requirements for electronic protected health information (ePHI) in transit.</li>
-        <li><strong>Audit Trail Elimination:</strong> By avoiding permanent accounts and usernames, DropItOver eliminates the blast radius of credential compromise.</li>
-      </ul>
-
-      <h2>Checklist: Pre-Transmission Document Sanitization</h2>
-      <p>
-        Before transmitting sensitive PDF reports or spreadsheets:
-      </p>
-      <ol>
-        <li><strong>Strip Hidden PDF Metadata:</strong> PDF documents often contain author names, software versions, and edit histories. Use a PDF metadata scrubbing tool to purge EXIF data.</li>
-        <li><strong>Password-Protect Embedded ZIPs:</strong> If transferring multiple private keys or database dumps, package them in an AES-256 encrypted 7z/ZIP container before uploading.</li>
-        <li><strong>Confirm Recipient Read Status:</strong> Ensure your recipient is ready to download so the single-use burn trigger executes promptly.</li>
-      </ol>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Is it safe to send passwords or API keys in text files?</summary>
-          <div class="faq-answer">
-            Yes, provided you use an ephemeral, encrypted link with 'Burn after download' enabled, or transfer the text directly over a local WebRTC P2P DataChannel. Once downloaded, the record vanishes completely.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>How does DropItOver prevent unauthorized scraping of share links?</summary>
-          <div class="faq-answer">
-            Share links use high-entropy random identifiers (cryptographically unpredictable) and are served with strict <code>X-Robots-Tag: noindex</code> headers to prevent search engine indexing.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I revoke a link immediately if I accidentally send it to the wrong recipient?</summary>
-          <div class="faq-answer">
-            Yes. Click 'Delete now' on your transfer summary screen to immediately purge the file and cryptographic keys from storage.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Are files scanned by automated AI or content indexing bots?</summary>
-          <div class="faq-answer">
-            No. DropItOver does not inspect, parse, analyze, or feed user files into machine learning models or advertising databases.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What happens if a recipient forwards the download link to someone else?</summary>
-          <div class="faq-answer">
-            If you enabled 'Delete once they download it', the link becomes permanently invalid the moment the first recipient finishes downloading. Any subsequent attempt to open the link returns a 404 expired error.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I encrypt text notes or messages without sending a file?</summary>
-          <div class="faq-answer">
-            Yes. In DropItOver's link creator, you can type confidential notes or passwords directly into the 'Message' box without attaching a file.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Explained</a></li>
-        <li><a href="/guides/ephemeral-expiring-links-privacy">Why Ephemeral Links Protect Your Data</a></li>
-        <li><a href="/guides/send-large-files-without-email">Send Large Files Without Email Limits</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>Send sensitive documents with a clear threat model</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>Send sensitive documents with a clear threat model</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>Before choosing a transfer button, decide who must be prevented from reading the document and what happens after the recipient saves it. A bank statement sent to a trusted adviser has different requirements from a public brochure, and an organizational policy may require an approved records system. DropItOver provides live browser transfers and temporary links, but neither mode verifies a recipient's real-world identity or prevents them from keeping a copy. This guide explains the actual boundaries and a practical verification workflow. It is technical guidance for using the tool, not a claim that a transfer automatically satisfies a particular regulatory regime.</p>
+<h2>Minimize the document and identify the recipient</h2>
+<p>Send only the pages or fields needed for the task. Review filenames, hidden comments, tracked changes, embedded metadata, and attachments before selecting the file. Redaction should remove underlying content rather than merely cover it visually. Create a non-sensitive test document if you need to check compatibility first. Confirm the recipient through an existing trusted channel, especially if someone unexpectedly requests records or changes their contact address. A familiar display nickname in a nearby list is not identity verification and can be imitated by another participant.</p>
+<p>Ask whether the recipient can stay online and whether server-managed storage is permitted. If the answer is unclear, resolve that before uploading. Avoid sending passwords, private keys, recovery codes, or documents you are not authorized to disclose. For an organizational workflow, follow its approved retention and recipient-verification process. A tool offering a short expiry does not waive those requirements, and a successful encrypted connection does not prove that the selected recipient should have the file.</p>
+<h2>Understand the live transfer boundary</h2>
+<p>Nearby and room file payloads use SCTP over DTLS between browsers. TURN can relay the encrypted packets if direct ICE connectivity fails. The signaling service still processes connection metadata, participant names, transfer offers, SDP, and ICE candidates. A filename can itself reveal sensitive information before the bytes are sent, so choose neutral names where appropriate. Both browsers must remain active, and recipients can save copies. Browser-delivered code and the devices running it remain part of the trust model.</p>
+<pre>Live payload: Sender browser ===== DTLS-encrypted data ===== Recipient
+Metadata: browsers ----- signaling service ----- browsers
+Stored link: plaintext in Worker -&gt; AES-GCM ciphertext in R2 -&gt; Worker plaintext</pre>
+<p>A room URL grants an invitation to the room rather than a named-account permission check. Keep it within the intended group and confirm who joined. Public-IP discovery can also group unrelated people behind one shared gateway. Do not treat discovery as proof that someone is physically nearby or belongs to your organization. If recipient identity has serious consequences, verify it out of band and use a system with the identity and access controls your process requires.</p>
+<h2>Understand the stored-link boundary</h2>
+<p>Link uploads travel over HTTPS to a Worker, which processes plaintext and encrypts file chunks with AES-256-GCM before writing to R2. The Worker holds the master key and later decrypts downloads. This is encryption at rest controlled by the service, not zero-knowledge encryption with a key held only by the sender. D1 stores metadata and notes separately. Do not put secrets into a note or filename on the assumption that file encryption protects every field in the database.</p>
+<p>If your threat model excludes the service operator, encrypt the document independently with a tool and format the recipient already supports before uploading. Exchange the decryption key through a separate, authenticated communication channel. Avoid sending the key beside the link in the same message when separation is the point of your control. Confirm that the recipient can decrypt a test archive first. A forgotten archive password is not recoverable by the file-transfer service, and a weak password can undermine otherwise strong encryption.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Concern</th><th scope="col">Useful control</th><th scope="col">Remaining limitation</th></tr></thead><tbody><tr><td>Wrong recipient</td><td>Independent identity confirmation</td><td>Nicknames and bearer URLs are not identities</td></tr><tr><td>Operator access to stored payload</td><td>Independent encryption before selection</td><td>Metadata may still be visible</td></tr><tr><td>Link forwarded</td><td>Restrict distribution and use short expiry</td><td>Existing recipients can copy files</td></tr><tr><td>Later service access</td><td>Delete stored share after confirmation</td><td>Recipient copies remain</td></tr><tr><td>Accidental data disclosure</td><td>Minimize and inspect document</td><td>Encryption cannot correct over-sharing</td></tr></tbody></table></div>
+<h2>Choose retention deliberately</h2>
+<p>Select an expiry that leaves enough time for the intended recipient to download, while avoiding unnecessary availability. Links stop resolving after expiry and scheduled cleanup removes stored data on a ten-minute cycle under normal operation. Operational failures can delay physical deletion. Burn-after-read removes a share after the required items have been collected, and the owner can delete earlier using the private token. None of these operations erases a screenshot, forwarded copy, browser download, or independently retained record.</p>
+<p>Keep the source under your own retention policy until the recipient confirms a usable copy. If the document must be a formal record, place it in the appropriate controlled system after transfer rather than using an expiring URL as the only record. Do not make promises of instantaneous physical overwriting or universal legal compliance based on a countdown timer. The Privacy Policy documents what this service stores, and support can handle applicable requests for support records without pretending that no-account use means no personal data exists.</p>
+<h2>Verify delivery without leaking diagnostics</h2>
+<p>Begin with a harmless test file on the intended devices and network. Keep tabs foregrounded, especially on iOS Safari, and avoid screen lock during live delivery. On Windows, review browser firewall permissions and the active network profile if connection setup fails; do not disable protection globally. On guest Wi-Fi, AP Isolation may block a direct path. A trusted hotspot can diagnose that restriction, but do not move a confidential workflow to an unapproved network merely because it is technically easier.</p>
+<p>After receiving, compare size and open the saved copy. For important documents, compare SHA-256 digests through an authenticated channel when practical. A digest proves byte agreement with the selected source, not authorship or authorization. Inspect the actual pages and attachments so a correctly transmitted wrong document does not pass unnoticed. If something fails, retain the original and report the stage, browser versions, network arrangement, and approximate size using a non-sensitive reproduction. Never attach the private document just to prove that transfer is broken.</p>
+<h2>Plan time and memory without false assurance</h2>
+<p>Large scanned records or archives can expose mobile memory limits. WebRTC receives assemble Blob parts but retain the whole received object for saving; a small send chunk does not establish constant total memory. Test a representative harmless file and monitor resources. Stored links use different buffers and default limits of two GiB per file and eight GiB per bundle. Neither method is a malware scanner or an archival verification system.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated 100 MiB example</th><th scope="col">Assumed payload rate</th><th scope="col">Ideal duration</th><th scope="col">What remains outside the calculation</th></tr></thead><tbody><tr><td>Live WebRTC</td><td>50 Mbit/s</td><td>16.8 seconds</td><td>Identity confirmation and saving</td></tr><tr><td>Live WebRTC</td><td>100 Mbit/s</td><td>8.4 seconds</td><td>Device resource pressure</td></tr><tr><td>Sequential stored link</td><td>10 up, 50 down Mbit/s</td><td>100.7 seconds</td><td>Upload finalization and retrieval delay</td></tr></tbody></table></div>
+<p>These are arithmetic estimates, not security evidence or hardware benchmarks. A faster transfer does not make a disclosure safer. Use the process that meets your recipient, access, retention, and device requirements, and stop if any of those requirements cannot be met. The encryption guide provides key and chunk details; the contact page accepts private support tickets, but it should not receive your passwords, confidential documents, or working download URLs as routine troubleshooting material.</p>
+ <h2>Sources and further reading</h2><p><a href="https://www.w3.org/TR/WebCryptoAPI/">Web Crypto specification</a>, <a href="/privacy">DropItOver data-handling policy</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -395,7 +141,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -419,8 +165,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>Why Ephemeral & Expiring Links Protect Your Personal Data | DropItOver</title>
-<meta name="description" content="Why persistent cloud links expose your confidential files to data breaches. Learn how self-destructing, single-use expiring links protect your digital privacy.">
+<title>Expiring file links: access deadlines, deletion, and recipient copies | DropItOver</title>
+<meta name="description" content="An expiring link is a temporary access mechanism, not a way to control a file after someone saves it. DropItOver lets a sender choose a link lifetime, dele">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/ephemeral-expiring-links-privacy">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="Why Ephemeral & Expiring Links Protect Your Personal Data">
+<meta property="og:title" content="Expiring file links: access deadlines, deletion, and recipient copies">
 <meta property="og:description" content="Why persistent cloud links expose your confidential files to data breaches. Learn how self-destructing, single-use expiring links protect your digital privacy.">
 <meta property="og:url" content="https://dropitover.com/guides/ephemeral-expiring-links-privacy">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "Why Ephemeral & Expiring Links Protect Your Personal Data",
-    "description": "Why persistent cloud links expose your confidential files to data breaches. Learn how self-destructing, single-use expiring links protect your digital privacy.",
+    "headline": "Expiring file links: access deadlines, deletion, and recipient copies",
+    "description": "An expiring link is a temporary access mechanism, not a way to control a file after someone saves it. DropItOver lets a sender choose a link lifetime, dele",
     "url": "https://dropitover.com/guides/ephemeral-expiring-links-privacy",
     "datePublished": "2026-08-22",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Security Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,63 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Why Ephemeral & Expiring Links Protect Your Personal Data",
+        "name": "Expiring file links: access deadlines, deletion, and recipient copies",
         "item": "https://dropitover.com/guides/ephemeral-expiring-links-privacy"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Can a deleted ephemeral file ever be recovered by DropItOver engineers?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. When a file is purged upon expiry or download burn, the encrypted storage objects and derived cryptographic keys are completely deleted from our Cloudflare R2 storage infrastructure. There are no backups or forensic recovery paths."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What happens if my recipient does not download the file before it expires?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "If the TTL timer expires before the recipient opens the link, the file is automatically deleted. You will need to generate a new share link."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is there any limit on how many expiring links I can create per day?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "To protect service availability and prevent automated abuse, standard daily bandwidth limits apply per IP subnet, which is more than sufficient for everyday personal and business document sharing."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does single-use burn handle interrupted downloads?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The burn deletion trigger only fires when the HTTP response body streaming completes with a successful 200 OK status. If the connection breaks midway, the recipient can retry until the full file is downloaded."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I share an ephemeral link with multiple recipients?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Simply set your desired expiration time (e.g. 24 hours or 7 days) without checking 'Delete once they download it'. Multiple recipients can download the file until the TTL clock runs out."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are download links protected against automated bots?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Ephemeral download links are structured with randomized URL tokens and anti-scraping headers to prevent web crawlers from downloading files automatically."
-          }
-        }
     ]
   }
 ]
@@ -144,215 +90,36 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>Why Ephemeral & Expiring Links Protect Your Personal Data</span>
-      </nav>
-
-      <p class="eyebrow">Privacy & Security</p>
-      <h1>Why Ephemeral & Expiring Links Protect Your Personal Data</h1>
-      <p class="dek">Discover how automated Time-To-Live expiration, single-use burn after download, and AES-256-GCM encryption prevent data leaks and link hoarding.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Security Team</span>
-        </div>
-        <span>10 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>The Hidden Privacy Crisis of Persistent Cloud File Links</h2>
-      <p>
-        In modern business and personal workflows, sharing files via generated links has become ubiquitous. Whether using Google Drive ("Anyone with the link can view"), Dropbox, OneDrive, or Box, users routinely create public URLs to share tax forms, bank statements, identification scans, medical records, and confidential contracts.
-      </p>
-      <p>
-        However, persistent cloud links introduce severe, long-term security liabilities:
-      </p>
-      <ul>
-        <li><strong>Orphaned Public Links:</strong> Once created, standard cloud share links remain active for years unless manually revoked. If an email thread is forwarded or a chat history is exposed, unauthorized third parties can access sensitive documents indefinitely.</li>
-        <li><strong>Search Engine &amp; Web Crawler Indexing:</strong> Misconfigured cloud buckets and shared links frequently get discovered and indexed by search engine crawlers and automated vulnerability scanners.</li>
-        <li><strong>Data Hoarding &amp; Breach Targets:</strong> Centralized file sharing servers store millions of files permanently, making them prime targets for credential stuffing and data extortion attacks.</li>
-      </ul>
-
-      <h2>The Ephemeral Security Paradigm: Self-Destructing Data Architecture</h2>
-      <p>
-        <strong>Ephemeral file sharing</strong> is built on the cryptographic principle of minimal data retention: data should exist only for the exact duration required to complete its intended purpose, and not a single millisecond longer.
-      </p>
-
-      <h2>How Ephemeral &amp; Expiring Links Protect Your Privacy</h2>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">1</div>
-          <span>Strict Time-To-Live (TTL) Enforcement</span>
-        </div>
-        <p>
-          Every share link generated on DropItOver is assigned an immutable cryptographic Time-To-Live timestamp (e.g., 1 hour, 6 hours, 24 hours, or up to 7 days). Automated cron sweepers run every 10 minutes to permanently delete and scrub expired files from storage disks.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">2</div>
-          <span>"Burn After Download" (Single-Use Delivery)</span>
-        </div>
-        <p>
-          By checking the "Delete once they download it" option, the file self-destructs the moment the recipient completes their download stream. Even if an attacker intercepts the link five seconds later, the URL returns a permanent 404 error with zero recoverable data.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">3</div>
-          <span>Authenticated AES-256-GCM Encryption</span>
-        </div>
-        <p>
-          All uploaded ephemeral files are encrypted in 8 MB chunks with unique initialization vectors before hitting storage. The raw files cannot be read by storage administrators or intermediate network transit providers.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">4</div>
-          <span>Instant Manual Revocation</span>
-        </div>
-        <p>
-          Made a mistake or sent the link to the wrong person? Click <strong>"Delete now"</strong> on your transfer result screen to immediately purge the file and cryptographic keys from storage.
-        </p>
-      </div>
-
-      <h2>Ephemeral Links vs Permanent Cloud Storage Comparison</h2>
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Security Factor</th>
-            <th class="us">Ephemeral Links (DropItOver)</th>
-            <th>Standard Cloud Links (Drive / Dropbox)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Default Expiration</strong></td>
-            <td class="us yes">Automatic (24 hours default)</td>
-            <td class="no">Never expires (Permanent)</td>
-          </tr>
-          <tr>
-            <td><strong>Single-Use Burn Option</strong></td>
-            <td class="us yes">Built-in 1-Click</td>
-            <td class="no">Not available</td>
-          </tr>
-          <tr>
-            <td><strong>Permanent Data Retention</strong></td>
-            <td class="us yes">Zero (Scrubbed on expiry)</td>
-            <td class="no">Stored until account deletion</td>
-          </tr>
-          <tr>
-            <td><strong>Account Exposure Risk</strong></td>
-            <td class="us yes">Zero (No user account exists)</td>
-            <td class="no">High (Tied to Google/Microsoft identity)</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Threat Vector Analysis: Defense Against Link Scraping &amp; Interception</h2>
-      <ol>
-        <li><strong>Brute Force URL Guessing:</strong> DropItOver share links utilize 128-bit high-entropy random identifiers (e.g. <code>/d/3k9m2xp8...</code>), making random enumeration computationally infeasible.</li>
-        <li><strong>Search Engine Exclusion:</strong> All link download pages serve strict HTTP headers: <code>X-Robots-Tag: noindex, nofollow</code>, guaranteeing that web crawlers never index or cache download links.</li>
-        <li><strong>Immediate Erasure Verification:</strong> When single-use burn triggers, the file metadata in SQLite D1 databases and encrypted blobs in Cloudflare R2 are deleted simultaneously, preventing data remanence.</li>
-      </ol>
-
-      <h2>Cryptographic Deletion vs Soft Deletion</h2>
-      <p>
-        Many enterprise cloud storage vendors implement "soft deletion," where files marked as deleted remain in recycling bins, cold snapshot backups, and audit logs for 30 to 90 days.
-      </p>
-      <p>
-        DropItOver implements <strong>cryptographic shredding and hard deletion</strong>:
-      </p>
-      <ul>
-        <li>The unique AES-256-GCM encryption key associated with the link is purged from the database.</li>
-        <li>The underlying R2 binary chunks are immediately deleted via the Cloudflare storage API.</li>
-        <li>Without the cryptographic key and without the encrypted ciphertext blocks, mathematical reconstruction of the original file is impossible.</li>
-      </ul>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Can a deleted ephemeral file ever be recovered by DropItOver engineers?</summary>
-          <div class="faq-answer">
-            No. When a file is purged upon expiry or download burn, the encrypted storage objects and derived cryptographic keys are completely deleted from our Cloudflare R2 storage infrastructure. There are no backups or forensic recovery paths.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What happens if my recipient does not download the file before it expires?</summary>
-          <div class="faq-answer">
-            If the TTL timer expires before the recipient opens the link, the file is automatically deleted. You will need to generate a new share link.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Is there any limit on how many expiring links I can create per day?</summary>
-          <div class="faq-answer">
-            To protect service availability and prevent automated abuse, standard daily bandwidth limits apply per IP subnet, which is more than sufficient for everyday personal and business document sharing.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>How does single-use burn handle interrupted downloads?</summary>
-          <div class="faq-answer">
-            The burn deletion trigger only fires when the HTTP response body streaming completes with a successful 200 OK status. If the connection breaks midway, the recipient can retry until the full file is downloaded.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I share an ephemeral link with multiple recipients?</summary>
-          <div class="faq-answer">
-            Yes. Simply set your desired expiration time (e.g. 24 hours or 7 days) without checking 'Delete once they download it'. Multiple recipients can download the file until the TTL clock runs out.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Are download links protected against automated bots?</summary>
-          <div class="faq-answer">
-            Yes. Ephemeral download links are structured with randomized URL tokens and anti-scraping headers to prevent web crawlers from downloading files automatically.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Explained</a></li>
-        <li><a href="/guides/how-to-send-sensitive-documents-safely">How to Safely Send Sensitive Documents</a></li>
-        <li><a href="/guides/p2p-vs-cloud-storage">P2P vs Cloud Storage Comparison</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>Expiring file links: access deadlines, deletion, and recipient copies</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>Expiring file links: access deadlines, deletion, and recipient copies</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>An expiring link is a temporary access mechanism, not a way to control a file after someone saves it. DropItOver lets a sender choose a link lifetime, delete a share early, and optionally remove it after completed retrieval. Those controls reduce how long the service offers the stored copy, but they do not erase recipient downloads, screenshots, forwarded attachments, or independent backups. This guide follows the share lifecycle in the implementation and explains the difference between an access deadline, scheduled cleanup, and a verified handoff. Keep that distinction explicit whenever you use a timer as part of a privacy workflow.</p>
+<h2>Follow the share lifecycle</h2>
+<p>A link begins as a pending upload. The browser submits file metadata and expiry preferences, receives upload details and an owner token, and sends file parts. The Worker encrypts parts with AES-256-GCM before R2 storage. Finalization completes the upload and makes the share ready; the expiry clock for a completed share is tied to that lifecycle rather than a public promise that any selected file is instantly available. Do not distribute a link until the interface confirms completion, especially when the upload is large or the sender's connection is unstable.</p>
+<pre>pending -&gt; parts uploaded -&gt; finalized / ready -&gt; accessible until expiresAt
+                                         -&gt; sender delete
+                                         -&gt; completed burn-after-read
+expired or abandoned -&gt; scheduled object and metadata cleanup</pre>
+<p>The defaults offer one hour, six hours, twenty-four hours, three days, or seven days. Choose enough time for the recipient's schedule, not merely for the upload. A person in another time zone may not see a short-lived URL before it expires. If the material needs recurring access, an expiring share may be the wrong primary record. Use a controlled document or storage system for that purpose rather than treating a temporary download address as permanent infrastructure.</p>
+<h2>Access expiry and physical cleanup are separate</h2>
+<p>Once the expiry condition is reached, the application treats the share as unavailable. The scheduled sweeper runs every ten minutes to remove expired shares, associated file records, objects, and abandoned upload state. A delay between access expiry and object cleanup is therefore expected. An operational failure can extend that delay. A privacy statement should describe this design instead of promising that a storage object is overwritten at the exact millisecond shown on a countdown timer. Check monitoring and cleanup behavior when operating the service.</p>
+<p>The Worker manages the master encryption key and derived file keys, so deletion is not the destruction of an independent hardware secret per share. Ciphertext lives in R2 while metadata, notes, salts, and IVs live in D1. The running Worker sees plaintext during encryption and decryption. Short retention reduces exposure time but does not make this stored path zero-knowledge. If excluding operator access matters, independently encrypt the selected file before uploading and exchange its key using a suitable separate process.</p>
+<h2>Owner controls and bearer links</h2>
+<p>The download URL is a bearer capability: whoever receives it can attempt access while it is valid. The owner token authorizes management actions such as upload completion and deletion. Keep these values private and do not paste them into public bug reports. A recipient should not need the owner's management token. If you distribute a link through a channel with many viewers, the service cannot infer which person was intended merely from the address they opened. Confirm the recipient through an existing trusted channel before sending sensitive material.</p>
+<p>Use the sender's delete control after the recipient verifies a saved copy if early removal fits the task. Do not delete while someone is still downloading and expect an uninterrupted result. If you lose the private owner state, avoid assuming you can recover management access from the public URL alone. Contact support for applicable help without publishing the secret. The safest ordinary routine is to keep the source, wait for recipient confirmation, remove unnecessary server availability, and retain records according to your own policy.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Lifecycle event</th><th scope="col">What the service does</th><th scope="col">What it cannot do</th></tr></thead><tbody><tr><td>Finalization</td><td>Marks a completed upload ready</td><td>Prove the recipient will download it</td></tr><tr><td>Expiry</td><td>Stops offering the share as valid</td><td>Erase prior recipient copies</td></tr><tr><td>Scheduled sweep</td><td>Deletes expired stored objects and rows</td><td>Guarantee millisecond cleanup</td></tr><tr><td>Sender deletion</td><td>Removes the managed share early</td><td>Recall a forwarded attachment</td></tr><tr><td>Burn-after-read</td><td>Removes after required retrieval completes</td><td>Identify a human from a bearer URL</td></tr></tbody></table></div>
+<h2>Burn-after-read is a bundle rule</h2>
+<p>A share can contain several files and a note. Removing everything after the first file click would lose the rest of the bundle, so completion needs to account for all required items. The implementation tracks retrieval and deletes once the required files and note have been collected. Explain this to recipients and avoid using the option when several people need independent copies. Opening a preview and deciding to retrieve the remainder later may be awkward in a one-retrieval workflow, particularly if the connection is unreliable.</p>
+<p>A download reaching the service's completion condition is not a guarantee that a person deliberately saved and reviewed every item. Browser saving, local disk errors, and user choices remain outside the server's knowledge. For a critical handoff, ask the recipient to confirm the saved copy explicitly. If burn-after-read has already removed the share and the recipient needs another attempt, create a fresh share from the retained source. Expiring URLs are designed to become unavailable, so keep another recoverable copy until the handoff is finished.</p>
+<h2>Reliability still depends on the transfer path</h2>
+<p>The link route uses ordinary HTTPS, but uploads can stop when mobile browsers are suspended or the network drops. Keep the tab active until finalization. Downloads stream decrypted parts and do not implement ordinary range resumption, so an interrupted large download may restart. Nearby and room modes are alternatives for live delivery, but depend on WebRTC routing and foreground tabs. Guest isolation or a Windows application firewall can block those paths even when link uploads work. Choose the mode deliberately rather than equating expiration with reliability.</p>
+<p>For testing, use harmless files with a short selected expiry. Confirm the share is available before its deadline and unavailable afterward. Exercise early deletion and a complete multi-file burn share separately. Do not test deletion against someone else's active production transfer. Record whether the UI, API state, and stored records agree, and use authenticated administration for storage inspection. A public endpoint should not expose database rows or owner tokens merely to make a cleanup test easier.</p>
+<h2>Timing and memory worksheet</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated one GiB delivery</th><th scope="col">Assumed capacity</th><th scope="col">Ideal payload duration</th><th scope="col">Expiry consideration</th></tr></thead><tbody><tr><td>Upload followed by download</td><td>20 up, 100 down Mbit/s</td><td>515.4 seconds</td><td>Leave retrieval and retry time</td></tr><tr><td>Upload followed by download</td><td>50 up, 100 down Mbit/s</td><td>257.7 seconds</td><td>Do not expire during handoff</td></tr><tr><td>Live WebRTC comparison</td><td>100 Mbit/s</td><td>85.9 seconds</td><td>Both browsers must stay active</td></tr></tbody></table></div>
+<p>These are arithmetic examples, not measured benchmarks for DropItOver or competing tools. Measure your actual upload, finalization, download, and saving stages separately, and run repeated trials if timing matters. Memory is also separate: part processing reduces per-operation payload size but does not cap all runtime allocations, and live browser receives retain a full Blob representation. A countdown timer should include realistic operational margin. If a share behaves unexpectedly, provide support with the mode, approximate time, safe size details, and failure stage rather than a private file, owner token, or working confidential link.</p>
+ <h2>Sources and further reading</h2><p><a href="https://www.w3.org/TR/webrtc/">WebRTC specification</a>, <a href="https://github.com/localsend/protocol">LocalSend protocol</a>, <a href="/privacy">DropItOver data-handling policy</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -374,7 +141,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -398,8 +165,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

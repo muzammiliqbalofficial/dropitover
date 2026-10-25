@@ -37,6 +37,16 @@
     here is a marketing announcement; most of these entries exist because something didn't work the way
     it should have, and this says plainly what changed and why.</p>
 
+    <div class="changelog-entry"><time datetime="2026-10-17">17 October 2026</time><h2>Contact tickets, readable guides, and crawler checks</h2><p>Added a D1-backed support submission endpoint, removed empty ad slots, documented the difference between WebRTC encryption and server-managed link encryption, and expanded the guides with troubleshooting and reproducible performance worksheets. The support schema must be applied with the release. Calculated transfer times are labeled as estimates, not measured device benchmarks.</p></div>
+
+    <div class="changelog-entry"><time datetime="2026-09-10">10 September 2026</time><h2>A guide hub and technical articles</h2><p>Repository commit 127f74a added the guide hub and fifteen topic pages, making troubleshooting and architecture material reachable from a single directory. The October review expands those pages and corrects claims that did not match the implementation.</p></div>
+
+    <div class="changelog-entry"><time datetime="2026-09-10">10 September 2026</time><h2>Trust and support pages made easier to find</h2><p>The same September release (127f74a) added the contact page and revised the about and policy pages. The original contact form opened an email client; the October release replaces that behavior with a stored support ticket.</p></div>
+
+    <div class="changelog-entry"><time datetime="2026-09-10">10 September 2026</time><h2>Consistent navigation across editorial pages</h2><p>Commit 127f74a added a shared top navigation pattern and four-column footer across the static pages. The October route checks follow those links, verify their fragment targets, and check that each destination returns actual HTML.</p></div>
+
+    <div class="changelog-entry"><time datetime="2026-09-07">7 September 2026</time><h2>Device and file icons moved to SVG</h2><p>Commit 6fe0c32 replaced emoji device and file glyphs with inline SVG icons. This makes the symbols more consistent across operating systems, where emoji fonts previously changed their appearance.</p></div>
+
     <div class="changelog-entry">
       <time>19 August 2026</time>
       <h2>Rooms officially support up to 8 people</h2>
@@ -110,7 +120,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -134,8 +144,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

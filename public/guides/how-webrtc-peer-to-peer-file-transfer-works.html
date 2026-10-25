@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>How WebRTC Peer-to-Peer File Transfer Works: The Complete Technical Guide | DropItOver</title>
-<meta name="description" content="A deep technical breakdown of WebRTC DataChannels, SDP offer/answer handshakes, ICE candidates, SCTP over DTLS, and browser peer-to-peer file transfer architecture.">
+<title>How DropItOver transfers files over WebRTC | DropItOver</title>
+<meta name="description" content="A browser file-transfer tool has two distinct conversations: instructions that arrange a connection, and the stream that carries the selected bytes. Confus">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/how-webrtc-peer-to-peer-file-transfer-works">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="How WebRTC Peer-to-Peer File Transfer Works: The Complete Technical Guide">
+<meta property="og:title" content="How DropItOver transfers files over WebRTC">
 <meta property="og:description" content="A deep technical breakdown of WebRTC DataChannels, SDP offer/answer handshakes, ICE candidates, SCTP over DTLS, and browser peer-to-peer file transfer architecture.">
 <meta property="og:url" content="https://dropitover.com/guides/how-webrtc-peer-to-peer-file-transfer-works">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "How WebRTC Peer-to-Peer File Transfer Works: The Complete Technical Guide",
-    "description": "A deep technical breakdown of WebRTC DataChannels, SDP offer/answer handshakes, ICE candidates, SCTP over DTLS, and browser peer-to-peer file transfer architecture.",
+    "headline": "How DropItOver transfers files over WebRTC",
+    "description": "A browser file-transfer tool has two distinct conversations: instructions that arrange a connection, and the stream that carries the selected bytes. Confus",
     "url": "https://dropitover.com/guides/how-webrtc-peer-to-peer-file-transfer-works",
     "datePublished": "2026-08-20",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Engineering Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,39 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "How WebRTC Peer-to-Peer File Transfer Works: The Complete Technical Guide",
+        "name": "How DropItOver transfers files over WebRTC",
         "item": "https://dropitover.com/guides/how-webrtc-peer-to-peer-file-transfer-works"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Does WebRTC work across different Wi-Fi networks or over the internet?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. While direct LAN transfers offer the fastest gigabit speeds, WebRTC can connect devices across different networks using STUN servers to resolve public IP addresses. In cases where strict symmetric NATs or firewalls block direct UDP ports, an encrypted TURN relay facilitates the handshake."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is WebRTC file transfer encrypted by default?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. WebRTC mandates DTLS (Datagram Transport Layer Security) encryption for all DataChannels. Data is encrypted end-to-end between the two endpoints and cannot be intercepted by network sniffers or signaling servers."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What happens if one device closes their browser during a WebRTC transfer?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Because WebRTC is a direct peer-to-peer connection without intermediate server storage, closing either browser tab immediately terminates the active data stream. For asynchronous transfers where the recipient is offline, use DropItOver's encrypted link sharing mode."
-          }
-        }
     ]
   }
 ]
@@ -120,259 +90,35 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>How WebRTC Peer-to-Peer File Transfer Works: The Complete Technical Guide</span>
-      </nav>
-
-      <p class="eyebrow">Technical Architecture</p>
-      <h1>How WebRTC Peer-to-Peer File Transfer Works: The Complete Technical Guide</h1>
-      <p class="dek">Understand the protocols, cryptographic handshakes, and network traversal mechanics that power real-time browser-to-browser data transfer.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Engineering Team</span>
-        </div>
-        <span>8 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>Introduction: The Evolution of Browser-to-Browser Networking</h2>
-      <p>
-        For decades, data transfer on the World Wide Web followed a strict client-server model. When user A wanted to send a file to user B, user A had to upload the entire payload to an intermediary server (such as an Apache or Nginx instance, an S3 bucket, or a centralized cloud drive), and user B then initiated a separate download request. While this architecture is reliable for asynchronous static distribution, it introduces massive latency overhead, bandwidth costs, storage liabilities, and serious privacy risks.
-      </p>
-      <p>
-        The introduction of <strong>WebRTC (Web Real-Time Communication)</strong> by the World Wide Web Consortium (W3C) and Internet Engineering Task Force (IETF) revolutionized browser networking. While initially celebrated for ultra-low-latency voice and video streaming via <code>MediaStream</code>, WebRTC's most potent capability for productivity applications is the <strong>RTCDataChannel API</strong>. This API allows arbitrary binary data (including large files, video streams, and encrypted archives) to flow directly between two browsers with zero server intermediation.
-      </p>
-
-      <h2>The WebRTC Protocol Stack &amp; Architecture</h2>
-      <p>
-        Unlike simple WebSocket or HTTP connections that run atop standard TCP/TLS, WebRTC uses a sophisticated, multi-layered transport stack designed to achieve resilience, high throughput, and cryptographic security across hostile network environments:
-      </p>
-
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Protocol Layer</th>
-            <th>Primary Responsibility</th>
-            <th>Benefit for File Transfer</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>SCTP (Stream Control Transmission Protocol)</strong></td>
-            <td>Multiplexing, congestion control, message framing</td>
-            <td>Supports both reliable and unordered binary chunk streaming without head-of-line blocking.</td>
-          </tr>
-          <tr>
-            <td><strong>DTLS (Datagram Transport Layer Security)</strong></td>
-            <td>End-to-end cryptographic handshake &amp; cipher negotiation</td>
-            <td>Guarantees that files cannot be intercepted or tampered with by intermediate network operators.</td>
-          </tr>
-          <tr>
-            <td><strong>ICE, STUN &amp; TURN</strong></td>
-            <td>NAT traversal, candidate discovery, relay fallback</td>
-            <td>Discovers direct UDP routes through domestic Wi-Fi routers, enterprise firewalls, and carrier-grade NATs.</td>
-          </tr>
-          <tr>
-            <td><strong>UDP (User Datagram Protocol)</strong></td>
-            <td>Low-latency packet delivery</td>
-            <td>Eliminates TCP connection setup delays and provides raw transport for custom congestion tuning.</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Step-by-Step: The WebRTC Signaling &amp; Handshake Lifecycle</h2>
-      <p>
-        Even though WebRTC transfers data directly peer-to-peer, two browsers cannot spontaneously discover each other across the global internet without an initial coordination step known as <strong>Signaling</strong>. Here is the exact lifecycle implemented in modern utilities like DropItOver:
-      </p>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">1</div>
-          <span>Signaling &amp; Discovery via Ephemeral WebSockets</span>
-        </div>
-        <p>
-          Both devices connect to a lightweight signaling server (such as a Cloudflare Worker backed by Durable Objects). Devices on the same Wi-Fi network are matched using a cryptographically hashed subnet identifier, allowing them to instantly see each other without account logins.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">2</div>
-          <span>Session Description Protocol (SDP) Offer &amp; Answer</span>
-        </div>
-        <p>
-          The initiating browser creates an <code>RTCPeerConnection</code> and generates an SDP Offer containing its supported codecs, encryption fingerprints, and data channel parameters. This offer is passed via the signaling channel to the receiver, which responds with an SDP Answer.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">3</div>
-          <span>Interactive Connectivity Establishment (ICE) Candidate Gathering</span>
-        </div>
-        <p>
-          Concurrently, both browsers query STUN (Session Traversal Utilities for NAT) servers to discover their public IP endpoints and local network interfaces (host, reflexive, and relay candidates). The browsers exchange these candidates until the lowest-latency, highest-bandwidth direct route is confirmed.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">4</div>
-          <span>DTLS Cryptographic Handshake &amp; Channel Opening</span>
-        </div>
-        <p>
-          Once network routing is locked, the browsers perform a mutual DTLS handshake using self-signed ephemeral certificates. An <code>RTCDataChannel</code> is opened atop SCTP with <code>ordered: true</code> and binary type set to <code>arraybuffer</code>.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">5</div>
-          <span>High-Speed Binary Slicing &amp; Flow Control</span>
-        </div>
-        <p>
-          The sender slices files into optimal binary chunks (typically 16 KB to 64 KB). A backpressure management loop monitors <code>dataChannel.bufferedAmount</code> to prevent memory exhaustion and match the receiver's disk write speed.
-        </p>
-      </div>
-
-      <h2>Optimizing Throughput: Backpressure &amp; Chunk Size Tuning</h2>
-      <p>
-        A naive implementation of WebRTC file transfer often crashes when sending multi-gigabyte files due to browser memory overflows. When a 2 GB file is read into memory at once, the browser tab will quickly exceed its V8 heap allocation. High-performance P2P file transfer engines solve this with stream slicing and buffered amount listeners:
-      </p>
-
-      <pre><code>// Efficient chunk streaming with backpressure control
-const CHUNK_SIZE = 64 * 1024; // 64 KB
-const BUFFER_THRESHOLD = 1024 * 1024; // 1 MB buffer limit
-
-async function sendFileInChunks(file, dataChannel) {
-  let offset = 0;
-  while (offset < file.size) {
-    if (dataChannel.bufferedAmount > BUFFER_THRESHOLD) {
-      await new Promise(resolve => {
-        dataChannel.onbufferedamountlow = () => {
-          dataChannel.onbufferedamountlow = null;
-          resolve();
-        };
-      });
-    }
-    const slice = file.slice(offset, offset + CHUNK_SIZE);
-    const buffer = await slice.arrayBuffer();
-    dataChannel.send(buffer);
-    offset += CHUNK_SIZE;
-  }
-}</code></pre>
-
-      <h2>Security &amp; Encryption Guarantees</h2>
-      <p>
-        Security is an integral requirement of the WebRTC standard. Data transmitted over an <code>RTCDataChannel</code> cannot be sent in plaintext. All transmissions are encrypted end-to-end using <strong>DTLS</strong> (Datagram Transport Layer Security), which provides:
-      </p>
-      <ul>
-        <li><strong>Confidentiality:</strong> Strong ciphers (such as AES-128-GCM and ChaCha20-Poly1305) ensure intermediate Wi-Fi eavesdroppers cannot read packets.</li>
-        <li><strong>Message Integrity:</strong> HMAC signatures detect any payload tampering or bit corruption in transit.</li>
-        <li><strong>Zero Server Footprint:</strong> Because the raw file payload never travels through the signaling server or cloud databases, server compromise has zero impact on past or active file transfers.</li>
-      </ul>
-
-      <h2>Comparing WebRTC P2P to Traditional HTTP Uploads</h2>
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Feature</th>
-            <th class="us">WebRTC P2P (DropItOver)</th>
-            <th>Cloud Upload (Drive / Dropbox)</th>
-            <th>Email Attachments</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Transfer Speed (Local LAN)</strong></td>
-            <td class="us yes">50 &ndash; 120+ MB/s (Direct Wi-Fi)</td>
-            <td class="no">Limited by ISP upload speed (e.g. 5-10 MB/s)</td>
-            <td class="no">Extremely Slow</td>
-          </tr>
-          <tr>
-            <td><strong>File Size Limitations</strong></td>
-            <td class="us yes">Unlimited (Memory-Streamed)</td>
-            <td>Capped by account storage tier</td>
-            <td class="no">25 MB strict cap</td>
-          </tr>
-          <tr>
-            <td><strong>Privacy &amp; Data Residency</strong></td>
-            <td class="us yes">100% Zero-Knowledge (Direct)</td>
-            <td class="no">Stored on third-party servers</td>
-            <td class="no">Logged in mail provider databases</td>
-          </tr>
-          <tr>
-            <td><strong>Software Requirements</strong></td>
-            <td class="us yes">Zero (Runs in any web browser)</td>
-            <td>Account sign-up / Native App</td>
-            <td>Email account configuration</td>
-          </tr>
-        </tbody>
-      </table>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Does WebRTC work across different Wi-Fi networks or over the internet?</summary>
-          <div class="faq-answer">
-            Yes. While direct LAN transfers offer the fastest gigabit speeds, WebRTC can connect devices across different networks using STUN servers to resolve public IP addresses. In cases where strict symmetric NATs or firewalls block direct UDP ports, an encrypted TURN relay facilitates the handshake.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Is WebRTC file transfer encrypted by default?</summary>
-          <div class="faq-answer">
-            Yes. WebRTC mandates DTLS (Datagram Transport Layer Security) encryption for all DataChannels. Data is encrypted end-to-end between the two endpoints and cannot be intercepted by network sniffers or signaling servers.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What happens if one device closes their browser during a WebRTC transfer?</summary>
-          <div class="faq-answer">
-            Because WebRTC is a direct peer-to-peer connection without intermediate server storage, closing either browser tab immediately terminates the active data stream. For asynchronous transfers where the recipient is offline, use DropItOver's encrypted link sharing mode.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/webrtc-stun-turn-signaling-servers-explained">Understanding WebRTC STUN, TURN & Signaling Servers</a></li>
-        <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Explained</a></li>
-        <li><a href="/guides/share-files-over-local-wifi-network">How to Share Files Over Local Wi-Fi Network at Maximum Speed</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>How DropItOver transfers files over WebRTC</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>How DropItOver transfers files over WebRTC</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>A browser file-transfer tool has two distinct conversations: instructions that arrange a connection, and the stream that carries the selected bytes. Confusing them makes failures hard to diagnose and privacy claims hard to evaluate. DropItOver uses WebSockets for signaling and WebRTC data channels for nearby and room transfers. Temporary links use a different HTTPS storage path. This walkthrough follows the actual implementation, identifies where memory grows, and gives you a repeatable way to investigate a connection without assuming that a successful page load guarantees a successful file transfer.</p>
+<h2>Discovery and signaling do not carry the file</h2>
+<p>On the homepage, the browser opens /ws/net. The Worker hashes the connecting public IP and selects a NetworkHub Durable Object. Browsers in that group exchange identities and receive a peer list. The sender selects a peer and sends a transfer offer containing a summary; the recipient accepts or declines. Only then do browsers negotiate their data channel. This means connection metadata, including file names in offers, can pass through signaling even though the file payload does not. Confirm the intended recipient rather than treating a nickname as identity proof.</p>
+<pre>Sender ---- identity / offer / SDP / ICE ---- Signaling ---- Receiver
+Sender ========= SCTP messages inside DTLS encryption ===== Receiver
+                                 direct route OR TURN relay</pre>
+<p>In a room, the room identifier selects a different Durable Object. A newcomer initiates connections to existing members, while existing members answer. That rule avoids both ends always creating simultaneous offers. It also means a group is a mesh: sending a file to several recipients creates several deliveries, not one server broadcast. A participant with a slow radio can finish later than everyone else. Room membership, data-channel readiness, and transfer completion should therefore be considered separate states when diagnosing group behavior.</p>
+<h2>ICE chooses a reachable route</h2>
+<p>An RTCPeerConnection gathers candidates representing possible transport paths. STUN helps discover a public-facing address; it does not normally forward file bytes. TURN provides relay candidates when a direct route cannot be established. Browsers exchange candidates through signaling, then perform connectivity checks. A working WebSocket tells you the browser can reach the signaling service, not that UDP between peers or a TURN endpoint is allowed. Symmetric NAT, guest isolation, VPNs, and managed firewalls can alter which candidate pair succeeds.</p>
+<p>Use the browser's WebRTC diagnostics or getStats() to inspect the selected candidate pair. A relay candidate indicates a TURN path. A host candidate may indicate a local address, but browsers can obscure addresses with mDNS, and a candidate label alone is not a throughput measurement. Record whether the pair becomes nominated and whether bytesSent and bytesReceived increase. Keep diagnostics private: SDP and candidate reports may reveal addresses and network details. A redacted state transition is usually enough for a support request.</p>
+<h2>SCTP messages, DTLS, and backpressure</h2>
+<p>The data channel transports ordered application messages over SCTP protected by DTLS. This is file data, not a media stream, so describing its payload protection as SRTP is inaccurate. DropItOver sends a file-start JSON message, binary slices, and a file-end message. The sender chooses a slice size using the negotiated SCTP maximum message size, with an application ceiling of 256 KiB. If a peer advertises an unexpectedly small limit, compatibility needs investigation; the application should never assume every browser accepts arbitrarily large messages.</p>
+<p>The sender pauses when the channel's bufferedAmount reaches about eight MiB and resumes after the browser reports that the queue has drained toward one MiB. This is backpressure: it prevents JavaScript from reading the entire source file into an ever-growing send queue. It does not reserve eight MiB for the entire process or promise that operating-system memory will remain flat. Browser networking, encryption, file slices, and receive storage all allocate additional resources. A progress bar reports application delivery, not a universal statement about disk persistence or integrity.</p>
+<h2>Receive memory is a separate constraint</h2>
+<p>BlobAssembler groups received buffers into Blob parts around sixteen MiB. The final Blob still represents the whole received file. Browsers may place backing storage in memory or on disk depending on their implementation and resource pressure. Consequently, a two GiB file can fail on a phone even when the send queue is bounded. Closing the tab discards application state. There is no persistent WebRTC resume journal here; keep the source and restart after an interrupted transfer. A file-end message triggers assembly and the browser's save workflow.</p>
+<p>For important transfers, compare the final byte count and, when feasible, a SHA-256 digest generated independently on both devices. A digest mismatch means the saved copy is not the expected file, regardless of whether a UI says complete. DTLS protects the active transport, but it cannot tell you whether the sender selected the correct document or whether an operating-system export produced a different media version. A saved filename is helpful context, not a cryptographic identity.</p>
+<h2>Troubleshooting by the last successful step</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Last success</th><th scope="col">Likely next area to inspect</th><th scope="col">Safe next action</th></tr></thead><tbody><tr><td>Page loads, peer absent</td><td>Signaling group or browser connectivity</td><td>Compare VPN, public egress, and open a room</td></tr><tr><td>Peer appears, no offer</td><td>Signaling or stale peer</td><td>Reload both idle tabs and retry a small file</td></tr><tr><td>Offer accepted, no bytes</td><td>ICE route or firewall</td><td>Test trusted hotspot and inspect candidate pair</td></tr><tr><td>Bytes stop midway</td><td>Suspension, lost route, memory</td><td>Keep tabs visible and reduce file size</td></tr><tr><td>Complete, no saved copy</td><td>Download handling</td><td>Inspect download prompt and save location</td></tr></tbody></table></div>
+<p>On Windows 11, review the active network profile and browser firewall rule, without turning off the firewall. On a router you control, check guest isolation; on someone else's network, use an approved alternative. On iOS, keep Safari foregrounded and the screen awake. Change one variable at a time and record the result. Randomly changing the router, browser, and VPN together can hide which restriction caused the problem and make the next failure impossible to reproduce.</p>
+<h2>Measure transport without inventing benchmarks</h2>
+<p>Create a known one GiB file, note both browser versions, and run three direct transfers, followed by three relay transfers if a relay is available. Record setup time separately from payload time. Do the same with a sequential link upload and download. Compare median payload throughput in MiB per second, not the Wi-Fi association speed printed by the operating system. The latter includes radio capacity that other clients and protocol overhead also consume. Use browser process measurements consistently if comparing memory.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated one GiB example</th><th scope="col">Assumed payload capacity</th><th scope="col">Payload duration</th><th scope="col">Interpretation</th></tr></thead><tbody><tr><td>Direct WebRTC SCTP</td><td>200 Mbit/s</td><td>42.9 seconds</td><td>Excludes negotiation and saving</td></tr><tr><td>Relay WebRTC SCTP</td><td>40 Mbit/s</td><td>214.7 seconds</td><td>Assumption, not TURN service measurement</td></tr><tr><td>Sequential cloud path</td><td>20 up plus 100 down Mbit/s</td><td>515.4 seconds</td><td>Two serial network legs</td></tr></tbody></table></div>
+<p>These are arithmetic scenarios, not observed rankings or promises. Snapdrop also uses browser peer transport, while LocalSend uses a different local application protocol; neither can be assigned a speed from its product name. Consult the W3C WebRTC specification for data-channel semantics and the projects' published source for comparison details. If documenting a result, publish the chosen route, file size, timing method, repeat count, and memory measurement method alongside the numbers so another person can repeat the experiment.</p>
+ <h2>Sources and further reading</h2><p><a href="https://www.w3.org/TR/webrtc/">WebRTC specification</a>, <a href="https://github.com/localsend/protocol">LocalSend protocol</a>, <a href="/privacy">DropItOver data-handling policy</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -394,7 +140,7 @@ async function sendFileInChunks(file, dataChannel) {
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -418,8 +164,8 @@ async function sendFileInChunks(file, dataChannel) {
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

@@ -19,6 +19,8 @@ routes = [
 [assets]
 directory = "./public"
 binding = "ASSETS"
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"
 # Static files are normally served before the Worker runs, which meant the
 # canonical redirect only fired on paths listed here -- every other page
 # (privacy, terms, guides, comparisons) stayed reachable over http:// and

@@ -15,14 +15,10 @@ export class Signaling extends Emitter {
     this.pending = new Map();
     this.queue = [];
     this.attempt = 0;
-    // Delay connection until after initial page load & audit evaluation
-    const isBot = typeof navigator !== 'undefined' && /Lighthouse|HeadlessChrome|bot|crawl/i.test(navigator.userAgent || '');
-    if (!isBot) {
-      if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-        window.requestIdleCallback(() => this.connect(), { timeout: 2500 });
-      } else {
-        setTimeout(() => this.connect(), 1500);
-      }
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(() => this.connect(), { timeout: 2500 });
+    } else {
+      this.retryTimer = setTimeout(() => this.connect(), 1500);
     }
   }
 
@@ -37,12 +33,14 @@ export class Signaling extends Emitter {
 
   connect() {
     if (this.manualClose) return;
-    if (typeof navigator !== 'undefined' && (navigator.onLine === false || /Lighthouse|HeadlessChrome/i.test(navigator.userAgent || ''))) {
+    if (navigator.onLine === false) {
+      this.retry();
       return;
     }
     try {
       this.ws = new WebSocket(this.url);
     } catch {
+      this.retry();
       return;
     }
 
@@ -73,17 +71,27 @@ export class Signaling extends Emitter {
     });
 
     this.ws.addEventListener('close', () => {
+      for (const pending of this.pending.values()) {
+        clearTimeout(pending.timer);
+        pending.reject(new Error('The connection was interrupted. Please try again.'));
+      }
+      this.pending.clear();
+      this.queue = [];
       this.emit('close');
-      if (this.manualClose) return;
-      const delay = BACKOFF_MS[Math.min(this.attempt, BACKOFF_MS.length - 1)];
-      this.attempt += 1;
-      setTimeout(() => this.connect(), delay);
+      this.retry();
     });
 
     this.ws.addEventListener('error', (e) => {
       if (e && e.preventDefault) try { e.preventDefault(); } catch (ex) {}
       this.emit('socket-error');
     });
+  }
+
+  retry() {
+    if (this.manualClose) return;
+    clearTimeout(this.retryTimer);
+    const delay = BACKOFF_MS[Math.min(this.attempt++, BACKOFF_MS.length - 1)];
+    this.retryTimer = setTimeout(() => this.connect(), delay);
   }
 
   send(type, data = {}) {
@@ -101,7 +109,7 @@ export class Signaling extends Emitter {
         reject(new Error('The server did not respond.'));
       }, timeoutMs);
 
-      this.pending.set(id, { resolve, timer });
+      this.pending.set(id, { resolve, reject, timer });
       const frame = JSON.stringify({ t: type, d: data, ack: id });
       if (this.isOpen) this.ws.send(frame);
       else this.queue.push(frame);
@@ -110,6 +118,7 @@ export class Signaling extends Emitter {
 
   close() {
     this.manualClose = true;
+    clearTimeout(this.retryTimer);
     try {
       this.ws?.close();
     } catch {

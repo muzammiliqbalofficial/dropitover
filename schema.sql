@@ -55,3 +55,17 @@ CREATE TABLE IF NOT EXISTS usage (
 );
 
 CREATE INDEX IF NOT EXISTS idx_usage_day ON usage (day);
+
+-- Private support tickets, readable only through authenticated D1 administration.
+CREATE TABLE IF NOT EXISTS contact_inquiries (
+  id TEXT PRIMARY KEY,
+  created_at INTEGER NOT NULL,
+  ip_hash TEXT NOT NULL,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  category TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  message TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_contact_ip_created ON contact_inquiries (ip_hash, created_at);
+CREATE INDEX IF NOT EXISTS idx_contact_created ON contact_inquiries (created_at);

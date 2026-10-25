@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>AES-256-GCM Encryption Explained: How Safe Is In-Browser File Sharing? | DropItOver</title>
-<meta name="description" content="Cryptographic analysis of AES-256 in Galois/Counter Mode (GCM). Learn how in-browser Web Crypto API ensures authenticated, tamper-proof file sharing.">
+<title>AES-256-GCM in DropItOver: keys, chunks, and trust boundaries | DropItOver</title>
+<meta name="description" content="Encryption claims are useful only when they identify who holds the key and where plaintext exists. DropItOver uses two different models. Nearby and room fi">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/aes-256-gcm-encryption-file-sharing">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="AES-256-GCM Encryption Explained: How Safe Is In-Browser File Sharing?">
+<meta property="og:title" content="AES-256-GCM in DropItOver: keys, chunks, and trust boundaries">
 <meta property="og:description" content="Cryptographic analysis of AES-256 in Galois/Counter Mode (GCM). Learn how in-browser Web Crypto API ensures authenticated, tamper-proof file sharing.">
 <meta property="og:url" content="https://dropitover.com/guides/aes-256-gcm-encryption-file-sharing">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "AES-256-GCM Encryption Explained: How Safe Is In-Browser File Sharing?",
-    "description": "Cryptographic analysis of AES-256 in Galois/Counter Mode (GCM). Learn how in-browser Web Crypto API ensures authenticated, tamper-proof file sharing.",
+    "headline": "AES-256-GCM in DropItOver: keys, chunks, and trust boundaries",
+    "description": "Encryption claims are useful only when they identify who holds the key and where plaintext exists. DropItOver uses two different models. Nearby and room fi",
     "url": "https://dropitover.com/guides/aes-256-gcm-encryption-file-sharing",
     "datePublished": "2026-08-21",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Security Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,55 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "AES-256-GCM Encryption Explained: How Safe Is In-Browser File Sharing?",
+        "name": "AES-256-GCM in DropItOver: keys, chunks, and trust boundaries",
         "item": "https://dropitover.com/guides/aes-256-gcm-encryption-file-sharing"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Can DropItOver or Cloudflare read my uploaded files?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "In direct Wi-Fi P2P mode, files never reach our servers at all. In Link Share mode, files are encrypted with AES-256-GCM before storage and strictly purged when expired. We never inspect, index, or sell user file contents."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What makes AES-256 practically unbreakable by modern computers?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "AES-256 has 2^256 possible key combinations (a number with 78 digits). Even a supercomputer attempting trillions of keys per second would require billions of years—far longer than the age of the universe—to crack an AES-256 key via brute force."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is Web Cryptography as fast as native C++ encryption software?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Modern browsers implement the Web Cryptography API by delegating directly to the underlying CPU's native AES-NI hardware instruction sets, delivering near-instant multi-gigabyte throughput with negligible CPU overhead."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is an Initialization Vector (IV) and why is it critical?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "An IV is a non-repeating random number used for each encryption operation. In AES-GCM, reusing an IV with the same key destroys the security of the cipher. DropItOver generates a cryptographically secure, unique 96-bit IV for every single 8MB binary chunk."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does authenticated encryption prevent bit-flipping attacks?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "AES-GCM calculates a 128-bit authentication tag over the entire ciphertext. If an attacker modifies even a single byte during transit, the authentication tag fails mathematical validation, and the browser refuses to decrypt the corrupted payload."
-          }
-        }
     ]
   }
 ]
@@ -136,221 +90,34 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>AES-256-GCM Encryption Explained: How Safe Is In-Browser File Sharing?</span>
-      </nav>
-
-      <p class="eyebrow">Security & Cryptography</p>
-      <h1>AES-256-GCM Encryption Explained: How Safe Is In-Browser File Sharing?</h1>
-      <p class="dek">An in-depth look at modern browser cryptography, authenticated encryption, nonce management, and zero-knowledge data protections.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Security Team</span>
-        </div>
-        <span>10 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>Understanding In-Browser Cryptography: Is Web-Based Sharing Truly Safe?</h2>
-      <p>
-        Security and data privacy are paramount when transferring sensitive business records, financial audits, medical reports, or personal photographs. For years, security practitioners warned users against browser-based utilities due to weak JavaScript cryptography, vulnerable server-side logging, and side-channel timing attacks.
-      </p>
-      <p>
-        However, the modern web platform has undergone a dramatic cryptographic upgrade. The emergence of the standardized <strong>W3C Web Cryptography API (SubtleCrypto)</strong> and authenticated cipher modes like <strong>AES-256-GCM</strong> now allows web browsers to perform military-grade hardware-accelerated encryption directly on user devices before any byte of data touches a network socket or storage disk.
-      </p>
-
-      <h2>What Is AES-256-GCM and Why Is It the Industry Gold Standard?</h2>
-      <p>
-        <strong>AES (Advanced Encryption Standard)</strong> with a 256-bit key length is the encryption algorithm approved by the U.S. National Institute of Standards and Technology (NIST) and utilized by global financial institutions and defense organizations to protect classified information.
-      </p>
-      <p>
-        The <strong>GCM (Galois/Counter Mode)</strong> mode of operation introduces a critical security enhancement: <strong>AEAD (Authenticated Encryption with Associated Data)</strong>.
-      </p>
-
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Encryption Mode</th>
-            <th>Confidentiality</th>
-            <th>Integrity &amp; Authentication</th>
-            <th>Vulnerability to Tampering</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="us"><strong>AES-256-GCM</strong></td>
-            <td class="us yes">256-bit Key Strength</td>
-            <td class="us yes">128-bit Authentication Tag (Poly1305/GMAC)</td>
-            <td class="us yes">Immune (Tampering halts decryption instantly)</td>
-          </tr>
-          <tr>
-            <td><strong>AES-256-CBC</strong></td>
-            <td>256-bit Key Strength</td>
-            <td class="no">Requires separate HMAC</td>
-            <td class="no">Vulnerable to padding oracle attacks if misconfigured</td>
-          </tr>
-          <tr>
-            <td><strong>AES-ECB (Obsolete)</strong></td>
-            <td class="no">Leaks visual patterns</td>
-            <td class="no">No authentication</td>
-            <td class="no">Extremely vulnerable</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>How Galois/Counter Mode Protects Against Man-in-the-Middle Attacks</h2>
-      <p>
-        Older cipher modes like CBC (Cipher Block Chaining) only encrypted plaintext. If a sophisticated attacker altered an encrypted block in transit, the recipient would decrypt corrupted data without knowing the ciphertext had been manipulated.
-      </p>
-      <p>
-        In contrast, AES-256-GCM generates a unique cryptographic <strong>Authentication Tag (AuthTag)</strong> for every encrypted chunk. During decryption, the algorithm recalculates this tag. If even a single bit in the ciphertext, initialization vector (IV), or associated metadata has been modified, decryption immediately aborts with an authentication failure.
-      </p>
-
-      <h2>The DropItOver Ephemeral Encryption Architecture</h2>
-      <p>
-        When you use DropItOver's <strong>"Send a link"</strong> mode, your data is protected through a multi-tier cryptographic pipeline:
-      </p>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">1</div>
-          <span>Key Derivation via HKDF</span>
-        </div>
-        <p>
-          Each individual file share generates a unique, isolated 256-bit cryptographic key derived from high-entropy system randomness using HKDF (HMAC-based Extract-and-Expand Key Derivation Function).
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">2</div>
-          <span>Chunked Streaming &amp; Unique IV Generation</span>
-        </div>
-        <p>
-          Files are partitioned into 8 MB chunks. Every single chunk is encrypted with AES-256-GCM using a cryptographically unique 96-bit Initialization Vector (IV/Nonce), guaranteeing that identical data blocks produce completely distinct ciphertexts.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">3</div>
-          <span>Encrypted Storage &amp; Automated Pruning</span>
-        </div>
-        <p>
-          The encrypted ciphertext is stored in temporary object storage with an immutable Time-To-Live (TTL). When the timer expires or when the recipient completes their download with "burn after download" enabled, the data chunks and encryption keys are permanently destroyed.
-        </p>
-      </div>
-
-      <h2>Cryptographic Implementation Details (Web Crypto API)</h2>
-      <p>
-        Modern browsers leverage native C++ cryptographic libraries (such as BoringSSL in Chrome and Apple CommonCrypto in Safari) mapped directly to CPU AES-NI instructions:
-      </p>
-
-      <pre><code>// In-browser AES-GCM encryption snippet
-async function encryptChunk(chunkBuffer, rawKey, iv) {
-  const cryptoKey = await window.crypto.subtle.importKey(
-    'raw',
-    rawKey,
-    { name: 'AES-GCM' },
-    false,
-    ['encrypt']
-  );
-  
-  return await window.crypto.subtle.encrypt(
-    { name: 'AES-GCM', iv: iv, tagLength: 128 },
-    cryptoKey,
-    chunkBuffer
-  );
-}</code></pre>
-
-      <h2>Direct P2P vs Encrypted Link: Which Security Model Fits Your Needs?</h2>
-      <ul>
-        <li><strong>Choose Direct Wi-Fi P2P Mode:</strong> When both parties are online simultaneously and absolute zero-knowledge transmission is required. Data flows through encrypted WebRTC DTLS channels and never touches server disks.</li>
-        <li><strong>Choose Encrypted Link Mode:</strong> When the recipient is offline or located on a remote network. Data is protected with AES-256-GCM at rest and in transit, with guaranteed ephemeral deletion.</li>
-      </ul>
-
-      <h2>Threat Model Analysis: What AES-256-GCM Protects Against</h2>
-      <ol>
-        <li><strong>Cloud Provider Snooping:</strong> Storage infrastructure operators and database administrators cannot read user data because files are stored strictly as encrypted ciphertext chunks with decoupled master keys.</li>
-        <li><strong>Packet Sniffing &amp; Coffee Shop Wi-Fi Eavesdropping:</strong> Open Wi-Fi networks in public locations expose plaintext HTTP traffic. Because DropItOver enforces TLS 1.3 in transit and AES-256-GCM at the payload layer, network sniffers capture only random cryptographic entropy.</li>
-        <li><strong>Subpoenas &amp; Regulatory Seizures:</strong> Because link shares automatically expire and direct P2P streams never touch server storage, there are no historical data vaults to subpoena.</li>
-      </ol>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Can DropItOver or Cloudflare read my uploaded files?</summary>
-          <div class="faq-answer">
-            In direct Wi-Fi P2P mode, files never reach our servers at all. In Link Share mode, files are encrypted with AES-256-GCM before storage and strictly purged when expired. We never inspect, index, or sell user file contents.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What makes AES-256 practically unbreakable by modern computers?</summary>
-          <div class="faq-answer">
-            AES-256 has 2^256 possible key combinations (a number with 78 digits). Even a supercomputer attempting trillions of keys per second would require billions of years—far longer than the age of the universe—to crack an AES-256 key via brute force.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Is Web Cryptography as fast as native C++ encryption software?</summary>
-          <div class="faq-answer">
-            Yes. Modern browsers implement the Web Cryptography API by delegating directly to the underlying CPU's native AES-NI hardware instruction sets, delivering near-instant multi-gigabyte throughput with negligible CPU overhead.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What is an Initialization Vector (IV) and why is it critical?</summary>
-          <div class="faq-answer">
-            An IV is a non-repeating random number used for each encryption operation. In AES-GCM, reusing an IV with the same key destroys the security of the cipher. DropItOver generates a cryptographically secure, unique 96-bit IV for every single 8MB binary chunk.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>How does authenticated encryption prevent bit-flipping attacks?</summary>
-          <div class="faq-answer">
-            AES-GCM calculates a 128-bit authentication tag over the entire ciphertext. If an attacker modifies even a single byte during transit, the authentication tag fails mathematical validation, and the browser refuses to decrypt the corrupted payload.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/ephemeral-expiring-links-privacy">Why Ephemeral & Expiring Links Protect Privacy</a></li>
-        <li><a href="/guides/how-to-send-sensitive-documents-safely">How to Safely Send Sensitive Documents Online</a></li>
-        <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC Technical Deep Dive</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>AES-256-GCM in DropItOver: keys, chunks, and trust boundaries</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>AES-256-GCM in DropItOver: keys, chunks, and trust boundaries</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>Encryption claims are useful only when they identify who holds the key and where plaintext exists. DropItOver uses two different models. Nearby and room file payloads travel through browser-to-browser WebRTC data channels protected by DTLS. Link files arrive over HTTPS at a Worker, which encrypts them with AES-256-GCM before writing ciphertext to R2. The Worker also decrypts downloads. Calling both paths zero-knowledge would hide an important difference. This guide describes the implemented link format, the surrounding metadata, and practical steps for handling sensitive files without treating an algorithm name as a complete security guarantee.</p>
+<h2>Follow plaintext through the system</h2>
+<pre>Sender file -- HTTPS --&gt; Worker plaintext -- AES-GCM --&gt; R2 ciphertext
+Recipient &lt;-- HTTPS -- Worker plaintext &lt;-- AES-GCM -- R2 ciphertext
+D1: names, sizes, salts, IVs, expiry, owner token, notes, object metadata</pre>
+<p>TLS protects the client-to-Worker connection. AES-GCM protects each stored file part and detects modifications under the relevant key. The Worker is inside the trust boundary because it possesses the master key and processes plaintext. Protecting an R2 object does not hide information in D1: file names, sizes, MIME types, and notes are stored separately. The operator or infrastructure controlling Worker execution is not cryptographically excluded. For a confidentiality requirement that excludes the service operator, encrypt the file independently before selecting it, or use an appropriate verified end-to-end system.</p>
+<h2>What AES-GCM authenticates</h2>
+<p>AES is the block cipher and GCM combines counter-mode encryption with authentication. It uses a Galois-field authentication construction, not Poly1305. In this application the tag is sixteen bytes and the IV is twelve bytes. Decryption must verify the tag; modified ciphertext, the wrong key, the wrong IV, or incorrect associated data causes authentication failure. This is stronger than simply obscuring bytes, but it does not stop an authorized recipient from copying the plaintext or an attacker with access to the running Worker from reading it.</p>
+<p>An authenticated chunk is not automatically a signed document from a named person. The application relies on HTTPS, owner tokens, link secrecy, and its metadata database to select the expected share and part order. When handling a contract or release artifact, validate its signature or independently supplied hash if those are part of your workflow. AES-GCM transport and storage protections do not prove that a selected file was authored by a particular organization, that it is safe to execute, or that its contents are correct.</p>
+<h2>Keys, salts, IVs, and associated data</h2>
+<p>The server's MASTER_KEY is a 256-bit root key encoded as sixty-four hexadecimal characters. A per-file random salt feeds HKDF-SHA256 to derive a file key. Each file is split into default eight MiB parts, and each part has its own random ninety-six-bit IV. The part index is authenticated as associated data. The database records the salts and IVs needed to decrypt. These values are not substitutes for the master secret. Losing the master key makes stored link files unreadable; rotating it without a migration strategy has the same consequence.</p>
+<p>The essential GCM rule is to avoid IV reuse with the same key. Random IV generation reduces collision probability; it is not a mathematical promise that randomness can never repeat. The implementation creates new per-file key material and per-part IVs rather than deriving an IV from an untrusted filename. Do not copy an example IV into production code. If changing retries or encryption internals, check that repeated requests cannot encrypt different plaintext under the same file key and IV. The repository's encryption tests exercise round trips and tampering detection, not every operational key-management failure.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Item</th><th scope="col">Stored where</th><th scope="col">Secret?</th><th scope="col">Why it matters</th></tr></thead><tbody><tr><td>Master key</td><td>Worker secret binding</td><td>Yes</td><td>Root of link-file confidentiality</td></tr><tr><td>File salt</td><td>D1 metadata</td><td>No</td><td>Separates derived file keys</td></tr><tr><td>Part IV</td><td>D1 metadata</td><td>No</td><td>Must not repeat under the same key</td></tr><tr><td>Authentication tag</td><td>Appended ciphertext</td><td>No</td><td>Detects wrong key or altered authenticated input</td></tr><tr><td>Owner token</td><td>Sender and D1</td><td>Yes</td><td>Authorizes upload and deletion operations</td></tr><tr><td>Download URL</td><td>Whoever receives it</td><td>Treat as secret</td><td>Grants access while share is valid</td></tr></tbody></table></div>
+<h2>Encryption does not eliminate retention questions</h2>
+<p>Links stop resolving after their selected expiry. A scheduled cleanup runs every ten minutes to delete expired data and abandoned uploads; an operational failure can delay physical deletion. Burn-after-read removes a completed share after all required items have been collected, while the sender can delete earlier using the owner token. These operations delete stored records and objects. They do not overwrite every physical storage sector, destroy a distinct hardware key for each share, or revoke copies already saved by recipients. Describe deletion accurately rather than promising instantaneous cryptographic shredding.</p>
+<p>Direct WebRTC transfers avoid this stored file path, but signaling still exchanges identities, offers, SDP, and ICE candidates. TURN can carry the DTLS-encrypted traffic. The service is therefore not absent from every network exchange. Browser-delivered application code is also part of the trust model: compromised code can alter behavior before encryption or after decryption. Use the canonical HTTPS address and a browser you maintain, and verify the intended recipient out of band for high-consequence transfers.</p>
+<h2>Test correctness before discussing speed</h2>
+<p>For an implementation change, encrypt known non-sensitive bytes, decrypt them with the expected file key and part index, and compare every byte. Flip one ciphertext bit and confirm decryption fails. Try a different part index and a wrong key. Keep these tests separate from performance runs so a fast but incorrect implementation cannot look successful. Never use production master keys or real personal documents in a benchmark fixture. Avoid printing keys, private share URLs, or plaintext into test logs.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated overhead example</th><th scope="col">Parts</th><th scope="col">Tag bytes</th><th scope="col">What is excluded</th></tr></thead><tbody><tr><td>Eight MiB single part</td><td>1</td><td>16</td><td>IV and salt metadata, HTTP overhead</td></tr><tr><td>One GiB at eight MiB per part</td><td>128</td><td>2,048</td><td>Requests, database rows, runtime buffers</td></tr><tr><td>Two GiB at eight MiB per part</td><td>256</td><td>4,096</td><td>Retries and multipart bookkeeping</td></tr></tbody></table></div>
+<p>This table is format arithmetic, not an encryption-speed benchmark. Runtime memory can exceed one part because encryption input, output, network buffers, and stream queues coexist. To measure, report Worker configuration, file size, elapsed upload and download time, and the observation method. Browser-to-browser WebRTC and LocalSend use different transport paths; an AES-GCM microbenchmark cannot rank whole products. Hardware acceleration and implementation choices vary, so avoid claiming universal near-zero encryption cost on every phone.</p>
+<h2>Practical checklist for a sensitive transfer</h2>
+<p>Confirm the recipient and minimize the selection. Use independent file encryption if operator access is outside your acceptable threat model. Put any separately agreed password or key in a different communication channel. Choose an expiry with enough retrieval time, keep the original, and verify the saved copy. Do not include sensitive information in the filename or note unless you accept their storage behavior. After confirmation, delete the share if appropriate. Consult the Privacy Policy and the Web Crypto specification for the precise boundaries; an algorithm label is only one part of the full workflow.</p>
+ <h2>Sources and further reading</h2><p><a href="https://www.w3.org/TR/WebCryptoAPI/">Web Crypto specification</a>, <a href="/privacy">DropItOver data-handling policy</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -372,7 +139,7 @@ async function encryptChunk(chunkBuffer, rawKey, iv) {
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -396,8 +163,8 @@ async function encryptChunk(chunkBuffer, rawKey, iv) {
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

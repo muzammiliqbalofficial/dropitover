@@ -161,10 +161,17 @@ export async function copyText(text) {
 }
 
 export async function fetchJson(url, options) {
-  const res = await fetch(url, options);
+  let res;
+  try {
+    res = await fetch(url, options);
+  } catch {
+    throw new Error('Could not connect. Check your connection and try again.');
+  }
   const body = await res.json().catch(() => ({}));
   if (!res.ok) {
-    const err = new Error(body.message || body.error || `Request failed (${res.status})`);
+    const err = new Error(res.status === 499 || res.status >= 500
+      ? 'The service is temporarily unavailable. Please try again.'
+      : body.message || 'The request could not be completed. Please try again.');
     err.status = res.status;
     err.code = body.error;
     throw err;
@@ -174,7 +181,18 @@ export async function fetchJson(url, options) {
 
 let cachedConfig = null;
 export async function loadConfig() {
-  if (!cachedConfig) cachedConfig = await fetchJson('/api/config');
+  if (!cachedConfig) {
+    try {
+      cachedConfig = await fetchJson('/api/config');
+    } catch {
+      // Fallback configuration if offline or static preview
+      cachedConfig = {
+        maxFileSize: 2 * 1024 * 1024 * 1024,
+        expiryOptions: ['1h', '6h', '24h', '3d', '7d'],
+        defaultExpiry: '24h',
+      };
+    }
+  }
   return cachedConfig;
 }
 

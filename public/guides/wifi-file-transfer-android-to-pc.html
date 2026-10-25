@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>How to Transfer Large 4K Video Files Between Android and PC Wirelessly | DropItOver</title>
-<meta name="description" content="Step-by-step tutorial on sending 4K and 8K video files from Android phones to Windows PC without USB cables, compression, or cloud storage limits.">
+<title>Android to PC Wi-Fi transfer: preserve original video files | DropItOver</title>
+<meta name="description" content="Moving a long Android recording to a PC should preserve the selected file rather than create another compressed copy. DropItOver sends the file bytes provi">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/wifi-file-transfer-android-to-pc">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="How to Transfer Large 4K Video Files Between Android and PC Wirelessly">
+<meta property="og:title" content="Android to PC Wi-Fi transfer: preserve original video files">
 <meta property="og:description" content="Step-by-step tutorial on sending 4K and 8K video files from Android phones to Windows PC without USB cables, compression, or cloud storage limits.">
 <meta property="og:url" content="https://dropitover.com/guides/wifi-file-transfer-android-to-pc">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "How to Transfer Large 4K Video Files Between Android and PC Wirelessly",
-    "description": "Step-by-step tutorial on sending 4K and 8K video files from Android phones to Windows PC without USB cables, compression, or cloud storage limits.",
+    "headline": "Android to PC Wi-Fi transfer: preserve original video files",
+    "description": "Moving a long Android recording to a PC should preserve the selected file rather than create another compressed copy. DropItOver sends the file bytes provi",
     "url": "https://dropitover.com/guides/wifi-file-transfer-android-to-pc",
     "datePublished": "2026-08-19",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Editorial Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,55 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "How to Transfer Large 4K Video Files Between Android and PC Wirelessly",
+        "name": "Android to PC Wi-Fi transfer: preserve original video files",
         "item": "https://dropitover.com/guides/wifi-file-transfer-android-to-pc"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Will transferring video over DropItOver compress or degrade 4K quality?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. DropItOver streams raw binary chunks without applying any video re-encoding, transcoding, or compression. The video saved on your PC will be bit-for-bit identical to the master file recorded on your phone."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What if my PC is connected via Ethernet cable while my phone is on Wi-Fi?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "As long as your PC's Ethernet cable connects to the same local router network and subnet as your Wi-Fi access point, local P2P discovery and high-speed transfers will function seamlessly."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I transfer multiple video files simultaneously?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. You can select dozens of video clips at once. DropItOver queues and streams the files sequentially to ensure smooth throughput and avoid browser memory overload."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does this work for ProRes or RAW files from Android devices?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. DropItOver supports all file formats, including DNG RAW, MP4, MKV, MOV, and high-bitrate ProRes video files without restrictions."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I transfer files from my PC back to Android?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Simply drop files onto the Android phone icon on your PC browser and tap Accept on your phone."
-          }
-        }
     ]
   }
 ]
@@ -136,204 +90,35 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>How to Transfer Large 4K Video Files Between Android and PC Wirelessly</span>
-      </nav>
-
-      <p class="eyebrow">Mobile & PC Workflows</p>
-      <h1>How to Transfer Large 4K Video Files Between Android and PC Wirelessly</h1>
-      <p class="dek">Bypass slow MTP USB cables and cloud storage upload caps with high-speed local Wi-Fi peer-to-peer streaming.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Editorial Team</span>
-        </div>
-        <span>9 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>The Challenge of Moving 4K and 8K Video Footage Wirelessly</h2>
-      <p>
-        Modern Android smartphones (including Samsung Galaxy S24/S25 Ultra, Google Pixel 9/10 Pro, and Xiaomi flagships) capture breathtaking 4K and 8K HDR video at 60 frames per second using high-bitrate codecs such as HEVC (H.265) and 10-bit Log. A mere five-minute 4K video clip routinely exceeds 2 GB to 4 GB in raw file size.
-      </p>
-      <p>
-        Moving these colossal video files from an Android phone to a Windows PC or Mac for editing in Adobe Premiere Pro, DaVinci Resolve, or Final Cut is notoriously frustrating:
-      </p>
-      <ul>
-        <li><strong>MTP USB Cable Issues:</strong> Android's Media Transfer Protocol (MTP) over USB frequently freezes, drops connections midway through multi-gigabyte transfers, or fails to mount on Windows systems due to driver lockups.</li>
-        <li><strong>Bluetooth Bottlenecks:</strong> Bluetooth 5.x throughput caps out at roughly 2 Mbps (~250 KB/s), requiring several hours to transfer a single video clip.</li>
-        <li><strong>Cloud Drive Compression &amp; Quotas:</strong> Uploading 4K video to Google Drive or Dropbox consumes expensive mobile data and takes significant time depending on home internet upload speeds.</li>
-      </ul>
-
-      <h2>The Technical Mechanics: Local Wi-Fi WebRTC Slicing vs Cloud Uplinks</h2>
-      <p>
-        When you upload a 4 GB video to a cloud drive, your home internet upload bandwidth (which is frequently asymmetric and capped at 10–20 Mbps) becomes the ultimate bottleneck. A 4 GB upload can easily take 45 to 60 minutes.
-      </p>
-      <p>
-        In contrast, direct local peer-to-peer streaming over a 5 GHz Wi-Fi 6 router operates at the router's internal PHY link speed (866 Mbps to 2,400 Mbps), bypassing external ISP cables entirely. The data streams from the phone's flash storage, through the wireless router's 5 GHz radio, directly to the PC's network adapter in under 45 seconds.
-      </p>
-
-      <h2>Step-by-Step Tutorial: Moving 4K Video from Android to PC Wirelessly</h2>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">1</div>
-          <span>Connect Both Devices to 5 GHz Wi-Fi</span>
-        </div>
-        <p>
-          For peak transfer rates, ensure your Android phone and PC are connected to the 5 GHz or 6 GHz band of your Wi-Fi router rather than the older, congested 2.4 GHz band.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">2</div>
-          <span>Open DropItOver in Chrome / Edge</span>
-        </div>
-        <p>
-          Navigate to <strong><a href="/">dropitover.com</a></strong> on both your Android phone and your PC. No app download or account creation is required.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">3</div>
-          <span>Select Your Video Files</span>
-        </div>
-        <p>
-          On your Android phone, tap the PC's name under "Devices on your Wi-Fi". Choose your 4K video files from the Android Gallery or Files app. You can select multiple clips at once.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">4</div>
-          <span>Accept &amp; Save Directly to PC Disk</span>
-        </div>
-        <p>
-          A prompt will appear on your PC browser. Click <strong>Accept</strong>. The video stream will stream directly into your PC's Downloads directory with zero compression or quality loss.
-        </p>
-      </div>
-
-      <h2>Transfer Speed Benchmark Comparison</h2>
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Transfer Method</th>
-            <th>3 GB 4K Video Transfer Time</th>
-            <th>Average Speed</th>
-            <th>Setup Complexity</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="us"><strong>DropItOver (5 GHz Wi-Fi P2P)</strong></td>
-            <td class="us yes">~35 &ndash; 45 Seconds</td>
-            <td class="us yes">70 &ndash; 90 MB/s</td>
-            <td class="us yes">Instant (Zero install)</td>
-          </tr>
-          <tr>
-            <td><strong>USB Cable (MTP Protocol)</strong></td>
-            <td>~2 &ndash; 4 Minutes</td>
-            <td>15 &ndash; 30 MB/s</td>
-            <td>Requires cable &amp; unlock</td>
-          </tr>
-          <tr>
-            <td><strong>Cloud Upload (Google Drive)</strong></td>
-            <td class="no">~10 &ndash; 25 Minutes (ISP dependent)</td>
-            <td class="no">2 &ndash; 5 MB/s upload</td>
-            <td>High (Login &amp; storage limit)</td>
-          </tr>
-          <tr>
-            <td><strong>Bluetooth 5.0</strong></td>
-            <td class="no">&gt; 3 Hours</td>
-            <td class="no">0.25 MB/s</td>
-            <td>Tedious pairing</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Hardware &amp; Network Optimization Tips for Video Editors</h2>
-      <ol>
-        <li><strong>Prevent Android Screen Sleep:</strong> Android OS power-saving daemons may throttle CPU and Wi-Fi throughput when the display turns off. Keep your browser screen awake during multi-gigabyte transfers.</li>
-        <li><strong>Hardwire Your Editing PC to the Router:</strong> If your desktop PC connects to the router via a Cat6 Gigabit Ethernet cable, your transfer speeds will be nearly double compared to having both devices on wireless simultaneously.</li>
-        <li><strong>Ensure Original File Preservation:</strong> Unlike messaging apps (WhatsApp, Telegram) that transcode 4K footage into heavily compressed 720p/1080p video, WebRTC DataChannels preserve 100% bit-for-bit file integrity, original color profiles, and audio tracks.</li>
-      </ol>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Will transferring video over DropItOver compress or degrade 4K quality?</summary>
-          <div class="faq-answer">
-            No. DropItOver streams raw binary chunks without applying any video re-encoding, transcoding, or compression. The video saved on your PC will be bit-for-bit identical to the master file recorded on your phone.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What if my PC is connected via Ethernet cable while my phone is on Wi-Fi?</summary>
-          <div class="faq-answer">
-            As long as your PC's Ethernet cable connects to the same local router network and subnet as your Wi-Fi access point, local P2P discovery and high-speed transfers will function seamlessly.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I transfer multiple video files simultaneously?</summary>
-          <div class="faq-answer">
-            Yes. You can select dozens of video clips at once. DropItOver queues and streams the files sequentially to ensure smooth throughput and avoid browser memory overload.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Does this work for ProRes or RAW files from Android devices?</summary>
-          <div class="faq-answer">
-            Yes. DropItOver supports all file formats, including DNG RAW, MP4, MKV, MOV, and high-bitrate ProRes video files without restrictions.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I transfer files from my PC back to Android?</summary>
-          <div class="faq-answer">
-            Yes. Simply drop files onto the Android phone icon on your PC browser and tap Accept on your phone.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10 & 11</a></li>
-        <li><a href="/guides/share-files-over-local-wifi-network">Maximizing Local Wi-Fi Transfer Speeds</a></li>
-        <li><a href="/guides/send-large-files-without-email">Send Large Files Online Free (2GB+)</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>Android to PC Wi-Fi transfer: preserve original video files</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>Android to PC Wi-Fi transfer: preserve original video files</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>Moving a long Android recording to a PC should preserve the selected file rather than create another compressed copy. DropItOver sends the file bytes provided by Android's picker; it does not transcode the stream. The distinction matters because a gallery app can export a different file before the browser sees it. This guide starts with locating the original, follows the nearby transfer workflow, and explains what to do when a large video stalls. Keep the original on the phone until you have opened and checked the copy on the computer.</p>
+<h2>Find the original before measuring anything</h2>
+<p>In Android's file picker, choose the actual recording from device storage if possible. A cloud-backed gallery may need to download the original before it can provide the file. That preparation can take time and consume mobile data, independently of DropItOver. Note the extension, byte size, duration, and approximate location. If you choose an edited export, that export is what transfers. A four K label describes pixel dimensions, not file size or transfer speed; bitrate, codec, frame rate, and duration determine the amount of data.</p>
+<p>Open the site on the Windows PC and Android browser, connect both to your trusted home network, and assign recognizable device names. Select the receiving PC from the phone's nearby list and choose one small test file. Check the acceptance prompt on Windows before starting the full video. If the PC does not appear, confirm the phone has not switched to cellular data and the PC's VPN is not using different internet egress. An explicit room is useful when the public-IP grouping does not match your intended pair.</p>
+<h2>Understand the two paths you can use</h2>
+<pre>Nearby: Android file picker -&gt; WebRTC SCTP/DTLS -&gt; Windows browser -&gt; Save
+Link: Android -&gt; HTTPS Worker -&gt; AES-GCM R2 object -&gt; Worker -&gt; PC download</pre>
+<p>The nearby route needs both tabs alive and a reachable ICE candidate pair. It may use a TURN relay, which carries encrypted traffic rather than storing a reusable file. The link route needs an upload first, then a download, but the phone can leave after the server confirms completion. Link files default to a two GiB per-file cap and an eight GiB bundle cap, with daily anonymous storage quotas. A video above that limit needs an approved alternative or a deliberately prepared split archive; changing its extension does not reduce its size.</p>
+<h2>Avoid Android background interruptions</h2>
+<p>Keep the sending tab visible, the phone unlocked, and the device adequately charged. Opening the camera, switching to a game, or enabling extreme battery saving can suspend or evict the browser. Some Android builds apply additional battery restrictions to applications. A short test after changing power settings is more useful than assuming one setting behaves the same on every manufacturer. Do not grant unrelated permissions or install a supposed transfer accelerator. Browser file selection and normal network access are sufficient for this workflow.</p>
+<p>For a large batch, send a few representative files first. Include a large video, a photo with a non-ASCII name, and a document if those appear in your real selection. Check their names and bytes on Windows. If many small files create an awkward saving workflow, package them into a ZIP using tools you already trust. ZIP may simplify selection and preserve directory structure; it usually saves little space on already compressed video. Ensure the archive stays within the applicable limit and keep enough storage for both archive and originals.</p>
+<h2>Diagnose Wi-Fi and Windows separately</h2>
+<p>If devices appear but no data begins after acceptance, inspect the network path. Guest Wi-Fi can show the same network name while isolating clients. Try your own hotspot or a trusted main SSID before changing settings. Do not disable isolation on a school or company network. If you control the router, change only the relevant client-to-client policy and restore unnecessary changes. A configured TURN relay can help some blocked routes; an HTTPS link is the separate fallback when browser peer traffic is unavailable.</p>
+<p>On Windows 11, inspect Settings, Network &amp; internet, and the current connection's profile. Set Private only on a trusted network. Review whether your security software allows the browser under that profile. You do not need SMB sharing, Network Discovery broadcasts, or a broad inbound firewall exception. When a managed laptop refuses peer connections, give the administrator the symptom and ask for an approved route. A successful transfer on a personal hotspot narrows the fault to the original network without weakening the machine's firewall.</p>
+<h2>Large-file memory and saving limits</h2>
+<p>The sender reads slices instead of loading the entire file at once and pauses when the data-channel send queue grows. The receiving browser builds Blob parts and eventually a Blob for the whole video. That may require substantial memory or browser-managed backing storage. Chunking is not proof that a two GiB receive uses only sixteen MiB. If Windows slows down or the receiving tab disappears, try a smaller file, close unrelated heavy applications, and use a storage-based link or local application when that better fits the available resources.</p>
+<p>Wait for the received file to be saved, then open it in a suitable player. If a video opens with no image but its size matches, the PC may lack support for the source codec; that is different from a failed transfer. Try a player that supports the codec rather than repeatedly uploading the same file. For valuable footage, compare SHA-256 hashes with trusted local tools where available. Keep a second copy until you have checked playback through the end, since a thumbnail alone says little about the complete recording.</p>
+<h2>Reproducible speed and memory worksheet</h2>
+<p>Use the same original file for each method. Record phone model, Android version, PC browser version, router, band, wired or wireless PC, and selected ICE route. Measure from acceptance to received completion, then measure saving separately. Run three times and report the median. If comparing Snapdrop or LocalSend, record the exact deployment or app version. A comparison that changes the file, phone, and radio conditions between runs does not isolate the transfer method.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated scenario for one GiB</th><th scope="col">Assumed payload rate</th><th scope="col">Time excluding setup</th><th scope="col">What to watch</th></tr></thead><tbody><tr><td>Browser WebRTC</td><td>80 Mbit/s</td><td>107.4 seconds</td><td>Android stays foregrounded</td></tr><tr><td>Browser WebRTC</td><td>240 Mbit/s</td><td>35.8 seconds</td><td>Windows receiver Blob storage</td></tr><tr><td>Sequential cloud upload/download</td><td>15 up, 100 down Mbit/s</td><td>658.6 seconds</td><td>Upload is the slow leg</td></tr></tbody></table></div>
+<p>The table contains calculations, not real device measurements. Divide the actual file's bits by the measured elapsed seconds to get achieved throughput; divide bytes by seconds and by 1,048,576 to report MiB per second. Capture process memory with the same tool before, during, and after each run. Browser memory includes networking and UI work, while operating-system file caches may be reported elsewhere. Label that method clearly instead of publishing one unexplained memory number.</p>
+<h2>What to include in a useful support ticket</h2>
+<p>State whether discovery worked, whether the PC accepted, whether progress started, and whether saving completed. Include the selected mode, file size, browser versions, and whether foregrounding the phone or changing networks helped. Redact nearby device names and personal filenames from screenshots. Do not upload private recordings to demonstrate a bug; a non-sensitive test file of similar size is usually enough. The WebRTC architecture guide explains the transport stages, and the large-file guide covers link limits and interrupted uploads in more detail.</p>
+ <h2>Sources and further reading</h2><p><a href="https://www.w3.org/TR/webrtc/">WebRTC specification</a>, <a href="https://github.com/localsend/protocol">LocalSend protocol</a>, <a href="/privacy">DropItOver data-handling policy</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -355,7 +140,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -379,8 +164,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

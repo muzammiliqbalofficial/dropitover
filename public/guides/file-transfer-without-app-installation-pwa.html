@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>File Transfer Without App Installation: The Power of Progressive Web Apps (PWAs) | DropItOver</title>
-<meta name="description" content="How Progressive Web Apps (PWAs), WebRTC, and the File System Access API enable desktop-class file transfers without heavy software installers or admin rights.">
+<title>Browser file transfer and PWA shortcuts: what installation changes | DropItOver</title>
+<meta name="description" content="DropItOver can transfer selected files from a browser without installing a native application. You may also be able to add a shortcut or install a web-app ">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/file-transfer-without-app-installation-pwa">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="File Transfer Without App Installation: The Power of Progressive Web Apps (PWAs)">
+<meta property="og:title" content="Browser file transfer and PWA shortcuts: what installation changes">
 <meta property="og:description" content="How Progressive Web Apps (PWAs), WebRTC, and the File System Access API enable desktop-class file transfers without heavy software installers or admin rights.">
 <meta property="og:url" content="https://dropitover.com/guides/file-transfer-without-app-installation-pwa">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "File Transfer Without App Installation: The Power of Progressive Web Apps (PWAs)",
-    "description": "How Progressive Web Apps (PWAs), WebRTC, and the File System Access API enable desktop-class file transfers without heavy software installers or admin rights.",
+    "headline": "Browser file transfer and PWA shortcuts: what installation changes",
+    "description": "DropItOver can transfer selected files from a browser without installing a native application. You may also be able to add a shortcut or install a web-app ",
     "url": "https://dropitover.com/guides/file-transfer-without-app-installation-pwa",
     "datePublished": "2026-08-24",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Engineering Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,71 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "File Transfer Without App Installation: The Power of Progressive Web Apps (PWAs)",
+        "name": "Browser file transfer and PWA shortcuts: what installation changes",
         "item": "https://dropitover.com/guides/file-transfer-without-app-installation-pwa"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Does installing a PWA take up space on my phone or computer?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Very little. DropItOver's PWA caches only minimal lightweight HTML, CSS, and JS assets (under 100 KB total), preserving your device's storage for your actual files."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I use DropItOver as a PWA on a school or corporate computer with restricted permissions?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Because PWAs run within standard browser security sandboxes, they do not require administrator passwords or system-level driver modifications."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do PWAs update automatically?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Every time you open the app or refresh the page, the Service Worker automatically fetches the latest updates in the background."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I use the PWA offline?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The PWA shell and cached UI will load offline. Once devices are introduced, local WebRTC transfers can proceed without external internet bandwidth."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I uninstall the DropItOver PWA?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "On Windows, search for DropItOver in the Start Menu and click Uninstall. On Android and iOS, simply tap and hold the app icon and select Delete/Remove."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do PWAs support drag-and-drop file transfers?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. You can drag and drop folders and files directly into the PWA standalone window from Windows File Explorer, macOS Finder, or Linux file managers."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I launch DropItOver with keyboard shortcuts?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "When installed as a desktop PWA, you can pin DropItOver to your Windows Taskbar or macOS Dock and launch it instantly like any native app."
-          }
-        }
     ]
   }
 ]
@@ -152,241 +90,36 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>File Transfer Without App Installation: The Power of Progressive Web Apps (PWAs)</span>
-      </nav>
-
-      <p class="eyebrow">Web Technology & Standards</p>
-      <h1>File Transfer Without App Installation: The Power of Progressive Web Apps (PWAs)</h1>
-      <p class="dek">Say goodbye to bloated desktop installers. Explore how modern browser standards deliver native-speed file transfers with zero installation and universal compatibility.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Engineering Team</span>
-        </div>
-        <span>11 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>The Shift Away from Heavy Native Software Installers</h2>
-      <p>
-        For decades, moving files between personal computers and mobile devices required installing dedicated desktop software packages (such as iTunes, Samsung Smart Switch, or manufacturer-specific driver utilities). These native installers often suffered from:
-      </p>
-      <ul>
-        <li><strong>Bloated Disk Footprints:</strong> Consuming hundreds of megabytes of disk space and bundling unwanted background services, auto-updaters, and telemetry daemons.</li>
-        <li><strong>Administrative Privilege Requirements:</strong> Requiring root or administrator rights to install, making them unusable on locked-down corporate or school laptops.</li>
-        <li><strong>Platform Fragmentation:</strong> Software designed for Windows was incompatible with macOS, and Linux support was frequently non-existent.</li>
-      </ul>
-
-      <h2>The Power of Modern Progressive Web Apps (PWAs)</h2>
-      <p>
-        <strong>Progressive Web Apps (PWAs)</strong> combine the universal accessibility of a web URL with the high performance, offline capabilities, and system integration of native applications.
-      </p>
-      <p>
-        Built entirely with modern web APIs—including <strong>Service Workers</strong>, <strong>WebRTC</strong>, <strong>File System Access API</strong>, and <strong>Web Cryptography</strong>—PWAs allow utilities like DropItOver to deliver a desktop-class file transfer experience with zero installation overhead.
-      </p>
-
-      <h2>Key Web APIs Powering Desktop-Class In-Browser File Transfer</h2>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">1</div>
-          <span>File System Access API &amp; Streaming Blob Slicing</span>
-        </div>
-        <p>
-          Allows the browser to stream multi-gigabyte files directly from the local disk into binary chunks without loading the entire payload into RAM, eliminating browser crashes on low-memory devices.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">2</div>
-          <span>Service Workers &amp; Instant Offline Boot</span>
-        </div>
-        <p>
-          Service Workers cache application HTML, CSS, and JavaScript assets locally. DropItOver boots in under 100 milliseconds and can discover local network devices even if external internet connectivity drops.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">3</div>
-          <span>WebRTC DataChannels with Hardware-Accelerated DTLS</span>
-        </div>
-        <p>
-          Enables direct peer-to-peer socket streaming between browsers at line-rate wireless speeds without passing through cloud servers.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">4</div>
-          <span>Web Share Target API &amp; Drag-and-Drop</span>
-        </div>
-        <p>
-          When installed as a PWA on Android or ChromeOS, DropItOver integrates directly into the system <strong>"Share"</strong> sheet, allowing you to send photos and files straight from your camera or gallery app.
-        </p>
-      </div>
-
-      <h2>PWA vs Native Desktop Software Comparison</h2>
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Characteristic</th>
-            <th class="us">DropItOver PWA</th>
-            <th>Native Desktop Software (.exe / .dmg)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Installation Footprint</strong></td>
-            <td class="us yes">&lt; 100 KB Cached Code</td>
-            <td class="no">100 MB &ndash; 500 MB Installer</td>
-          </tr>
-          <tr>
-            <td><strong>Admin Rights Needed?</strong></td>
-            <td class="us yes">None (Runs in sandbox)</td>
-            <td class="no">Requires UAC / Admin permissions</td>
-          </tr>
-          <tr>
-            <td><strong>Cross-Platform Parity</strong></td>
-            <td class="us yes">100% Identical on all OS</td>
-            <td class="no">Separate platform builds required</td>
-          </tr>
-          <tr>
-            <td><strong>Update Mechanism</strong></td>
-            <td class="us yes">Instant &amp; Silent on refresh</td>
-            <td class="no">Manual download &amp; re-install</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>How to "Install" DropItOver as a Standalone App</h2>
-      <ol>
-        <li><strong>On Windows / Mac / Chrome:</strong> Open <code>dropitover.com</code> in Google Chrome or Microsoft Edge. Click the <strong>Install</strong> icon in the address bar (or Menu > "Install DropItOver").</li>
-        <li><strong>On iPhone / iPad (iOS):</strong> Open <code>dropitover.com</code> in Safari, tap the <strong>Share</strong> button, and choose <strong>"Add to Home Screen"</strong>.</li>
-        <li><strong>On Android:</strong> Open <code>dropitover.com</code> in Chrome, tap the three dots menu, and select <strong>"Install app"</strong>.</li>
-      </ol>
-
-      <h2>Security Benefits of the Web Sandbox</h2>
-      <p>
-        Unlike native executable installers that can potentially install keyloggers, modify system registries, or access unauthorized folders, browser PWAs run inside strict security sandboxes:
-      </p>
-      <ul>
-        <li>No access to arbitrary system folders without explicit user file picker authorization.</li>
-        <li>No background hardware access (microphones or cameras) without clear browser prompts.</li>
-        <li>Automated sandboxing prevents malicious binaries from executing without user consent.</li>
-      </ul>
-
-      <h2>Memory Management &amp; Streaming Efficiency</h2>
-      <p>
-        Legacy web apps frequently suffered from memory leaks when handling files over 500 MB. Modern PWAs utilize <code>ReadableStream</code> and <code>WritableStream</code> piping:
-      </p>
-      <pre><code>// Direct stream piping to disk via File System Access API
-async function saveStreamToDisk(fileHandle, dataStream) {
-  const writable = await fileHandle.createWritable();
-  await dataStream.pipeTo(writable);
-}</code></pre>
-      <p>
-        This streaming pipeline allows multi-gigabyte video files to be written directly to local storage as binary chunks arrive over the network, keeping browser RAM usage steady at under 50 MB.
-      </p>
-
-      <h2>Future Outlook: Project Fugu and Web Capabilities</h2>
-      <p>
-        The ongoing evolution of the Web Capabilities project (Project Fugu) continues to narrow the gap between web applications and native desktop software:
-      </p>
-      <ul>
-        <li><strong>File Handling API:</strong> Allows PWAs to register as default file handlers for specific extensions (like <code>.zip</code> or <code>.p2p</code>) in Windows File Explorer and macOS Finder.</li>
-        <li><strong>Web Locks API:</strong> Coordinates multiple open tabs to prevent duplicate transfer streams and manage concurrent downloads cleanly.</li>
-        <li><strong>WebAssembly (WASM) Accelerators:</strong> Enables near-native C/Rust encryption routines executing at full processor clock speeds directly inside V8 engines.</li>
-      </ul>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Does installing a PWA take up space on my phone or computer?</summary>
-          <div class="faq-answer">
-            Very little. DropItOver's PWA caches only minimal lightweight HTML, CSS, and JS assets (under 100 KB total), preserving your device's storage for your actual files.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I use DropItOver as a PWA on a school or corporate computer with restricted permissions?</summary>
-          <div class="faq-answer">
-            Yes. Because PWAs run within standard browser security sandboxes, they do not require administrator passwords or system-level driver modifications.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Do PWAs update automatically?</summary>
-          <div class="faq-answer">
-            Yes. Every time you open the app or refresh the page, the Service Worker automatically fetches the latest updates in the background.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I use the PWA offline?</summary>
-          <div class="faq-answer">
-            The PWA shell and cached UI will load offline. Once devices are introduced, local WebRTC transfers can proceed without external internet bandwidth.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>How do I uninstall the DropItOver PWA?</summary>
-          <div class="faq-answer">
-            On Windows, search for DropItOver in the Start Menu and click Uninstall. On Android and iOS, simply tap and hold the app icon and select Delete/Remove.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Do PWAs support drag-and-drop file transfers?</summary>
-          <div class="faq-answer">
-            Yes. You can drag and drop folders and files directly into the PWA standalone window from Windows File Explorer, macOS Finder, or Linux file managers.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I launch DropItOver with keyboard shortcuts?</summary>
-          <div class="faq-answer">
-            When installed as a desktop PWA, you can pin DropItOver to your Windows Taskbar or macOS Dock and launch it instantly like any native app.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/cross-platform-file-transfer-mac-linux-windows">Cross-Platform File Sharing</a></li>
-        <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Architecture</a></li>
-        <li><a href="/guides/airdrop-for-windows">AirDrop for Windows Alternatives</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>Browser file transfer and PWA shortcuts: what installation changes</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>Browser file transfer and PWA shortcuts: what installation changes</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>DropItOver can transfer selected files from a browser without installing a native application. You may also be able to add a shortcut or install a web-app shell through your browser. That convenience does not turn the site into a background file service, give it unrestricted filesystem access, or make discovery work offline. This guide distinguishes the actual browser workflow from features often assumed to come with a PWA label. It explains file selection, saving, mobile suspension, and a small compatibility test so you can decide whether an installation-free path fits the devices you have.</p>
+<h2>Start with the ordinary browser workflow</h2>
+<p>Open the canonical HTTPS address in a maintained full browser rather than an embedded social-media viewer. The app needs WebRTC for nearby and room modes; link sharing uses ordinary web requests and storage services. Choose a harmless document, identify the intended receiver, accept its transfer prompt, and save the result. Confirm the final file opens before selecting a larger batch. No account is needed for transfer, but normal connection metadata is still processed and stored-link data has its own retention and trust boundary.</p>
+<p>The browser's file picker grants access to the files you select. It does not grant the website permission to browse your entire disk or create a full directory backup. Drag-and-drop and multiple selection can simplify a handoff, but directory trees, symbolic links, and application databases need deliberate packaging. If a platform cannot expose an item in its picker, a home-screen shortcut does not repair that local access problem. Use Files, an approved export process, or another supported tool to create the intended transferable file first.</p>
+<h2>A manifest is not an offline service</h2>
+<p>The repository includes a web manifest and icons so supported browsers can identify the site and offer a convenient entry point. It does not include a service-worker implementation for offline caching, queued background transfers, or push notifications. Do not advertise those capabilities based solely on an install prompt. Browser installation criteria and wording vary. A shortcut can be useful even when it is simply a convenient way to reopen the live site, but the tool still needs the network services its modes depend on.</p>
+<pre>Browser or home-screen entry -&gt; same website code -&gt; signaling / API
+Nearby and room -&gt; live WebRTC data channel -&gt; recipient browser
+Link upload -&gt; Worker encryption -&gt; temporary R2 storage -&gt; later download
+No service worker here -&gt; no promised offline queue or background completion</pre>
+<p>Nearby discovery reaches a WebSocket service that groups browsers by hashed public IP. Room invitations reach a room Durable Object. Link uploads need the API, D1 metadata, and R2 storage. A page already visible after losing connectivity is not proof that any of those dependencies will operate offline. If your requirement is transfer on an isolated LAN with no internet, test an application designed for that scenario. Do not rely on a browser's cached page or a homescreen icon as evidence of offline readiness.</p>
+<h2>Mobile foreground execution remains a limit</h2>
+<p>Keep Safari on iPhone or iPad in the foreground and the screen awake during a live transfer. iOS can suspend pages when you switch apps or lock the device. Android browser behavior also depends on power-saving and manufacturer policy. A standalone web-app window does not grant unlimited background execution. An upload can be interrupted before server finalization, and a live receive can be lost if its tab is evicted. Keep the source and use a small non-sensitive test after changing device power settings.</p>
+<p>Link sharing lets a sender leave after the server confirms upload completion; that is different from completing an unfinished upload in the background. A receiver may arrive later while the link remains valid. Choose an expiry that matches that schedule and remember that downloading still requires a functioning connection and saving workflow. A room has no persistent file inbox. If both participants cannot remain active, select a stored link or another approved asynchronous service rather than hoping installation will remove the simultaneous-presence requirement.</p>
+<h2>Saving and memory deserve their own test</h2>
+<p>DropItOver receives live files into Blob parts and builds the final Blob for saving. The browser may use memory or managed disk backing, but the object still represents the entire received file. Small send chunks and an eight MiB backpressure threshold do not create a fixed total memory ceiling. On a low-memory phone, begin with a small file and increase gradually. A closed or reloaded page does not preserve a partly received live file. This implementation does not provide a persistent resume journal or background filesystem writer.</p>
+<p>Desktop browsers may offer a download prompt, automatic saving, or a preview depending on file type and settings. Sandboxed Linux browsers and mobile file providers can also affect where files are selected or saved. Record the final destination and inspect the saved byte count. A received completion message is not a substitute for checking that the file exists in a location you can reopen. If codec support is missing, a successfully transferred video may fail to play even though the bytes match.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Capability</th><th scope="col">Current browser workflow</th><th scope="col">Assumption to avoid</th></tr></thead><tbody><tr><td>Select files</td><td>User grants picker access</td><td>Site can scan all local folders</td></tr><tr><td>Add home-screen entry</td><td>Browser-dependent shortcut or shell</td><td>Native background service exists</td></tr><tr><td>Nearby transfer</td><td>Internet signaling plus WebRTC</td><td>Manifest means offline discovery</td></tr><tr><td>Link sharing</td><td>Upload completes before sender leaves</td><td>Closed tab keeps uploading</td></tr><tr><td>Save received file</td><td>Blob and browser download behavior</td><td>Constant-memory direct disk stream</td></tr></tbody></table></div>
+<h2>Diagnose network problems independently</h2>
+<p>On Windows 11, check the active network profile and browser firewall permission when a peer connection fails. Do not open SMB ports or disable the firewall for this browser workflow. Guest Wi-Fi AP Isolation may block client traffic even after peers appear through the internet signaling service. Try a trusted main network or personal hotspot to isolate that condition. A room can use TURN if configured and reachable, but it is not guaranteed to bypass every network policy. On managed devices, use the administrator's approved route.</p>
+<p>If the page loads but the app is still connecting, give its passive retry a chance and verify ordinary connectivity. For an explicit upload or transfer failure, retain the source and note the failed stage. Changing the installed shortcut, browser window decoration, or nickname does not fix a blocked ICE route. Test with the regular browser tab as a baseline, then compare the shortcut with the same file and network. That isolates any platform-specific launch behavior without confusing it with transport differences.</p>
+<h2>Measure a shortcut against the same page</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated one GiB payload</th><th scope="col">Assumed capacity</th><th scope="col">Ideal duration</th><th scope="col">What the icon cannot promise</th></tr></thead><tbody><tr><td>Browser WebRTC</td><td>100 Mbit/s</td><td>85.9 seconds</td><td>Better radio throughput</td></tr><tr><td>Browser WebRTC</td><td>200 Mbit/s</td><td>42.9 seconds</td><td>Lower receive memory</td></tr><tr><td>Sequential stored link</td><td>20 up, 100 down Mbit/s</td><td>515.4 seconds</td><td>Background upload completion</td></tr></tbody></table></div>
+<p>The table gives calculations, not hardware benchmarks or PWA speed claims. If comparing normal and standalone windows, record device, browser, source bytes, route, setup, payload, and saving time. Repeat three trials and compare medians. Observe memory with the same method and verify the final digest. A shortcut's main benefit may be easier access, which is useful without inventing an acceleration mechanism. For support, report the launch mode and actual failure stage, using safe diagnostics rather than private file contents or working download URLs.</p>
+ <h2>Sources and further reading</h2><p><a href="https://www.w3.org/TR/webrtc/">WebRTC specification</a>, <a href="https://github.com/localsend/protocol">LocalSend protocol</a>, <a href="/privacy">DropItOver data-handling policy</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -408,7 +141,7 @@ async function saveStreamToDisk(fileHandle, dataStream) {
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -432,8 +165,8 @@ async function saveStreamToDisk(fileHandle, dataStream) {
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

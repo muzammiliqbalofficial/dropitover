@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#070a12">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f6f2">
 
 <!-- Primary SEO Meta Tags -->
 <title>DropItOver: Free File Transfer &amp; AirDrop Alternative</title>
@@ -79,7 +79,7 @@
         "name": "How do I transfer files between Android, Windows, iPhone, and Mac?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Simply open DropItOver on both devices. If they are on the same Wi-Fi network, they will discover each other automatically for direct peer-to-peer (P2P) file transfer. Alternatively, drag and drop your file to generate an encrypted link or start a room."
+          "text": "Open dropitover.com on both devices. Browsers sharing a public IP can appear under \"Devices on your Wi-Fi\". Confirm the recipient, select a file, and have them accept the transfer. For remote devices, click \"Get a link\"."
         }
       },
       {
@@ -87,7 +87,7 @@
         "name": "Is DropItOver free and what is the file size limit?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "DropItOver is 100% free with no account creation or subscription required. You can send files up to 2 GB per file, with no limit on how many files you send at once. A single share link can total up to 8 GB."
+          "text": "DropItOver is 100% free with no account creation or subscription required. You can send files up to 2 GB per file , with no limit on how many files you send at once. A single share link can total up to 8 GB."
         }
       },
       {
@@ -95,15 +95,31 @@
         "name": "Are my transfers secure and private?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Direct Wi-Fi transfers and room shares use peer-to-peer WebRTC encryption, meaning your files pass directly between devices without ever reaching a server. Link shares are encrypted with AES-256-GCM before storage."
+          "text": "Nearby and room file payloads use browser-to-browser DTLS; a TURN server may relay encrypted packets. Signaling processes connection metadata. For links, the Worker handles plaintext and encrypts file chunks with AES-256-GCM before R2 storage."
         }
       },
       {
         "@type": "Question",
-        "name": "How is DropItOver an alternative to Apple AirDrop?",
+        "name": "How does DropItOver differ from Apple AirDrop or Snapdrop?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "AirDrop is restricted to Apple hardware. DropItOver brings AirDrop-like simplicity to all operating systems: Android, Windows, Linux, macOS, and iOS, directly in your browser."
+          "text": "AirDrop is restricted solely to Apple hardware. Snapdrop focuses on browser-based peer transfers, with discovery dependent on its deployment. DropItOver works across every platform (Android, Windows, Mac, iOS, Linux) and provides both direct local P2P and encrypted remote links."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does DropItOver compress or reduce the quality of my photos and videos?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. DropItOver never compresses, transcodes, or modifies your files. Everything is transferred byte-for-byte in original raw resolution."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long do shared links remain active?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "When creating an encrypted link, you can choose an expiration time from 1 hour up to 7 days. Once expired, or if you select \"Delete once downloaded\", the file is permanently purged from storage."
         }
       }
     ]
@@ -111,8 +127,7 @@
 ]
 </script>
 
-<link rel="preload" href="/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/css/styles.css"></noscript>
+<link rel="stylesheet" href="/css/styles.css">
 <link rel="modulepreload" href="/js/app.js">
 <link rel="modulepreload" href="/js/util.js">
 <link rel="modulepreload" href="/js/ui.js">
@@ -129,33 +144,45 @@
 <body>
 <div class="wrap">
 
-    <header class="topbar">
-    <a class="brand" href="/">
-      <img class="mark" src="/favicon.svg" alt="DropItOver Logo" width="38" height="38">
-      <span>DropItOver<small>send files between devices</small></span>
-    </a>
-    <nav class="top-nav" aria-label="Main Navigation">
+  <header class="topbar">
+    <div class="topbar-main">
+      <a class="brand" href="/">
+        <img class="mark" src="/favicon.svg" alt="DropItOver Logo" width="30" height="30">
+        <span>DropItOver<small>direct file transfer</small></span>
+      </a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="top-nav">
+        <svg class="icon menu-icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="icon close-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <nav class="top-nav" id="top-nav" aria-label="Main Navigation">
       <a href="/" class="nav-link active">Home</a>
       <a href="/guides/" class="nav-link">Guides</a>
       <a href="/about#how-it-works" class="nav-link">How It Works</a>
       <a href="/about" class="nav-link">About</a>
       <a href="/contact" class="nav-link">Contact</a>
+      <div class="identity-cluster">
+        <span class="security-badge" title="Files are transferred over encrypted WebRTC DTLS or AES-256-GCM">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          End-to-End Encrypted
+        </span>
+        <div class="identity">
+          <label for="device-name">This device</label>
+          <input id="device-name" type="text" maxlength="32" autocomplete="off" spellcheck="false">
+        </div>
+      </div>
     </nav>
-    <div class="identity">
-      <label for="device-name">This device</label>
-      <input id="device-name" type="text" maxlength="32" autocomplete="off" spellcheck="false">
-    </div>
   </header>
 
   <main>
   <section class="hero">
-    <h1>Send files to<br><span class="grad">any device</span></h1>
-    <p>Phone to laptop. Laptop to a friend. Nothing to install, no account to make.</p>
-    <ul class="pills">
-      <li>Up to <b>2 GB</b> a file</li>
-      <li><b>No limit</b> on how many</li>
-      <li>Files <b>delete themselves</b></li>
-      <li><b>Free</b>, no sign-up</li>
+    <h1>Direct file transfer.<br><span class="accent-text">No sign-up, no compression.</span></h1>
+    <p>Phone to laptop. Laptop to a friend. Fast peer-to-peer streaming and encrypted share links.</p>
+    <ul class="capability-tags">
+      <li><b>2 GB</b> per file</li>
+      <li><b>No limit</b> on count</li>
+      <li><b>Auto-purging</b> storage</li>
+      <li><b>100% Free</b></li>
     </ul>
   </section>
 
@@ -169,161 +196,257 @@
     <p class="footnote" id="boot-error-detail"></p>
   </section>
 
-  <div class="modes">
+  <div class="workspace-shell">
+    <nav class="mode-dock" role="tablist" aria-label="Transfer Modes">
+      <button class="dock-btn active" id="tab-link" role="tab" aria-selected="true" aria-controls="mode-link">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        <span class="dock-label-full">Send a Link</span>
+        <span class="dock-label-short" aria-hidden="true">Link</span>
+      </button>
+      <button class="dock-btn" id="tab-p2p" role="tab" aria-selected="false" aria-controls="mode-p2p">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+        <span class="dock-label-full">Nearby Wi-Fi</span>
+        <span class="dock-label-short" aria-hidden="true">Nearby</span>
+      </button>
+      <button class="dock-btn" id="tab-room" role="tab" aria-selected="false" aria-controls="mode-room">
+        <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        <span class="dock-label-full">Transfer Room</span>
+        <span class="dock-label-short" aria-hidden="true">Room</span>
+      </button>
+    </nav>
 
-    <!-- Mode 1 ------------------------------------------------------------ -->
-    <section class="card span-2">
-      <header>
-        <span class="tile"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg></span>
-        <div>
-          <h2>Devices on your Wi‑Fi</h2>
-          <p class="sub">Open this page on your other device and it shows up here.</p>
-        </div>
-        <span class="badge p2p" id="peer-count">Looking…</span>
-      </header>
+    <div class="modes">
 
-      <ul class="peer-list" id="peers"></ul>
-      <div class="empty" id="peers-empty">
-        Nothing yet. Open this page on your phone or another computer using the same Wi‑Fi.
-      </div>
-      <p class="footnote">Files go straight from one device to the other. Nothing gets stored.</p>
-    </section>
-
-    <!-- Mode 2 ------------------------------------------------------------ -->
-    <section class="card">
-      <header>
-        <span class="tile"><svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span>
-        <div>
-          <h2>Send a link</h2>
-          <p class="sub">Works anywhere. They can open it later, even after you close this page.</p>
-        </div>
-      </header>
-
-      <div class="dropzone" id="link-drop" tabindex="0" role="button" aria-label="Choose files to send">
-        <strong>Drop files here</strong>
-        <span id="link-limits">or tap to choose</span>
-      </div>
-      <input id="link-files" type="file" multiple hidden>
-      <ul class="items" id="link-file-list"></ul>
-
-      <div class="mt">
-        <label class="field" for="link-text">Message (optional)</label>
-        <textarea id="link-text" rows="3" placeholder="Type or paste something…"></textarea>
-      </div>
-
-      <div class="row mt">
-        <div class="grow">
-          <label class="field" for="link-expiry">Link stops working after</label>
-          <select id="link-expiry"></select>
-        </div>
-        <div class="grow" style="align-self:flex-end;padding-bottom:11px">
-          <label class="check"><input type="checkbox" id="link-burn"> Delete once they download it</label>
-        </div>
-      </div>
-
-      <button class="btn-primary btn-block mt" id="link-send">Get a link</button>
-
-      <div id="upload-wrap" class="mt" hidden>
-        <div class="progress"><span id="upload-fill"></span></div>
-        <p class="footnote" id="upload-note">Sending…</p>
-      </div>
-
-      <div id="link-result" class="mt" hidden>
-        <hr class="hr">
-        <div class="share-result">
-          <div>
-            <div class="link-box">
-              <code id="result-url"></code>
-              <button class="btn-sm" id="copy-url">Copy</button>
-            </div>
-            <p class="kv mt">
-              <span>Works for <b id="result-expiry"></b></span>
-              <span><b id="result-files"></b></span>
-              <span id="result-burn" hidden><b>Deletes after download</b></span>
-            </p>
-            <div class="row tight mt">
-              <a class="btn btn-sm" id="result-open" target="_blank" rel="noopener">Open</a>
-              <button class="btn-sm btn-danger" id="result-revoke">Delete now</button>
-              <button class="btn-sm btn-ghost" id="result-new">Send something else</button>
-            </div>
+      <!-- Mode 2: Send a Link (AES-256 Encrypted) — Active Default Centerpiece -->
+      <section class="mode-panel" id="mode-link" role="tabpanel" aria-labelledby="tab-link">
+        <div class="dropzone" id="link-drop" tabindex="0" role="button" aria-label="Choose files to send">
+          <div class="drop-glyph">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           </div>
-          <img class="qr" id="result-qr" alt="Scan to open the link">
+          <strong>Drop files here to transfer</strong>
+          <span id="link-limits">or tap to choose · up to 2 GB per file</span>
         </div>
-      </div>
-    </section>
+        <input id="link-files" type="file" multiple hidden>
+        <ul class="items" id="link-file-list"></ul>
 
-    <!-- Mode 3 ------------------------------------------------------------ -->
-    <section class="card">
-      <header>
-        <span class="tile"><svg class="icon" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></span>
-        <div>
-          <h2>Share both ways</h2>
-          <p class="sub">Up to 8 people, sending back and forth.</p>
+        <div class="mt">
+          <label class="field" for="link-text">Message or Note (optional)</label>
+          <textarea id="link-text" rows="2" placeholder="Add an optional private note to accompany your files…"></textarea>
         </div>
-      </header>
 
-      <p class="sub" style="margin-top:0">
-        You get a link and a code others can scan. Everyone who joins can send files
-        and messages to everyone else, for as long as the room stays open.
-      </p>
-
-      <button class="btn-primary btn-block mt" id="create-room">Start a room</button>
-
-      <hr class="hr">
-      <label class="field" for="join-code">Got a room code?</label>
-      <div class="row tight">
-        <input class="grow" id="join-code" type="text" placeholder="e.g. k7m2xp9a" autocomplete="off" spellcheck="false">
-        <button id="join-room">Join</button>
-      </div>
-    </section>
-
-    <!-- Activity ---------------------------------------------------------- -->
-    <section class="card span-2">
-      <header>
-        <span class="tile"><svg class="icon" viewBox="0 0 24 24"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
-        <div>
-          <h2>Sent &amp; received</h2>
-          <p class="sub">Whatever you swap with nearby devices shows up here.</p>
+        <div class="transfer-options mt">
+          <div class="option-expiry">
+            <label class="field" for="link-expiry">Link expiration window</label>
+            <select id="link-expiry"></select>
+          </div>
+          <div class="option-burn">
+            <label class="check" for="link-burn"><input type="checkbox" id="link-burn"> Delete once downloaded</label>
+          </div>
         </div>
-      </header>
-      <ul class="items" id="transfers"></ul>
-      <div class="empty" id="transfers-empty">Nothing yet.</div>
-    </section>
 
-    <!-- SEO & FAQ Section --------------------------------------------------- -->
-    <section class="card span-2 seo-section" id="faq">
+        <button class="btn-primary btn-block mt" id="link-send">Create Encrypted Link</button>
+
+        <div id="upload-wrap" class="mt" hidden>
+          <div class="progress"><span id="upload-fill"></span></div>
+          <p class="footnote" id="upload-note">Sending…</p>
+        </div>
+
+        <div id="link-result" class="mt" hidden>
+          <hr class="hr">
+          <div class="share-result">
+            <div>
+              <div class="link-box">
+                <code id="result-url"></code>
+                <button class="btn-sm" id="copy-url">Copy</button>
+              </div>
+              <p class="kv mt">
+                <span>Active for <b id="result-expiry"></b></span>
+                <span><b id="result-files"></b></span>
+                <span id="result-burn" hidden><b>Deletes after download</b></span>
+              </p>
+              <div class="row tight mt">
+                <a class="btn btn-sm" id="result-open" target="_blank" rel="noopener">Open Link</a>
+                <button class="btn-sm btn-danger" id="result-revoke">Delete now</button>
+                <button class="btn-sm btn-ghost" id="result-new">Send something else</button>
+              </div>
+            </div>
+            <img class="qr" id="result-qr" alt="Scan to open the link">
+          </div>
+        </div>
+      </section>
+
+      <!-- Mode 1: Nearby Devices (P2P Wi-Fi) -------------------------------- -->
+      <section class="mode-panel" id="mode-p2p" role="tabpanel" aria-labelledby="tab-p2p" hidden>
+        <header style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <div>
+            <h2>Devices on your Wi‑Fi</h2>
+            <p class="sub">Open DropItOver on your second device to transfer directly.</p>
+          </div>
+          <span class="badge p2p" id="peer-count">Discovering nearby devices…</span>
+        </header>
+
+        <ul class="peer-list" id="peers"></ul>
+        <div class="empty" id="peers-empty">
+          No devices detected yet. Open <b>dropitover.com</b> on your phone, tablet, or another computer on the same Wi-Fi. They will appear here automatically for direct peer-to-peer streaming.
+        </div>
+        <p class="footnote">Files travel directly device-to-device using WebRTC DTLS encryption. Nothing is stored on any server.</p>
+      </section>
+
+      <!-- Mode 3: Transfer Room (Mesh Collaboration) ------------------------ -->
+      <section class="mode-panel" id="mode-room" role="tabpanel" aria-labelledby="tab-room" hidden>
+        <header style="margin-bottom:16px;">
+          <h2>Real-Time Transfer Room</h2>
+          <p class="sub">Private temporary mesh room for fast file swapping across multiple devices.</p>
+        </header>
+
+        <button class="btn-primary btn-block" id="create-room">Start a Room</button>
+
+        <hr class="hr">
+        <label class="field" for="join-code">Have a room code or link?</label>
+        <div class="row tight">
+          <input class="grow" id="join-code" type="text" placeholder="e.g. k7m2xp9a" autocomplete="off" spellcheck="false">
+          <button class="btn-primary" id="join-room">Join Room</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Activity Log (Transfer Shelf) -------------------------------- -->
+  <section class="activity-card" id="shelf-activity">
+    <header>
+      <h2>Active &amp; Completed Transfers</h2>
+    </header>
+    <ul class="items" id="transfers"></ul>
+    <div class="empty" id="transfers-empty">No active transfers. Staged and received files will appear here.</div>
+  </section>
+
+  <hr class="arch-rule">
+
+    <!-- Rich Informational Editorial & Technical Architecture Section ---------------- -->
+    <section class="card span-2 seo-section" id="how-it-works">
       <header>
         <span class="tile"><svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
         <div>
-          <h2>Cross-Platform File Sharing &amp; AirDrop Alternative</h2>
-          <p class="sub">Fast, encrypted, and private file transfer across Android, Windows, Mac, iOS, and Linux.</p>
+          <h2>How DropItOver Works</h2>
+          <p class="sub">Three friction-free methods to transfer files across any operating system.</p>
         </div>
       </header>
 
       <div class="seo-grid">
         <div class="seo-card">
-          <h3><svg class="icon icon-sm" style="color:var(--primary)" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg> Instant P2P Wi-Fi Transfer</h3>
-          <p>Devices on the same Wi-Fi network discover each other automatically. Files travel browser-to-browser via WebRTC with zero cloud storage and maximum speed.</p>
+          <div class="step-num" style="display:inline-block;padding:2px 8px;background:rgba(99,102,241,0.15);color:var(--primary);border-radius:6px;font-size:0.75rem;font-weight:700;margin-bottom:8px;">STEP 1</div>
+          <h3><svg class="icon icon-sm" style="color:var(--primary)" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg> Direct Wi-Fi P2P Transfer</h3>
+          <p>Open <code>dropitover.com</code> on both devices connected to the same Wi-Fi or hotspot. Both devices automatically discover each other via WebRTC. Tap a peer to stream files directly browser-to-browser with 0 cloud storage.</p>
         </div>
         <div class="seo-card">
+          <div class="step-num" style="display:inline-block;padding:2px 8px;background:rgba(16,185,129,0.15);color:var(--accent);border-radius:6px;font-size:0.75rem;font-weight:700;margin-bottom:8px;">STEP 2</div>
           <h3><svg class="icon icon-sm" style="color:var(--accent)" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> AES-256 Encrypted Share Links</h3>
-          <p>Send files to anyone, anywhere. Files are encrypted with AES-256-GCM before upload and automatically self-destruct upon expiration or download.</p>
+          <p>Need to send a file to someone on another network? Drop files into "Send a link", set your expiration duration (1 hour to 7 days), and optionally enable "Delete after download". Uploads travel over HTTPS and are encrypted with AES-256-GCM in the Worker before storage.</p>
         </div>
         <div class="seo-card">
-          <h3><svg class="icon icon-sm" style="color:var(--primary)" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> Universal AirDrop Alternative</h3>
-          <p>No ecosystem limits. Easily share photos, 4K videos, documents, and code snippets between Windows PCs, Android phones, iPhones, and MacBooks.</p>
+          <div class="step-num" style="display:inline-block;padding:2px 8px;background:rgba(99,102,241,0.15);color:var(--primary);border-radius:6px;font-size:0.75rem;font-weight:700;margin-bottom:8px;">STEP 3</div>
+          <h3><svg class="icon icon-sm" style="color:var(--primary)" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Real-Time Transfer Rooms</h3>
+          <p>Collaborating in a team or classroom? Click "Start a room" to create an instant private collaborative mesh for up to 8 people. Scan the QR code to join and swap files bi-directionally in real-time.</p>
         </div>
       </div>
 
       <hr class="hr">
 
-      <div class="seo-faq">
+      <!-- Security & Encryption Architecture Deep Dive -->
+      <div style="margin-top:24px;">
+        <header>
+          <span class="tile"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+          <div>
+            <h2>Security &amp; Data Handling</h2>
+            <p class="sub">How DropItOver protects your documents, 4K videos, and sensitive data.</p>
+          </div>
+        </header>
+
+        <div class="seo-grid" style="margin-top:16px;">
+          <div class="seo-card">
+            <h3>WebRTC DataChannel DTLS Encryption</h3>
+            <p>Direct peer transfers travel through WebRTC DataChannels secured by Datagram Transport Layer Security (DTLS). Data packets are encrypted end-to-end between your devices; our signaling servers only broker connection metadata.</p>
+          </div>
+          <div class="seo-card">
+            <h3>Ephemeral Cloud Purging</h3>
+            <p>Link transfers stored in temporary edge object storage are automatically deleted by scheduled cleanup crons after expiry on the scheduled cleanup cycle, or after a completed burn-after-read download. Link metadata includes file names and sizes.</p>
+          </div>
+          <div class="seo-card">
+            <h3>Zero Compression &amp; Lossless Quality</h3>
+            <p>DropItOver transfers the selected file bytes without transcoding. Your 4K videos, high-resolution RAW photos, and ZIP archives arrive byte-for-byte identical.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="hr">
+
+      <!-- Feature Highlights -->
+      <div style="margin-top:24px;">
+        <header>
+          <span class="tile"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></span>
+          <div>
+            <h2>Platform Capabilities &amp; Technical Limits</h2>
+            <p class="sub">Engineered for speed, cross-device interoperability, and maximum bandwidth utilization.</p>
+          </div>
+        </header>
+
+        <div class="seo-grid" style="margin-top:16px;">
+          <div class="seo-card">
+            <h3>2 GB File Limit &amp; 8 GB Bundles</h3>
+            <p>Send massive video files, CAD designs, codebases, or disk images up to 2 GB per individual file and 8 GB per share link without subscription paywalls.</p>
+          </div>
+          <div class="seo-card">
+            <h3>Universal Cross-Platform Transfer</h3>
+            <p>Works smoothly across Windows 10/11, macOS, Linux, Android, iOS (iPhone/iPad), and ChromeOS directly within modern Chromium, WebKit, and Gecko browsers.</p>
+          </div>
+          <div class="seo-card">
+            <h3>No Account, Sign-Up, or App Install</h3>
+            <p>Zero friction. You never have to create an account, verify an email address, or install invasive desktop background software.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="hr">
+
+      <!-- Featured Technical Guides -->
+      <div style="margin-top:24px;">
+        <header>
+          <span class="tile"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+          <div>
+            <h2>Educational Guides &amp; Knowledge Base</h2>
+            <p class="sub">Read our in-depth engineering breakdowns, networking tutorials, and comparisons.</p>
+          </div>
+        </header>
+
+        <div class="seo-grid" style="margin-top:16px;">
+          <div class="seo-card">
+            <h3><a href="/guides/airdrop-for-windows" style="color:var(--text);text-decoration:none;">AirDrop for Windows 11 &amp; 10 &rarr;</a></h3>
+            <p>How to transfer files seamlessly between iPhone, Android, and Windows PCs without installing third-party drivers or software suites.</p>
+          </div>
+          <div class="seo-card">
+            <h3><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works" style="color:var(--text);text-decoration:none;">WebRTC P2P Technical Deep Dive &rarr;</a></h3>
+            <p>An architectural explanation of SDP handshakes, ICE candidates, STUN/TURN NAT traversal, and SCTP data channels.</p>
+          </div>
+          <div class="seo-card">
+            <h3><a href="/guides/wifi-file-transfer-android-to-pc" style="color:var(--text);text-decoration:none;">Android to PC Wi-Fi File Transfer &rarr;</a></h3>
+            <p>Step-by-step tutorial on sending 4K 60fps video clips and large photo albums over local Wi-Fi without USB cables.</p>
+          </div>
+        </div>
+        <div style="margin-top:16px;text-align:center;">
+          <a class="btn" href="/guides/" style="display:inline-block;padding:10px 20px;">Explore All 15 Guides &amp; Tutorials &rarr;</a>
+        </div>
+      </div>
+
+      <hr class="hr">
+
+      <div class="seo-faq" id="faq">
         <h3>Frequently Asked Questions</h3>
         <div class="faq-list">
           <details class="faq-item">
             <summary>How do I transfer files between Android, Windows, iPhone, and Mac?</summary>
             <div class="faq-answer">
-              Open <code>dropitover.com</code> on both devices. On the same Wi-Fi network, devices discover each other automatically under "Devices on your Wi-Fi". Select a file to send instantly. For remote devices, click "Get a link".
+              Open <code>dropitover.com</code> on both devices. Browsers sharing a public IP can appear under "Devices on your Wi-Fi". Confirm the recipient, select a file, and have them accept the transfer. For remote devices, click "Get a link".
             </div>
           </details>
 
@@ -337,14 +460,28 @@
           <details class="faq-item">
             <summary>Are my transfers secure and private?</summary>
             <div class="faq-answer">
-              Direct Wi-Fi transfers and room shares use peer-to-peer WebRTC encryption, meaning your files pass directly between devices without ever reaching a server. Link shares are encrypted with AES-256-GCM before storage.
+              Nearby and room file payloads use browser-to-browser DTLS; a TURN server may relay encrypted packets. Signaling processes connection metadata. For links, the Worker handles plaintext and encrypts file chunks with AES-256-GCM before R2 storage.
             </div>
           </details>
 
           <details class="faq-item">
-            <summary>How is DropItOver an alternative to Apple AirDrop?</summary>
+            <summary>How does DropItOver differ from Apple AirDrop or Snapdrop?</summary>
             <div class="faq-answer">
-              AirDrop is restricted to Apple hardware. DropItOver brings AirDrop-like simplicity to all operating systems: Android, Windows, Linux, macOS, and iOS, directly in your browser.
+              AirDrop is restricted solely to Apple hardware. Snapdrop focuses on browser-based peer transfers, with discovery dependent on its deployment. DropItOver works across every platform (Android, Windows, Mac, iOS, Linux) and provides both direct local P2P and encrypted remote links.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Does DropItOver compress or reduce the quality of my photos and videos?</summary>
+            <div class="faq-answer">
+              No. DropItOver never compresses, transcodes, or modifies your files. Everything is transferred byte-for-byte in original raw resolution.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>How long do shared links remain active?</summary>
+            <div class="faq-answer">
+              When creating an encrypted link, you can choose an expiration time from 1 hour up to 7 days. Once expired, or if you select "Delete once downloaded", the file is permanently purged from storage.
             </div>
           </details>
         </div>
@@ -372,7 +509,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -396,8 +533,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

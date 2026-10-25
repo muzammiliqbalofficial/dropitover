@@ -7,6 +7,7 @@ import { hashNetworkId, randomId, timingSafeEqual } from '../lib/crypto.js';
 import { UsageTracker } from '../lib/limits.js';
 import { buildIceServers, hasRelay } from '../lib/turn.js';
 import { qrSvg } from '../lib/qr.js';
+import { handleContact } from './contact.js';
 
 const json = (data, init = {}) =>
   new Response(JSON.stringify(data), {
@@ -20,6 +21,8 @@ export async function handleApi(request, env, ctx, url) {
   const path = url.pathname.replace(/^\/api\/?/, '');
   const segments = path.split('/').filter(Boolean);
   const config = readConfig(env);
+
+  if (path === 'contact') return handleContact(request, env);
 
   if (segments[0] === 'health') {
     // `encryptionKey` is a setup diagnostic — it says whether the secret is

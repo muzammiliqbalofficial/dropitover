@@ -68,44 +68,49 @@
         </p>
       </div>
 
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
+<section class="article" aria-labelledby="choose-guide">
+ <h2 id="choose-guide">Choose a guide by the stage that failed</h2>
+ <p>Start with the task you actually need to finish. A nearby handoff, a remote recipient who is offline, and a group meeting require different workflows. The operating-system guides below show file selection and saving as well as networking. The architecture articles explain what our servers process. Comparison pages separate protocol differences from measured performance, because a product name alone cannot establish speed, resource usage, or privacy. These guides were reviewed against the repository on October 17, 2026; browser and network behavior should still be tested on your own devices.</p>
+ <h3>If you cannot see the receiving device</h3>
+ <p>Read the local Wi-Fi and WebRTC signaling guides first. Nearby discovery groups browsers by their public IP at our WebSocket service; it does not scan the local subnet or authenticate a nearby person. A VPN, cellular fallback, or guest-network arrangement can change the group. An explicit room gives you a shared invitation, but it still needs a reachable data path. Confirm the receiver's nickname and acceptance prompt before selecting private files. The Windows and Android guides include a small-file baseline you can repeat before changing network settings.</p>
+ <h3>If devices appear but file data never starts</h3>
+ <p>Move to the STUN/TURN guide and its troubleshooting matrix. Seeing a peer establishes signaling, while ICE determines whether a direct or relay route works. Guest AP Isolation can block local clients even though both browse the web. On Windows 11, review the active Public or Private profile and browser firewall permission, without disabling the firewall. On managed networks, ask for an approved route. A stored link is a different HTTPS path, and using it still needs to meet your organization's storage rules.</p>
+ <h3>If a large transfer stalls or the saved file will not open</h3>
+ <p>The large-file, iPhone, and Android articles cover foreground tabs, screen lock, available storage, and receiving-browser memory. Sending small chunks does not make the complete received Blob occupy a fixed small amount of resources. Keep originals until the saved copy is checked. Compare byte size and, for important archives, an independent digest. A video with unsupported codecs can fail to play even when its bytes arrived correctly. Record whether selection, connection setup, payload delivery, or saving failed before asking support to investigate.</p>
+ <h3>If confidentiality or deletion is the main requirement</h3>
+ <p>Read the AES-GCM, sensitive-document, and expiring-link guides together with the Privacy Policy. Direct WebRTC payloads use browser-to-browser DTLS and may traverse a TURN relay. Stored links pass through a Worker that handles plaintext and controls the encryption key; this is not zero-knowledge storage. Metadata and notes live separately in D1. Expiry and deletion remove service availability and stored records, not recipient copies. Independently encrypt files when operator access is outside your acceptable trust boundary, and verify the recipient through an appropriate separate channel.</p>
+ <h3>How to use the performance worksheets</h3>
+ <p>Tables labeled calculated examples are arithmetic scenarios, not hardware benchmarks. They divide a known payload by assumed capacities and explain excluded work. For your own comparison, hold devices, source bytes, network arrangement, and timing boundaries constant. Run three trials, record the median, identify direct versus relay paths, and verify the saved file. Measure process memory separately with a stated tool and sampling method. The Snapdrop and LocalSend references describe different deployments and protocols; they do not justify assigning universal speed or memory numbers to either product.</p>
+ <p>All fifteen topic guides and both comparison pages are static HTML, so their instructions are readable before the transfer application connects. Choose a non-sensitive test file when reproducing a problem and keep private download URLs, owner tokens, network addresses, and personal documents out of public diagnostic reports.</p>
+ </section>
       <div class="guide-grid">
         <a class="guide-card" href="/guides/how-webrtc-peer-to-peer-file-transfer-works">
           <div>
             <div class="cat">Technical Architecture</div>
-            <h3>How WebRTC Peer-to-Peer File Transfer Works: The Complete Technical Guide</h3>
-            <p>Deep dive into WebRTC DataChannels, SDP handshakes, SCTP over DTLS, and browser peer-to-peer socket streaming.</p>
+            <h3>How DropItOver transfers files over WebRTC</h3>
+            <p>A browser file-transfer tool has two distinct conversations: instructions that arrange a connection, and the stream that carries the selected bytes.</p>
           </div>
           <div class="meta">
-            <span>8 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/airdrop-for-windows">
           <div>
             <div class="cat">Operating Systems</div>
-            <h3>AirDrop for Windows 10 & 11: Top 5 Free Alternatives in 2026</h3>
-            <p>Discover the fastest and safest free alternatives to Apple AirDrop for transferring files between iPhone, Android, and Windows PC.</p>
+            <h3>AirDrop for Windows: a practical browser transfer workflow</h3>
+            <p>AirDrop does not provide a Windows receiver. If your sender is an iPhone and your destination is a Windows laptop, opening the Apple sharing sheet and waiting for that laptop will not create compatibility.</p>
           </div>
           <div class="meta">
-            <span>7 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/wifi-file-transfer-android-to-pc">
           <div>
             <div class="cat">Mobile & PC Workflows</div>
-            <h3>How to Transfer Large 4K Video Files Between Android and PC Wirelessly</h3>
-            <p>Step-by-step tutorial on sending 4K/8K video footage from Android phones to Windows PC without cables or compression.</p>
+            <h3>Android to PC Wi-Fi transfer: preserve original video files</h3>
+            <p>Moving a long Android recording to a PC should preserve the selected file rather than create another compressed copy. DropItOver sends the file bytes provided by Android's picker; it does not transcode the stream.</p>
           </div>
           <div class="meta">
             <span>6 min read</span>
@@ -115,19 +120,19 @@
         <a class="guide-card" href="/guides/aes-256-gcm-encryption-file-sharing">
           <div>
             <div class="cat">Security & Cryptography</div>
-            <h3>AES-256-GCM Encryption Explained: How Safe Is In-Browser File Sharing?</h3>
-            <p>Cryptographic analysis of AES-256 in Galois/Counter Mode and how in-browser Web Crypto API ensures tamper-proof file security.</p>
+            <h3>AES-256-GCM in DropItOver: keys, chunks, and trust boundaries</h3>
+            <p>Encryption claims are useful only when they identify who holds the key and where plaintext exists. DropItOver uses two different models.</p>
           </div>
           <div class="meta">
-            <span>8 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/send-large-files-without-email">
           <div>
             <div class="cat">Productivity & Cloud</div>
-            <h3>Send Large Files Online Free Without Email Attachment Limits (Up to 2GB+)</h3>
-            <p>How to bypass the 25 MB email attachment cap. Send up to 2 GB files online free with ephemeral, self-destructing links.</p>
+            <h3>Send large files without email: limits, retries, and verification</h3>
+            <p>Email is convenient for a short note, but a large video or archive usually needs a different delivery method. DropItOver offers live browser transfers and temporary download links.</p>
           </div>
           <div class="meta">
             <span>6 min read</span>
@@ -137,96 +142,96 @@
         <a class="guide-card" href="/guides/iphone-to-windows-file-transfer-without-itunes">
           <div>
             <div class="cat">Mobile & PC Workflows</div>
-            <h3>How to Transfer Files from iPhone to Windows PC Without iTunes</h3>
-            <p>Wirelessly transfer photos, ProRes videos, and documents from iPhone to Windows 10/11 without iTunes or iCloud storage limits.</p>
+            <h3>iPhone to Windows without iTunes: files, Safari, and reliable saving</h3>
+            <p>An iPhone can send a selected file to a Windows browser without iTunes, but a browser transfer is not a complete phone backup or photo-library synchronization system.</p>
           </div>
           <div class="meta">
-            <span>7 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/p2p-vs-cloud-storage">
           <div>
             <div class="cat">Storage & Networking</div>
-            <h3>Peer-to-Peer (P2P) vs Cloud Storage: Which Is Better for File Sharing?</h3>
-            <p>In-depth comparison between WebRTC peer-to-peer file transfer and cloud storage (Google Drive, Dropbox) for speed, privacy, and costs.</p>
+            <h3>P2P versus cloud storage: compare the whole delivery workflow</h3>
+            <p>The useful question is not whether peer-to-peer or cloud storage is universally faster. It is which route fits the recipient's availability, network restrictions, file size, and trust requirements.</p>
           </div>
           <div class="meta">
-            <span>8 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/share-files-over-local-wifi-network">
           <div>
             <div class="cat">Networking & Performance</div>
-            <h3>How to Share Files Over Local Wi-Fi Network at Maximum Speed</h3>
-            <p>Optimize your home and office Wi-Fi router for maximum local file transfer speeds up to 100+ MB/s across all your devices.</p>
+            <h3>Local Wi-Fi file sharing: discovery, isolation, and the actual data path</h3>
+            <p>Being connected to Wi-Fi does not necessarily mean two devices can communicate directly. Guest isolation, separate VLANs, VPNs, and the access point's forwarding policy can separate clients that both browse the internet successfully.</p>
           </div>
           <div class="meta">
-            <span>7 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/cross-platform-file-transfer-mac-linux-windows">
           <div>
             <div class="cat">Operating Systems</div>
-            <h3>Cross-Platform File Transfer Between Mac, Linux, and Windows: A Practical Guide</h3>
-            <p>Easily transfer files across Linux, macOS, and Windows without Samba shares, NFS mounts, or USB drive formatting incompatibilities.</p>
+            <h3>Cross-platform file transfer across macOS, Linux, and Windows</h3>
+            <p>Cross-platform transfer problems often come from file semantics rather than the network alone. A browser can move a selected file's bytes between macOS, Linux, and Windows, but it does not automatically preserve directory trees, Unix permissions, symbolic links, or a photo library's database.</p>
           </div>
           <div class="meta">
-            <span>7 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/ephemeral-expiring-links-privacy">
           <div>
             <div class="cat">Privacy & Security</div>
-            <h3>Why Ephemeral & Expiring Links Protect Your Personal Data</h3>
-            <p>Why persistent cloud links expose your confidential files. Learn how self-destructing, single-use expiring links protect your data.</p>
+            <h3>Expiring file links: access deadlines, deletion, and recipient copies</h3>
+            <p>An expiring link is a temporary access mechanism, not a way to control a file after someone saves it. DropItOver lets a sender choose a link lifetime, delete a share early, and optionally remove it after completed retrieval.</p>
           </div>
           <div class="meta">
-            <span>7 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/snapdrop-alternatives-local-sharing">
           <div>
             <div class="cat">Tool Comparisons</div>
-            <h3>Snapdrop Alternatives: Reliable In-Browser Local Network Sharing</h3>
-            <p>Review the best Snapdrop alternatives in 2026. Compare DropItOver, PairDrop, LocalSend, and Sharedrop for reliable local sharing.</p>
+            <h3>Snapdrop alternatives: choose by protocol, availability, and trust</h3>
+            <p>An alternative to Snapdrop should solve a specific problem: installation restrictions, unreliable discovery, offline operation, recipient availability, or a different trust model.</p>
           </div>
           <div class="meta">
-            <span>7 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/how-to-send-sensitive-documents-safely">
           <div>
             <div class="cat">Security & Best Practices</div>
-            <h3>How to Safely Send Sensitive Documents and Passwords Over the Internet</h3>
-            <p>The definitive guide to securely transmitting confidential documents, contracts, and credentials without cloud data leaks.</p>
+            <h3>Send sensitive documents with a clear threat model</h3>
+            <p>Before choosing a transfer button, decide who must be prevented from reading the document and what happens after the recipient saves it.</p>
           </div>
           <div class="meta">
-            <span>8 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/webrtc-stun-turn-signaling-servers-explained">
           <div>
             <div class="cat">Networking Architecture</div>
-            <h3>Understanding WebRTC STUN, TURN, and Signaling Servers in Simple Terms</h3>
-            <p>A visual explanation of how WebRTC STUN, TURN relays, and WebSocket signaling connect browsers through NATs and firewalls.</p>
+            <h3>WebRTC signaling, STUN, and TURN: diagnose the failing stage</h3>
+            <p>Signaling, STUN, and TURN do different jobs. A signaling service introduces browsers and relays connection descriptions. STUN helps a browser learn a public-facing address.</p>
           </div>
           <div class="meta">
-            <span>8 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
         <a class="guide-card" href="/guides/file-transfer-without-app-installation-pwa">
           <div>
             <div class="cat">Web Standards & PWAs</div>
-            <h3>File Transfer Without App Installation: The Power of Progressive Web Apps (PWAs)</h3>
-            <p>How Progressive Web Apps (PWAs) and modern web APIs deliver desktop-class file transfer speeds with zero software installation.</p>
+            <h3>Browser file transfer and PWA shortcuts: what installation changes</h3>
+            <p>DropItOver can transfer selected files from a browser without installing a native application. You may also be able to add a shortcut or install a web-app shell through your browser.</p>
           </div>
           <div class="meta">
             <span>6 min read</span>
@@ -236,24 +241,14 @@
         <a class="guide-card" href="/guides/wireless-file-sharing-classrooms-office-meetings">
           <div>
             <div class="cat">Collaboration & Productivity</div>
-            <h3>Wireless File Sharing for Classrooms and Office Meetings Without Cables</h3>
-            <p>How to instantly distribute lecture slides, assignments, and project archives across laptops, tablets, and phones via QR codes.</p>
+            <h3>File sharing in classrooms and office meetings: plan the room and the network</h3>
+            <p>A classroom or meeting introduces coordination problems that a two-device demo does not reveal. Participants arrive at different times, use managed devices, share wireless airtime, and may sit on a guest network that blocks local traffic.</p>
           </div>
           <div class="meta">
-            <span>7 min read</span>
+            <span>6 min read</span>
             <span style="color:var(--accent); font-weight:600;">Read Guide &rarr;</span>
           </div>
         </a>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
       </div>
 
       <div class="cta">
@@ -283,7 +278,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -307,8 +302,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

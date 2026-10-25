@@ -115,6 +115,46 @@ Signaling messages are capped at 128 KB precisely so the socket can't be abused 
 
 ## Configuration
 
+### Contact inquiries
+
+Apply `schema.sql` before deploying the contact form (`npm run db:apply` for production,
+`npm run db:apply:local` for development). This adds only the `contact_inquiries`
+table and indexes; existing shares are preserved. `POST /api/contact` accepts JSON
+and saves a ticket in D1 before confirming it to the browser. Each hashed IP can
+submit five inquiries per UTC day. There is no public ticket-reading endpoint.
+
+The support operator must check D1; email forwarding is not configured. Read the
+inbox through the Cloudflare D1 dashboard or authenticated Wrangler:
+
+```bash
+npx wrangler d1 execute dropitover --remote --command="SELECT id, datetime(created_at / 1000, 'unixepoch') AS received, name, email, category, subject, message FROM contact_inquiries ORDER BY created_at DESC LIMIT 50"
+```
+
+Treat inquiry text as untrusted plain text. Reply through the support mailbox and
+use the ticket ID for follow-up. The scheduled cleanup removes tickets older than
+90 days. A privacy request can be handled by deleting the corresponding D1 ticket
+after verifying the requester controls its email address. Support tickets contain
+personal information; keep database access limited to support operators.
+
+### Site verification
+
+`npm run check:site` checks static navigation, fragment targets, structured data,
+article lengths, ad-slot removal, and sitemap coverage. To check HTTP responses too,
+start local development with a local canonical-host override (Wrangler otherwise
+applies the production redirect while emulating the custom domain):
+
+```bash
+npx wrangler dev --local --ip 127.0.0.1 --port 8787 --var CANONICAL_HOST:localhost
+npm run check:site -- http://127.0.0.1:8787
+npm test
+npx wrangler deploy --dry-run
+```
+
+The HTTP audit requests all public pages, `/guides`, `/sitemap.xml`, `/robots.txt`,
+and `/ads.txt` as a browser, Googlebot, and Mediapartners-Google, and rejects redirects
+or soft 404s. Run it against the canonical production URL after deployment too.
+These checks do not establish Google indexing or guarantee AdSense approval.
+
 Plain values live in `[vars]` in `wrangler.toml`; secrets go through `wrangler secret put`.
 
 | Setting | Default | Notes |

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>Cross-Platform File Transfer Between Mac, Linux, and Windows: A Practical Guide | DropItOver</title>
-<meta name="description" content="How to easily transfer files across Linux, macOS, and Windows without Samba shares, NFS mounts, or USB drive format incompatibilities.">
+<title>Cross-platform file transfer across macOS, Linux, and Windows | DropItOver</title>
+<meta name="description" content="Cross-platform transfer problems often come from file semantics rather than the network alone. A browser can move a selected file's bytes between macOS, Li">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/cross-platform-file-transfer-mac-linux-windows">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="Cross-Platform File Transfer Between Mac, Linux, and Windows: A Practical Guide">
+<meta property="og:title" content="Cross-platform file transfer across macOS, Linux, and Windows">
 <meta property="og:description" content="How to easily transfer files across Linux, macOS, and Windows without Samba shares, NFS mounts, or USB drive format incompatibilities.">
 <meta property="og:url" content="https://dropitover.com/guides/cross-platform-file-transfer-mac-linux-windows">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "Cross-Platform File Transfer Between Mac, Linux, and Windows: A Practical Guide",
-    "description": "How to easily transfer files across Linux, macOS, and Windows without Samba shares, NFS mounts, or USB drive format incompatibilities.",
+    "headline": "Cross-platform file transfer across macOS, Linux, and Windows",
+    "description": "Cross-platform transfer problems often come from file semantics rather than the network alone. A browser can move a selected file's bytes between macOS, Li",
     "url": "https://dropitover.com/guides/cross-platform-file-transfer-mac-linux-windows",
     "datePublished": "2026-08-22",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Engineering Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,63 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Cross-Platform File Transfer Between Mac, Linux, and Windows: A Practical Guide",
+        "name": "Cross-platform file transfer across macOS, Linux, and Windows",
         "item": "https://dropitover.com/guides/cross-platform-file-transfer-mac-linux-windows"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Does DropItOver work on headless Linux servers without a GUI?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "DropItOver is optimized for desktop and mobile web browsers. For headless Linux servers, traditional tools like <code>rsync</code>, <code>scp</code>, or lightweight HTTP servers are standard, while DropItOver serves all workstation, laptop, and mobile device interactions."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Are file permissions and symlinks preserved across operating systems?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Browsers transmit raw binary payloads. When transferring complex Linux directory trees with symlinks and Unix file permissions (e.g., <code>chmod 755</code>), package the folder into a <code>.tar.gz</code> archive before sending."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is there any limit to the number of files I can transfer across platforms?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. You can select hundreds of files at once. The transfer queue processes items sequentially to maintain smooth browser memory management."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I transfer files between Raspberry Pi OS and a Windows PC?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Any Linux distribution running Chromium or Firefox on ARM hardware (including Raspberry Pi 4/5) connects seamlessly with Windows and Mac devices."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does DropItOver require opening ports in UFW / iptables on Linux?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. Because WebRTC utilizes standard outbound UDP hole punching and WebSocket signaling over HTTPS port 443, standard default desktop firewall configurations work without manual rule creation."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How does DropItOver compare to setting up an NFS share?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "NFS requires static IP configuration, root privileges, and firewall port mapping. DropItOver works on-demand in 5 seconds without system configuration."
-          }
-        }
     ]
   }
 ]
@@ -144,220 +90,36 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>Cross-Platform File Transfer Between Mac, Linux, and Windows: A Practical Guide</span>
-      </nav>
-
-      <p class="eyebrow">Operating Systems & Compatibility</p>
-      <h1>Cross-Platform File Transfer Between Mac, Linux, and Windows: A Practical Guide</h1>
-      <p class="dek">Eliminate Samba configuration headaches and APFS/NTFS format issues with browser-based universal cross-platform file transfers.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Engineering Team</span>
-        </div>
-        <span>10 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>The Challenge of Multi-OS Environments: Windows, Mac &amp; Linux</h2>
-      <p>
-        In modern software engineering firms, design studios, and academic research labs, heterogeneous operating system environments are the norm. A developer might run Arch Linux or Ubuntu on their workstation, collaborate with a UI designer on macOS Sonoma, and test deployment builds on a Windows 11 desktop.
-      </p>
-      <p>
-        However, traditional cross-platform file sharing protocols are fraught with configuration complexity:
-      </p>
-      <ul>
-        <li><strong>Samba / SMB Shares:</strong> Setting up Samba shares across Linux, Windows, and macOS requires editing obscure <code>smb.conf</code> files, managing firewall rules, handling NTLMv2 authentication, and diagnosing permission conflicts.</li>
-        <li><strong>NFS (Network File System):</strong> NFS lacks native, user-friendly client support on Windows Home editions and requires root network privileges.</li>
-        <li><strong>USB Flash Drives &amp; File Systems:</strong> Formatting drives in NTFS prevents native write access on macOS, while Apple's APFS is completely unreadable on Windows and Linux without specialized commercial drivers.</li>
-      </ul>
-
-      <h2>The Unified In-Browser Protocol: Zero Configuration Cross-Platform Transfer</h2>
-      <p>
-        Web standards have unified the software world. Because modern browsers—Google Chrome, Mozilla Firefox, Apple Safari, Microsoft Edge, Brave, and Chromium on Linux—all strictly adhere to the W3C WebRTC DataChannel specification, they provide an identical, universal transport layer across all operating systems.
-      </p>
-
-      <h2>Supported Operating Systems and Platform Matrix</h2>
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Operating System</th>
-            <th>Supported Browsers</th>
-            <th>Setup Required</th>
-            <th>P2P Speed</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="us"><strong>Windows 10 / 11</strong></td>
-            <td>Chrome, Edge, Firefox, Brave, Opera</td>
-            <td class="yes">None (Open URL)</td>
-            <td class="yes">Full LAN Speed</td>
-          </tr>
-          <tr>
-            <td class="us"><strong>macOS (Apple Silicon &amp; Intel)</strong></td>
-            <td>Safari, Chrome, Firefox, Arc, Brave</td>
-            <td class="yes">None (Open URL)</td>
-            <td class="yes">Full LAN Speed</td>
-          </tr>
-          <tr>
-            <td class="us"><strong>Linux (Ubuntu, Fedora, Arch, Debian)</strong></td>
-            <td>Firefox, Chromium, Chrome, Brave</td>
-            <td class="yes">None (Open URL)</td>
-            <td class="yes">Full LAN Speed</td>
-          </tr>
-          <tr>
-            <td class="us"><strong>ChromeOS / Android / iOS</strong></td>
-            <td>Chrome, Safari, Mobile Firefox</td>
-            <td class="yes">None (Open URL)</td>
-            <td class="yes">Full LAN Speed</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Step-by-Step: Sharing Files Between Linux, Mac, and Windows in 3 Steps</h2>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">1</div>
-          <span>Launch Your Browser on Each Machine</span>
-        </div>
-        <p>
-          Open <strong><a href="/">dropitover.com</a></strong> on your Linux workstation, MacBook, and Windows PC.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">2</div>
-          <span>Discover Devices on the Local Subnet</span>
-        </div>
-        <p>
-          Each machine will automatically appear with its system name (e.g., "Linux Desktop", "MacBook Pro", "Windows PC") in the "Devices on your Wi-Fi" grid.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">3</div>
-          <span>Send and Receive Any File Type</span>
-        </div>
-        <p>
-          Click any target device and choose your files (TAR archives, ISOs, DMG installers, executable packages, or raw assets). The receiver accepts with one click.
-        </p>
-      </div>
-
-      <h2>Multi-Device Collaboration with Transfer Rooms</h2>
-      <p>
-        When coordinating a group project across a team of 4 to 8 developers and designers using mixed operating systems, use DropItOver's <strong>"Start a room"</strong> feature:
-      </p>
-      <ol>
-        <li>Click <strong>Start a room</strong> on the home page.</li>
-        <li>Share the 8-character room code (or QR code) with your team in your Slack/Discord channel.</li>
-        <li>All joined team members can broadcast files and snippets bidirectionally in real time without creating shared network drives or mounting volumes.</li>
-      </ol>
-
-      <h2>Preserving Archive Integrity &amp; File Permissions Across Platforms</h2>
-      <p>
-        Different operating systems handle file attributes differently (e.g., macOS creates <code>.DS_Store</code> metadata, Linux uses POSIX permissions, and Windows uses NTFS file attributes). To ensure clean cross-platform compatibility:
-      </p>
-      <ul>
-        <li><strong>For Developers:</strong> When sending source code repositories or scripts with execution flags (<code>chmod +x</code>), package them into <code>.tar.gz</code> or <code>.zip</code> archives prior to transfer.</li>
-        <li><strong>For Designers:</strong> High-resolution PSD, AI, and Figma exports maintain 100% color profile precision and layer data across Windows and macOS.</li>
-        <li><strong>Handling Hidden Files:</strong> macOS creates hidden resource fork files (prefixed with <code>._</code>). Archiving on macOS before transferring prevents cluttering Windows File Explorer.</li>
-      </ul>
-
-      <h2>Network Diagnostics: Cross-Subnet Discovery &amp; Firewall Tuning</h2>
-      <p>
-        In complex developer setups involving dual-homed machines, Docker bridges, or Linux virtualization (KVM/QEMU):
-      </p>
-      <ol>
-        <li><strong>Bridge Adapter Configuration:</strong> If running Linux inside a virtual machine, configure the VM network adapter in "Bridged Adapter" mode rather than NAT so the guest OS receives an IP address on the primary physical router subnet.</li>
-        <li><strong>Docker Host Sockets:</strong> Avoid running VPN containers that swallow all outbound UDP multicast traffic if you rely on mDNS subnet discovery.</li>
-        <li><strong>Universal Ephemeral Fallback:</strong> If network interfaces cannot be bridged, use DropItOver's <strong>"Send a link"</strong> mode for encrypted transfer over standard HTTPS.</li>
-      </ol>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Does DropItOver work on headless Linux servers without a GUI?</summary>
-          <div class="faq-answer">
-            DropItOver is optimized for desktop and mobile web browsers. For headless Linux servers, traditional tools like <code>rsync</code>, <code>scp</code>, or lightweight HTTP servers are standard, while DropItOver serves all workstation, laptop, and mobile device interactions.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Are file permissions and symlinks preserved across operating systems?</summary>
-          <div class="faq-answer">
-            Browsers transmit raw binary payloads. When transferring complex Linux directory trees with symlinks and Unix file permissions (e.g., <code>chmod 755</code>), package the folder into a <code>.tar.gz</code> archive before sending.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Is there any limit to the number of files I can transfer across platforms?</summary>
-          <div class="faq-answer">
-            No. You can select hundreds of files at once. The transfer queue processes items sequentially to maintain smooth browser memory management.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I transfer files between Raspberry Pi OS and a Windows PC?</summary>
-          <div class="faq-answer">
-            Yes. Any Linux distribution running Chromium or Firefox on ARM hardware (including Raspberry Pi 4/5) connects seamlessly with Windows and Mac devices.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Does DropItOver require opening ports in UFW / iptables on Linux?</summary>
-          <div class="faq-answer">
-            No. Because WebRTC utilizes standard outbound UDP hole punching and WebSocket signaling over HTTPS port 443, standard default desktop firewall configurations work without manual rule creation.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>How does DropItOver compare to setting up an NFS share?</summary>
-          <div class="faq-answer">
-            NFS requires static IP configuration, root privileges, and firewall port mapping. DropItOver works on-demand in 5 seconds without system configuration.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10 & 11</a></li>
-        <li><a href="/guides/iphone-to-windows-file-transfer-without-itunes">iPhone to Windows File Transfer</a></li>
-        <li><a href="/guides/wireless-file-sharing-classrooms-office-meetings">Wireless Sharing for Classrooms & Meetings</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>Cross-platform file transfer across macOS, Linux, and Windows</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>Cross-platform file transfer across macOS, Linux, and Windows</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>Cross-platform transfer problems often come from file semantics rather than the network alone. A browser can move a selected file's bytes between macOS, Linux, and Windows, but it does not automatically preserve directory trees, Unix permissions, symbolic links, or a photo library's database. DropItOver provides nearby browser transfers, explicit rooms, and temporary links. This guide explains how to package material deliberately, test delivery, and handle the receiving system's naming and saving behavior. Begin with copies or a harmless fixture so a troubleshooting attempt cannot damage your only source.</p>
+<h2>Decide what must survive the trip</h2>
+<p>For ordinary documents, images, and videos, the selected file and its name may be enough. For source code, a project directory can include hidden files, executable bits, symlinks, and case-sensitive names that Windows tools handle differently. Create an archive with a format appropriate to the recipient. A tar archive is useful for Unix metadata when both sides have compatible tools; ZIP is broadly convenient but extraction behavior varies. Do not assume a browser's multiple-file picker represents a recursive directory backup. State the packaging method when handing over a project.</p>
+<p>Watch for two files whose names differ only by case, such as Report.txt and report.txt. A case-insensitive destination may not retain both under those names. Characters legal on one operating system may also be rejected or sanitized on another. Test a small representative archive containing your real naming patterns before migrating a large collection. Keep checksums and a source inventory when exact reproduction matters. Transport encryption cannot correct an archive that omitted hidden files or a destination extractor that changed permissions.</p>
+<h2>Choose the smallest workable transfer route</h2>
+<p>Use nearby devices for a live exchange on a trusted network. Use a room when you need an explicit URL across different discovery groups. Use an expiring link when the recipient cannot remain online. A room is not a persistent shared folder, and a download link is not version synchronization. Link files pass through Worker-managed encryption and temporary storage, with default two GiB per-file and eight GiB bundle limits. A direct transfer can still face browser resource limits, so do not infer unlimited file size from the absence of cloud storage.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Material</th><th scope="col">Preparation</th><th scope="col">Receiving check</th></tr></thead><tbody><tr><td>Few PDFs or images</td><td>Select original files</td><td>Open and compare byte counts</td></tr><tr><td>Unix project tree</td><td>Archive with intended metadata</td><td>Inspect permissions and symlinks</td></tr><tr><td>Mixed-case filenames</td><td>Test destination naming behavior</td><td>Confirm both entries survive</td></tr><tr><td>Many small documents</td><td>Consider one archive</td><td>Check archive inventory</td></tr><tr><td>Sensitive source repository</td><td>Remove secrets before packaging</td><td>Verify intended recipient and access</td></tr></tbody></table></div>
+<p>Open the canonical HTTPS site in maintained browsers on both machines. Set clear nicknames and transfer a small fixture first. Confirm acceptance and the final save location, since browser download defaults differ. On Linux, sandboxed browser packages can have filesystem access limits. On macOS, operating-system privacy controls or endpoint tools can affect file selection. These are separate from WebRTC connectivity. If the picker cannot see a file, solve local access first rather than changing network settings.</p>
+<h2>Understand discovery versus transport</h2>
+<pre>macOS browser -- signaling hub or room -- Linux / Windows browser
+macOS browser ===== WebRTC SCTP over DTLS ===== receiving browser
+Archive extraction and permission checks happen after saving</pre>
+<p>Nearby discovery groups browsers using their public IP at our signaling service. It does not scan mDNS advertisements or mount network shares. A VPN can separate otherwise adjacent machines into different groups. Conversely, a shared public address can group devices that cannot reach each other locally. After the recipient accepts, ICE finds a direct or relay path for encrypted traffic. If discovery works but no file bytes move, inspect firewall, router isolation, and selected candidate-pair state. Changing the device nickname will not repair an unreachable route.</p>
+<p>On Windows 11, review the active Public or Private profile and the browser's application permission. On Linux, inspect your distribution's firewall and any container or sandbox network policy. On macOS, check applicable application firewall or organizational rules. Avoid disabling the entire host firewall. A small-file test on a trusted hotspot can isolate the original network. If a managed policy blocks peer traffic, use the approved transfer channel rather than adding broad exceptions. TURN may help only when configured and permitted by that network.</p>
+<h2>Handle interruption and resource pressure</h2>
+<p>Keep both tabs foregrounded and prevent system sleep during live delivery. The sender reads slices and uses bufferedAmount backpressure. The receiver groups chunks into Blob parts but retains a representation of the full file for saving. Memory and temporary storage can therefore become the limiting factor, especially when the receiver runs many other applications. A page reload does not preserve a partially received file. Retain the source and restart deliberately instead of assuming the next selection will resume from the interrupted byte.</p>
+<p>For a stored link, wait for upload and finalization before handing over the URL. Choose an expiry that fits time-zone differences and the recipient's availability. Download range resumption is not implemented for the encrypted stream, so use a stable connection for large archives. If burn-after-read is enabled, explain that another person may not be able to retrieve the same bundle later. Deleting a link removes the service's stored copy; it cannot remove extracted files from the recipient's machine.</p>
+<h2>Verify bytes and then verify meaning</h2>
+<p>Compare the saved archive's byte size and SHA-256 digest with the source, using trusted local command-line tools when available. On Windows, PowerShell Get-FileHash can calculate SHA-256; macOS commonly provides shasum, and Linux commonly provides sha256sum. Check the command's file path carefully and quote names containing spaces. A matching digest confirms the selected archive arrived unchanged. Then extract into a new directory, inspect the inventory and permissions, and run the project's ordinary verification before replacing an existing working copy.</p>
+<p>Never extract an untrusted archive blindly over personal files. The transport does not inspect executable content, remove malware, or guarantee that paths inside an archive are safe. For a project handoff, exclude local credentials, private keys, environment files, and unnecessary build artifacts before packaging. This minimizes both transfer size and accidental disclosure. If the goal is ongoing collaboration with history and merges, a version-control workflow may be more appropriate than repeatedly sending full directory archives.</p>
+<h2>Performance comparisons that can be repeated</h2>
+<p>Use an identical one GiB fixture and the same archive for every method. Record OS, browser version, CPU, available memory, network arrangement, and direct or relay route. Repeat three trials and report median payload time, connection setup, and saving separately. If comparing Snapdrop, identify the deployment; if comparing LocalSend, identify the installed version. A local browser test and a distant cloud upload measure different paths, so explain that difference alongside the numbers.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated one GiB example</th><th scope="col">Assumed rate</th><th scope="col">Payload time</th><th scope="col">Extra work outside timing</th></tr></thead><tbody><tr><td>Direct WebRTC</td><td>150 Mbit/s</td><td>57.3 seconds</td><td>Archive extraction and checking</td></tr><tr><td>Direct WebRTC</td><td>300 Mbit/s</td><td>28.6 seconds</td><td>Browser saving</td></tr><tr><td>Sequential cloud transfer</td><td>30 up, 150 down Mbit/s</td><td>343.6 seconds</td><td>Upload finalization</td></tr></tbody></table></div>
+<p>The rows are calculations, not hardware benchmarks or product rankings. Memory also needs its own measurement method: browser process usage, Blob backing storage, and operating-system caches are not one interchangeable number. Document the transfer arrangement that succeeded and preserve that procedure for future handoffs. When asking support for help, include the failed stage and file size without attaching private archives, credentials, live share links, or raw network diagnostic dumps.</p>
+ <h2>Sources and further reading</h2><p><a href="https://www.w3.org/TR/webrtc/">WebRTC specification</a>, <a href="https://github.com/localsend/protocol">LocalSend protocol</a>, <a href="/privacy">DropItOver data-handling policy</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -379,7 +141,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -403,8 +165,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

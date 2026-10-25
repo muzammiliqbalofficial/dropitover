@@ -46,95 +46,35 @@
 
       <p class="eyebrow">Legal &amp; Compliance</p>
       <h1>Privacy Policy</h1>
-      <p class="updated">Last updated: August 26, 2026</p>
+      <p class="updated">Last updated: October 17, 2026</p>
 
       <p>
         DropItOver is engineered from the ground up to respect and protect user privacy. This policy provides complete, transparent disclosure regarding data handling, cryptographic protections, advertising cookies, and user rights under the European General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA/CPRA).
       </p>
 
-      <h2>1. Summary of Data Practices</h2>
-      <ul>
-        <li><strong>No Account Required:</strong> No usernames, passwords, phone numbers, or credit cards are ever collected.</li>
-        <li><strong>Zero-Server P2P Mode:</strong> Files transferred via local Wi-Fi or Room mode flow directly browser-to-browser via WebRTC and never touch our servers.</li>
-        <li><strong>Encrypted Ephemeral Link Mode:</strong> Files uploaded for link sharing are encrypted client-side/edge using AES-256-GCM and automatically deleted upon expiration.</li>
-        <li><strong>No First-Party Tracking:</strong> We do not deploy invasive analytics trackers or behavioral profiling tools.</li>
-      </ul>
-
-      <h2>2. Data Processing by Transfer Mode</h2>
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Transfer Mode</th>
-            <th>Data Transmission Path</th>
-            <th>Server Retention</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Devices on Wi-Fi (P2P)</strong></td>
-            <td>Direct browser-to-browser WebRTC DataChannel (DTLS-SRTP).</td>
-            <td class="yes">0 Seconds (Never stored)</td>
-          </tr>
-          <tr>
-            <td><strong>Multi-Device Rooms</strong></td>
-            <td>Direct peer mesh relayed through ephemeral signaling WebSocket.</td>
-            <td class="yes">0 Seconds (Never stored)</td>
-          </tr>
-          <tr>
-            <td><strong>Encrypted Share Links</strong></td>
-            <td>Encrypted binary chunks uploaded to Cloudflare R2 object cache.</td>
-            <td>Deleted on expiry (1 hr &ndash; 7 days) or instant burn.</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>3. Google AdSense &amp; Advertising Disclosures</h2>
-      <p>
-        DropItOver uses <strong>Google AdSense</strong> to serve non-intrusive advertisements on editorial and content pages. Google and third-party advertising vendors use cookies (such as the DoubleClick DART cookie) and web beacons to serve ads based on a user's prior visits to this website and other websites across the internet.
-      </p>
-      <ul>
-        <li>
-          <strong>Personalized Ads Opt-Out:</strong> Users may opt out of personalized advertising by visiting <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Google Ads Settings</a>.
-        </li>
-        <li>
-          <strong>Network Advertising Initiative:</strong> You can also opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">aboutads.info/choices</a> or <a href="https://youradchoices.com/" target="_blank" rel="noopener">youradchoices.com</a>.
-        </li>
-        <li>
-          <strong>Partner Site Privacy Notice:</strong> To understand how Google manages data in its advertising products, please review <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses data when you use our partners' sites or apps</a>.
-        </li>
-      </ul>
-
-      <h2>4. Local Storage &amp; Cookie Usage</h2>
-      <p>
-        DropItOver itself does not set persistent tracking cookies. We utilize browser <code>localStorage</code> solely to remember your chosen device display nickname locally on your device for peer discovery convenience. This information is never transmitted to analytics databases.
-      </p>
-
-      <h2>5. Infrastructure &amp; Third-Party Service Providers</h2>
-      <p>
-        DropItOver is hosted globally on <strong>Cloudflare, Inc.</strong> (Workers, R2 Storage, Durable Objects, and TURN relays). Cloudflare acts as a data processor adhering to strict Standard Contractual Clauses (SCCs) and ISO 27001 certifications.
-      </p>
-
-      <h2>6. GDPR &amp; CCPA/CPRA Compliance</h2>
-      <p>
-        Under GDPR and CCPA:
-      </p>
-      <ul>
-        <li><strong>Right of Access &amp; Portability:</strong> Because we hold no user accounts and do not track IP addresses beyond ephemeral rate-limiting counters, we do not possess personally identifiable records to export.</li>
-        <li><strong>Right to Erasure:</strong> Senders of link shares can manually trigger immediate deletion ("Delete Now") at any time before link expiration.</li>
-        <li><strong>Non-Sale of Personal Data:</strong> DropItOver does not sell, rent, or trade personal information to third parties.</li>
-      </ul>
-
-      <h2>7. Children's Privacy (COPPA)</h2>
-      <p>
-        DropItOver does not knowingly collect or solicit personal data from children under the age of 13.
-      </p>
-
-      <h2>8. Contact Information</h2>
-      <p>
-        For privacy-related inquiries, legal requests, or data protection questions, please contact our Data Protection Officer at:
-      </p>
-      <p><strong>Email:</strong> <a href="mailto:support@dropitover.com">support@dropitover.com</a></p>
-
+      <h2>1. Data collected by transfer mode</h2>
+<p>No account is required to transfer files. The service still processes connection metadata and, for link shares and support requests, stores the information described below.</p>
+<table class="compare"><caption>What reaches our infrastructure</caption><thead><tr><th>Mode</th><th>Processing</th><th>Retention</th></tr></thead><tbody>
+<tr><td>Nearby devices and rooms</td><td>Signaling handles device nicknames, connection identifiers, transfer offers (including file names and sizes), SDP, and ICE candidates. WebRTC file bytes are DTLS encrypted between browsers. A TURN relay may carry encrypted packets when a direct route fails.</td><td>No application file storage for P2P. Room metadata lasts until room expiry; active connections hold signaling state.</td></tr>
+<tr><td>Expiring links</td><td>Files travel over HTTPS to a Cloudflare Worker, which sees plaintext and encrypts chunks with AES-256-GCM before writing to R2. D1 holds file names, MIME types, sizes, expiry, and key-derivation metadata. Notes are stored in D1.</td><td>Links expire after the selected duration (1 hour to 7 days). Cleanup runs every 10 minutes and removes expired storage; deletion can be delayed by operational failure. Burn-after-read and the sender's delete control can remove a share earlier.</td></tr>
+<tr><td>Contact inquiries</td><td>Name, email, category, subject, message, timestamp, random ticket ID, and a hashed IP identifier are stored privately in D1 for support and abuse prevention.</td><td>Up to 90 days, followed by scheduled deletion. Email correspondence is handled separately in the support mailbox.</td></tr>
+</tbody></table>
+<h2>2. Encryption and the limits of zero-knowledge</h2>
+<p>Direct WebRTC transfers protect file contents with browser-to-browser DTLS, including when a TURN server relays the encrypted traffic. Our signaling service does not receive the file payload, but handles connection metadata. The app does not independently verify a recipient's identity: confirm the recipient and accept prompt yourself.</p>
+<p>Link sharing is <strong>not zero-knowledge or client-side end-to-end encryption</strong>. Our Worker holds the master encryption key and encrypts and decrypts file chunks. The operator and infrastructure running that Worker are in the trust boundary. Encryption at rest does not hide file metadata or notes stored in D1. Do not assume that an expiring URL prevents copies, screenshots, or access by someone to whom the URL was forwarded.</p>
+<h2>3. Third-Party Vendors: Google AdSense and DoubleClick DART cookies</h2>
+<p>The site includes Google's AdSense verification script. Empty ad slots have been removed while approval is pending. If advertising is enabled, third-party vendors, including Google and its partners, may use advertising cookies, web beacons, IP addresses, and other identifiers to serve, personalize, measure, and limit ads based on prior visits to this site or other sites. Google's advertising cookies include cookies associated with DoubleClick domains, historically called the <strong>DoubleClick DART cookie</strong>.</p>
+<p>Google's use of advertising cookies enables it and its partners to serve ads based on visits to this and other sites. You may opt out of personalized advertising through <a href="https://adssettings.google.com/">Google Ads Settings (adssettings.google.com)</a>. Other vendors may provide opt-outs through <a href="https://www.aboutads.info/choices/">YourAdChoices</a>. Browser cookie settings also let you block or delete cookies. Opting out of personalization does not necessarily remove all advertisements or operational cookies.</p>
+<p>Read <a href="https://policies.google.com/technologies/partner-sites">how Google uses data on partner sites</a> and <a href="https://support.google.com/adsense/answer/1348695?hl=en">Google's required advertising disclosures</a>. Where consent is required, advertising must follow the applicable consent choice. This disclosure does not itself implement an advertising consent mechanism.</p>
+<h2>4. Local storage, network identifiers, and infrastructure</h2>
+<p>The browser remembers a generated device identity and your chosen nickname in localStorage. These are used for peer discovery, not first-party analytics. Clear site data in your browser to reset them. Discovery groups connections by a hash derived from the public IP supplied by Cloudflare. Upload quotas also use hashed IP counters; a hash is pseudonymous and should not be treated as anonymous. Upload usage counters older than two days are swept automatically.</p>
+<p>Cloudflare provides Workers, D1, R2, Durable Objects, and optional TURN services. It processes request IP addresses and operational metadata to deliver and secure the service, including under its own infrastructure policies. Google processes data when its scripts run. These providers may process data outside your country. We do not claim that having no account means no personal information is processed.</p>
+<h2>5. GDPR and CCPA/CPRA data rights</h2>
+<p>Depending on your location and applicable law, you may request access, correction, deletion, portability, restriction, or objection to processing, and withdraw consent where processing relies on consent. California residents may also request information about collected data and request opt-out of sale or sharing for cross-context behavioral advertising, where applicable. We do not sell uploaded file contents. Advertising vendors may process identifiers for advertising under their policies and your applicable choices.</p>
+<p>Submit a rights request through <a href="/contact">the contact form</a> or email <a href="mailto:support@dropitover.com">support@dropitover.com</a>. For a support record, include the ticket reference and use the same email address. We may request proportionate identity verification before disclosing or deleting records. Avoid sending identity documents unless needed and arranged with support. You may complain to your local data protection authority and exercise applicable rights without discriminatory treatment.</p>
+<p>The sender can delete an active link using its private owner token. We cannot retrieve files from a completed direct transfer or erase copies saved by a recipient. Retention obligations or security investigations may affect a request; we will explain any applicable exception.</p>
+<h2>6. Children and privacy contact</h2>
+<p>The service is not intended to collect personal information from children under 13. If a child has submitted personal data, a parent or guardian can contact support to request review and removal. For all privacy questions, contact <a href="mailto:support@dropitover.com">support@dropitover.com</a>.</p>
       <div class="cta">
         <a class="btn btn-primary" href="/">Return to Home</a>
         <a class="btn" href="/terms">View Terms of Service &rarr;</a>
@@ -161,7 +101,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -185,8 +125,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

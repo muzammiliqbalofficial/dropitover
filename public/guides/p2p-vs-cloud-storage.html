@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>Peer-to-Peer (P2P) vs Cloud Storage: Which Is Better for File Sharing? | DropItOver</title>
-<meta name="description" content="In-depth technical comparison between WebRTC peer-to-peer file sharing and centralized cloud storage (Google Drive, Dropbox). Speed, privacy, bandwidth, and cost analysis.">
+<title>P2P versus cloud storage: compare the whole delivery workflow | DropItOver</title>
+<meta name="description" content="The useful question is not whether peer-to-peer or cloud storage is universally faster. It is which route fits the recipient's availability, network restri">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/p2p-vs-cloud-storage">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="Peer-to-Peer (P2P) vs Cloud Storage: Which Is Better for File Sharing?">
+<meta property="og:title" content="P2P versus cloud storage: compare the whole delivery workflow">
 <meta property="og:description" content="In-depth technical comparison between WebRTC peer-to-peer file sharing and centralized cloud storage (Google Drive, Dropbox). Speed, privacy, bandwidth, and cost analysis.">
 <meta property="og:url" content="https://dropitover.com/guides/p2p-vs-cloud-storage">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "Peer-to-Peer (P2P) vs Cloud Storage: Which Is Better for File Sharing?",
-    "description": "In-depth technical comparison between WebRTC peer-to-peer file sharing and centralized cloud storage (Google Drive, Dropbox). Speed, privacy, bandwidth, and cost analysis.",
+    "headline": "P2P versus cloud storage: compare the whole delivery workflow",
+    "description": "The useful question is not whether peer-to-peer or cloud storage is universally faster. It is which route fits the recipient's availability, network restri",
     "url": "https://dropitover.com/guides/p2p-vs-cloud-storage",
     "datePublished": "2026-08-21",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Architecture Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,63 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Peer-to-Peer (P2P) vs Cloud Storage: Which Is Better for File Sharing?",
+        "name": "P2P versus cloud storage: compare the whole delivery workflow",
         "item": "https://dropitover.com/guides/p2p-vs-cloud-storage"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Does P2P file sharing use my cellular or ISP internet data?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "When transferring between devices connected to the same local Wi-Fi network, P2P uses zero internet data. Data travels strictly through local router antennas without traversing external internet cables."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is P2P file transfer legal and safe?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, 100%. While early 2000s torrent networks were associated with pirated media distribution, modern WebRTC P2P is an authorized W3C web standard used by enterprise tools, video conferencing software, and secure file transfer utilities."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the hybrid approach used by DropItOver?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "DropItOver combines the best of both worlds: direct zero-server P2P for instant high-speed LAN transfers, and encrypted ephemeral cloud caching (with automatic self-destruct timers) when sending files to offline or remote recipients."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can files be intercepted during a P2P transfer?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. WebRTC DataChannels are encrypted end-to-end using DTLS with strong AES ciphers. Even on open public Wi-Fi networks, third parties cannot inspect or tamper with the data packets."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the maximum file size supported in P2P mode?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "In direct Wi-Fi P2P mode, there is no artificial file size limit. Files are streamed as sequential memory slices, allowing multi-gigabyte transfers without memory bottlenecks."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What happens if my Wi-Fi disconnects midway through a transfer?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "In P2P mode, if the socket drops, the transfer stops. You can restart the transfer once reconnected, or use an encrypted share link for asynchronous transfer."
-          }
-        }
     ]
   }
 ]
@@ -144,207 +90,35 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>Peer-to-Peer (P2P) vs Cloud Storage: Which Is Better for File Sharing?</span>
-      </nav>
-
-      <p class="eyebrow">Storage & Networking</p>
-      <h1>Peer-to-Peer (P2P) vs Cloud Storage: Which Is Better for File Sharing?</h1>
-      <p class="dek">Explore the architectural trade-offs between zero-server P2P direct transfer and centralized cloud storage for speed, privacy, and cost efficiency.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Architecture Team</span>
-        </div>
-        <span>10 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>The Fundamental Architectural Divide: Centralized Cloud vs Decentralized P2P</h2>
-      <p>
-        When transferring files over the internet, digital users typically default to centralized cloud storage providers such as Google Drive, Microsoft OneDrive, Dropbox, and Box. While cloud storage excels at multi-device background synchronization and long-term archival, it is often the least efficient, most expensive, and least private architecture for direct person-to-person or device-to-device transfers.
-      </p>
-      <p>
-        <strong>Peer-to-Peer (P2P) networking</strong> operates on an entirely different paradigm: instead of depositing files into a central repository owned by a tech corporation, data flows directly from the sender's device to the receiver's device over ephemeral encrypted channels.
-      </p>
-
-      <h2>Architectural Comparison: How Your Data Moves</h2>
-
-      <div class="arch-box">
-        <h3>Centralized Cloud Storage Flow (Two-Hop Latency)</h3>
-        <p>
-          Sender &rarr; Home Router &rarr; ISP Uplink &rarr; Data Center S3 Bucket &rarr; Virus Scanner / Metadata Indexer &rarr; Storage At Rest &rarr; ISP Downlink &rarr; Receiver Router &rarr; Receiver Device.
-          <br><em>Result: High latency, upload bandwidth bottleneck, third-party data residency risk.</em>
-        </p>
-      </div>
-
-      <div class="arch-box">
-        <h3>Peer-to-Peer (P2P) WebRTC Flow (Single Direct Hop)</h3>
-        <p>
-          Sender Device &harr; Local Wi-Fi Router / Direct UDP Socket &harr; Receiver Device.
-          <br><em>Result: Line-rate throughput (up to 1 Gbps), zero cloud storage footprint, true zero-knowledge privacy.</em>
-        </p>
-      </div>
-
-      <h2>In-Depth Technical Comparison</h2>
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Evaluation Criteria</th>
-            <th class="us">Peer-to-Peer (DropItOver)</th>
-            <th>Cloud Storage (Google Drive / Dropbox)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Transfer Speed (Local LAN)</strong></td>
-            <td class="us yes">50 &ndash; 120+ MB/s (Local Wi-Fi speed)</td>
-            <td class="no">Limited by home internet upload cap (e.g. 5-10 MB/s)</td>
-          </tr>
-          <tr>
-            <td><strong>Data Privacy &amp; Subpoena Risk</strong></td>
-            <td class="us yes">Zero Server Data (Impossible to leak or subpoena)</td>
-            <td class="no">Stored on corporate servers subject to scans &amp; leaks</td>
-          </tr>
-          <tr>
-            <td><strong>Bandwidth &amp; Data Caps</strong></td>
-            <td class="us yes">Consumes 0 GB of ISP data on local Wi-Fi</td>
-            <td class="no">Consumes double bandwidth (Upload + Download)</td>
-          </tr>
-          <tr>
-            <td><strong>Cost &amp; Subscription</strong></td>
-            <td class="us yes">100% Free / No storage tiers</td>
-            <td class="no">Monthly recurring fees after 5 &ndash; 15 GB</td>
-          </tr>
-          <tr>
-            <td><strong>Recipient Friction</strong></td>
-            <td class="us yes">Zero account / instant browser download</td>
-            <td class="no">Requires login, folder sharing permissions, quota check</td>
-          </tr>
-          <tr>
-            <td><strong>Offline Asynchronous Access</strong></td>
-            <td>Requires both online (or use Ephemeral Link)</td>
-            <td class="yes">Yes (Files remain indefinitely in cloud)</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Economic and Energy Impact: The Hidden Cost of Cloud Storage</h2>
-      <p>
-        Every gigabyte stored indefinitely in commercial hyperscale data centers requires constant server power, cooling infrastructure, and disk replication. When users store temporary 10 GB video drafts in cloud drives and forget about them, they incur unnecessary storage expenses and contribute to global server farm energy consumption.
-      </p>
-      <p>
-        Peer-to-peer file transfer is intrinsically sustainable: data exists only in browser RAM during the active transfer, using zero persistent data center storage and leaving zero carbon footprint.
-      </p>
-
-      <h2>Security Threat Modeling: P2P vs Cloud Providers</h2>
-      <p>
-        When evaluating risk profiles for corporate data governance:
-      </p>
-      <ul>
-        <li><strong>Cloud Provider Insider Threat:</strong> System administrators, rogue employees, or compromised service accounts can potentially access unencrypted or server-side encrypted files in cloud buckets.</li>
-        <li><strong>Third-Party Vendor Subpoenas:</strong> Centralized cloud providers are subject to government surveillance orders and statutory disclosure mandates. In P2P mode, DropItOver holds no records or data to disclose.</li>
-        <li><strong>Account Hijacking:</strong> A compromised Google or Dropbox account exposes an entire lifetime of historical files. In P2P transfer, past transfers leave zero forensic trace once completed.</li>
-      </ul>
-
-      <h2>When to Use P2P File Transfer</h2>
-      <ol>
-        <li><strong>Sending Large Media Files Quickly:</strong> Transferring 5 GB to 50 GB of raw video, game assets, or disk images between two machines on the same desk or office.</li>
-        <li><strong>Confidential &amp; Sensitive Information:</strong> Transmitting financial audits, intellectual property, medical charts, or credentials where third-party cloud logging is unacceptable.</li>
-        <li><strong>Ad-Hoc Collaboration:</strong> Sharing files with clients, contractors, or classmates without exchanging email addresses or managing shared folder permissions.</li>
-      </ol>
-
-      <h2>When to Use Traditional Cloud Storage</h2>
-      <ul>
-        <li><strong>Long-Term Cold Backup:</strong> Archiving years of family photos or business tax returns for disaster recovery.</li>
-        <li><strong>Collaborative Document Editing:</strong> Multiple team members making simultaneous edits to live Google Docs or Microsoft 365 spreadsheets.</li>
-      </ul>
-
-      <h2>The Hybrid Solution: Ephemeral Encrypted Links</h2>
-      <p>
-        DropItOver provides a hybrid approach that bridges the gap between pure real-time P2P and asynchronous cloud storage. By enabling temporary, encrypted cloud caching with strict 1-hour to 7-day TTLs and single-use self-destruct triggers, you enjoy the convenience of link sharing without the permanent security liabilities of traditional cloud storage.
-      </p>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Does P2P file sharing use my cellular or ISP internet data?</summary>
-          <div class="faq-answer">
-            When transferring between devices connected to the same local Wi-Fi network, P2P uses zero internet data. Data travels strictly through local router antennas without traversing external internet cables.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Is P2P file transfer legal and safe?</summary>
-          <div class="faq-answer">
-            Yes, 100%. While early 2000s torrent networks were associated with pirated media distribution, modern WebRTC P2P is an authorized W3C web standard used by enterprise tools, video conferencing software, and secure file transfer utilities.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What is the hybrid approach used by DropItOver?</summary>
-          <div class="faq-answer">
-            DropItOver combines the best of both worlds: direct zero-server P2P for instant high-speed LAN transfers, and encrypted ephemeral cloud caching (with automatic self-destruct timers) when sending files to offline or remote recipients.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can files be intercepted during a P2P transfer?</summary>
-          <div class="faq-answer">
-            No. WebRTC DataChannels are encrypted end-to-end using DTLS with strong AES ciphers. Even on open public Wi-Fi networks, third parties cannot inspect or tamper with the data packets.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What is the maximum file size supported in P2P mode?</summary>
-          <div class="faq-answer">
-            In direct Wi-Fi P2P mode, there is no artificial file size limit. Files are streamed as sequential memory slices, allowing multi-gigabyte transfers without memory bottlenecks.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What happens if my Wi-Fi disconnects midway through a transfer?</summary>
-          <div class="faq-answer">
-            In P2P mode, if the socket drops, the transfer stops. You can restart the transfer once reconnected, or use an encrypted share link for asynchronous transfer.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">How WebRTC P2P Works</a></li>
-        <li><a href="/guides/ephemeral-expiring-links-privacy">Why Ephemeral Links Protect Privacy</a></li>
-        <li><a href="/guides/send-large-files-without-email">Send Large Files Online Free (2GB+)</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>P2P versus cloud storage: compare the whole delivery workflow</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>P2P versus cloud storage: compare the whole delivery workflow</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>The useful question is not whether peer-to-peer or cloud storage is universally faster. It is which route fits the recipient's availability, network restrictions, file size, and trust requirements. DropItOver exposes both live WebRTC transfers and temporary server-stored links, making the tradeoff visible in one interface. A direct path avoids storing a reusable file on our server, while a link lets the sender finish before the recipient arrives. This guide compares those workflows using explicit assumptions, explains the different memory constraints, and provides a measurement procedure instead of presenting invented product benchmarks.</p>
+<h2>Map the data paths</h2>
+<pre>Live direct: sender browser ===== WebRTC SCTP/DTLS ===== receiver browser
+Live relay: sender ===== TURN carrying encrypted packets ===== receiver
+Stored link: sender -&gt; HTTPS Worker encrypts -&gt; R2 -&gt; Worker decrypts -&gt; receiver</pre>
+<p>Peer-to-peer describes the live application relationship, but ICE may select a TURN relay rather than a local direct route. That relay still carries traffic and can be limited by internet bandwidth. A stored link has two separate transfers and server storage between them. In DropItOver, the Worker holds the encryption key and processes plaintext, so link encryption at rest does not exclude the operator from the trust boundary. A cloud product with client-held keys may have a different model; compare actual key ownership rather than treating every stored service as identical.</p>
+<h2>Availability changes the right answer</h2>
+<p>Use live transfer when both parties can keep browsers open and respond to acceptance prompts. It works well for a meeting, a quick device handoff, or a room session. Use a link when the recipient is asleep, traveling, or unable to stay connected. Select an expiry that leaves time for retrieval; a one-hour link sent across time zones can expire before anyone sees it. A room invitation is not an offline inbox and does not convert the mesh into persistent storage. Each participant needs a live connection to exchange file payloads.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Decision</th><th scope="col">Live WebRTC</th><th scope="col">Temporary link storage</th></tr></thead><tbody><tr><td>Recipient offline</td><td>Cannot deliver now</td><td>Can retrieve after upload</td></tr><tr><td>File stored by this service</td><td>No application file object</td><td>Yes, encrypted R2 object</td></tr><tr><td>Operator handles file plaintext</td><td>Not in normal P2P payload path</td><td>Yes, inside Worker</td></tr><tr><td>Restrictive network</td><td>ICE and possible TURN needed</td><td>Ordinary HTTPS may work</td></tr><tr><td>Interrupted browser session</td><td>No persistent resume UI</td><td>Upload/download recovery has limits</td></tr><tr><td>Deletion control</td><td>Cannot revoke recipient copy</td><td>Can remove stored share, not copies</td></tr></tbody></table></div>
+<p>Nearby discovery also has a separate dependency: browsers are grouped by their public IP at a WebSocket signaling service. A VPN or cellular connection can change that group. An explicit room avoids relying on the nearby list, but it does not remove firewall or client-isolation constraints. When a corporate environment forbids internet storage, the fact that an HTTPS link succeeds is not permission to use it. Select an approved route and consult the administrator before changing network policy.</p>
+<h2>Compare payload time with the same units</h2>
+<p>For one GiB, the payload contains 8,589,934,592 bits. A direct transfer's ideal payload time is those bits divided by the achieved end-to-end payload rate. A sequential stored workflow adds upload time and download time. The slow sender uplink often dominates, but local wireless contention can also make a direct path slow. Rates printed by a router or speed-test service are not necessarily the sustained rate your file receives. State whether MB means decimal megabytes or MiB means binary mebibytes when publishing a result.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated one GiB scenario</th><th scope="col">Assumed capacity</th><th scope="col">Ideal payload duration</th></tr></thead><tbody><tr><td>Direct WebRTC</td><td>200 Mbit/s</td><td>42.9 seconds</td></tr><tr><td>Relay WebRTC</td><td>30 Mbit/s</td><td>286.3 seconds</td></tr><tr><td>Sequential stored transfer</td><td>20 up and 100 down Mbit/s</td><td>515.4 seconds</td></tr><tr><td>Sequential stored transfer</td><td>100 up and 100 down Mbit/s</td><td>171.8 seconds</td></tr></tbody></table></div>
+<p>These are arithmetic examples, not measurements of DropItOver, Snapdrop, LocalSend, or a cloud vendor. Real timing includes negotiation, request overhead, encryption, retries, saving, and background activity. Some stored services overlap processing or support different download behavior; this table specifically assumes upload completes before download starts. Do not quote its values as real-world rankings. If someone publishes a universal speed table without devices, network topology, file size, and timing boundaries, there is not enough information to reproduce or trust the comparison.</p>
+<h2>Memory and bandwidth are different resources</h2>
+<p>DropItOver's WebRTC sender pauses around an eight MiB data-channel queue and reads file slices. The receiver batches buffers into Blob parts but retains the complete received object for saving. That can consume browser-managed memory or disk resources proportional to the file. A sixteen MiB assembly threshold is not a promise of sixteen MiB total memory. Phones can exhaust resources even when both network and encryption are working. Test progressively larger non-sensitive files rather than jumping straight to the largest valuable archive.</p>
+<p>The link Worker processes default eight MiB parts, but input, ciphertext, stream queues, and runtime overhead can coexist. Browser saving also has its own resource behavior. The current defaults cap stored files at two GiB each and bundles at eight GiB, with daily anonymous quotas. A direct path does not make hardware limits disappear. Compare peak process memory using the same tool and sampling method, and report what the number includes. A single protocol buffer constant cannot substitute for a measured memory result.</p>
+<h2>Troubleshoot the chosen path</h2>
+<p>For live transfers, separate discovery, acceptance, ICE setup, payload delivery, and saving. On Windows 11, review the active network profile and browser firewall permission without disabling the firewall. On guest Wi-Fi, test a trusted main network or personal hotspot to identify AP Isolation. On iOS Safari, keep the tab visible and screen awake. If a small document works but a large file fails, investigate resource pressure and suspension. A room may still require TURN; repeatedly creating rooms does not alter a blocked transport policy.</p>
+<p>For stored links, inspect creation limits, upload completion, finalization, expiry, and recipient download as separate stages. Do not hand over a pending upload as though it were ready. Choose burn-after-read only when one retrieval of the complete share matches your needs. Encrypted download range resumption is not implemented here, so unstable connections may require a restart. Keep the source, verify the saved copy, and delete the stored share early only after the intended recipient has confirmed success.</p>
+<h2>Build your own fair comparison</h2>
+<p>Prepare one small fixture and one representative large file. Record OS and browser versions, device models, network arrangement, VPN state, relay status, and free storage. Run each method three times, keeping the file and timing boundaries fixed. Report median setup, payload, and saving times separately. For Snapdrop, record the deployment because configurations differ; for LocalSend, record app version and LAN conditions. Verify byte count and digest after every run so an incomplete transfer cannot win a speed test.</p>
+<p>Choose based on the result that matters: time until the sender can leave, time until the recipient has a verified file, or the privacy and retention boundary your work requires. Those are different outcomes. Keep a concise record of the method that worked in your environment, and revisit it after meaningful browser or network changes. The related encryption and large-file guides explain storage keys, expiry, and retry limits in more detail. Support reports should include the failed stage and safe diagnostics, without disclosing private URLs or file contents.</p>
+ <h2>Sources and further reading</h2><p><a href="https://github.com/RobinLinus/snapdrop">Snapdrop source</a>, <a href="https://github.com/schlagmichdoch/PairDrop">PairDrop documentation</a>, <a href="https://github.com/localsend/protocol">LocalSend protocol</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -366,7 +140,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -390,8 +164,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

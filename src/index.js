@@ -1,11 +1,11 @@
 // DropItOver on Cloudflare Workers.
 //
-// /                     static assets (served before this Worker runs)
-// /r/<roomId> room page -> public/room.html
-// /d/<linkId> recipient page -> public/download.html
-// /api/* HTTP API -> src/routes/api.js
-// /ws/net Mode 1 signaling -> NetworkHub Durable Object
-// /ws/room/<roomId> Mode 3 signaling -> Room Durable Object
+//   /                     public static assets, after canonical host handling
+//   /r/<roomId>           room page          -> public/room.html
+//   /d/<linkId>           recipient page     -> public/download.html
+//   /api/*                HTTP API           -> src/routes/api.js
+//   /ws/net               Mode 1 signaling   -> NetworkHub Durable Object
+//   /ws/room/<roomId>     Mode 3 signaling   -> Room Durable Object
 //
 // Modes 1 and 3 never store anything: the Durable Objects relay SDP/ICE and the
 // browsers move the bytes themselves. Mode 2 is the only path that persists, and
@@ -37,6 +37,18 @@ export default {
     if (redirect) return Response.redirect(redirect, 301);
 
     try {
+      // High-priority direct handler for ads.txt so Google crawler is never delayed
+      if (url.pathname === '/ads.txt') {
+        return new Response('google.com, pub-8645479142211810, DIRECT, f08c47fec0942fa0\n', {
+          status: 200,
+          headers: {
+            'content-type': 'text/plain; charset=utf-8',
+            'cache-control': 'public, max-age=3600',
+            'access-control-allow-origin': '*',
+          },
+        });
+      }
+
       if (url.pathname === '/ws/net') return await connectNetwork(request, env);
       if (url.pathname.startsWith('/ws/room/')) return await connectRoom(request, env, url);
 
@@ -55,6 +67,11 @@ export default {
       if (url.pathname.startsWith('/r/')) return await serveAsset(env, url, '/room.html', undefined, headers);
       if (url.pathname.startsWith('/d/')) return await serveAsset(env, url, '/download.html', undefined, headers);
 
+      // The guide hub accepts both spellings; its canonical URL ends in '/'.
+      if (url.pathname === '/guides') {
+        return await serveAsset(env, url, '/guides/', undefined, headers);
+      }
+
       // Anything else that isn't a static file.
       const asset = await env.ASSETS.fetch(request);
       if (asset.status !== 404) return withHeaders(asset, headers);
@@ -63,7 +80,7 @@ export default {
       console.error('[worker]', err.stack || err.message);
       const wantsJson = url.pathname.startsWith('/api/');
       if (wantsJson) {
-        return new Response(JSON.stringify({ error: 'server_error', message: err.message }), {
+        return new Response(JSON.stringify({ error: 'server_error', message: 'The service is temporarily unavailable. Please try again.' }), {
           status: 500,
           headers: { 'content-type': 'application/json; charset=utf-8' },
         });
@@ -79,7 +96,10 @@ export default {
     const usage = new UsageTracker(env.DB, config.dailyLimits);
 
     ctx.waitUntil(
-      Promise.all([store.sweep(), usage.sweep()])
+      Promise.all([
+        store.sweep(), usage.sweep(),
+        env.DB.prepare('DELETE FROM contact_inquiries WHERE created_at < ?').bind(Date.now() - 90 * 86400000).run(),
+      ])
         .then(([{ expired, abandoned }, counters]) => {
           if (expired || abandoned || counters) {
             console.log(`[cleanup] expired=${expired} abandoned=${abandoned} counters=${counters}`);

@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>Understanding WebRTC STUN, TURN, and Signaling Servers in Simple Terms | DropItOver</title>
-<meta name="description" content="A clear, visual explanation of how WebRTC STUN, TURN relays, and WebSocket signaling work together to connect browsers through NATs and enterprise firewalls.">
+<title>WebRTC signaling, STUN, and TURN: diagnose the failing stage | DropItOver</title>
+<meta name="description" content="Signaling, STUN, and TURN do different jobs. A signaling service introduces browsers and relays connection descriptions. STUN helps a browser learn a publi">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/webrtc-stun-turn-signaling-servers-explained">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="Understanding WebRTC STUN, TURN, and Signaling Servers in Simple Terms">
+<meta property="og:title" content="WebRTC signaling, STUN, and TURN: diagnose the failing stage">
 <meta property="og:description" content="A clear, visual explanation of how WebRTC STUN, TURN relays, and WebSocket signaling work together to connect browsers through NATs and enterprise firewalls.">
 <meta property="og:url" content="https://dropitover.com/guides/webrtc-stun-turn-signaling-servers-explained">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "Understanding WebRTC STUN, TURN, and Signaling Servers in Simple Terms",
-    "description": "A clear, visual explanation of how WebRTC STUN, TURN relays, and WebSocket signaling work together to connect browsers through NATs and enterprise firewalls.",
+    "headline": "WebRTC signaling, STUN, and TURN: diagnose the failing stage",
+    "description": "Signaling, STUN, and TURN do different jobs. A signaling service introduces browsers and relays connection descriptions. STUN helps a browser learn a publi",
     "url": "https://dropitover.com/guides/webrtc-stun-turn-signaling-servers-explained",
     "datePublished": "2026-08-23",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Engineering Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,63 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "Understanding WebRTC STUN, TURN, and Signaling Servers in Simple Terms",
+        "name": "WebRTC signaling, STUN, and TURN: diagnose the failing stage",
         "item": "https://dropitover.com/guides/webrtc-stun-turn-signaling-servers-explained"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Can a STUN or TURN server operator see the contents of my files?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. STUN only processes IP discovery pings. TURN relays forward DTLS-encrypted packets blindly. Because the cryptographic keys exist only in the sender's and receiver's browser memory, the TURN server cannot decrypt the data."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why is WebRTC faster than standard HTTP downloads?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "WebRTC transfers data over UDP and SCTP without the TCP three-way handshake overhead, packet reordering stalls, and head-of-line blocking that slow down traditional HTTP transfers."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What firewall ports does WebRTC require?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "WebRTC typically communicates over UDP ports in the range of 1024 to 65535, with fallback to standard HTTPS (TCP port 443) when TURN relays are engaged."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What is the difference between Symmetric NAT and Cone NAT?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Cone NAT maps all outbound packets from a local port to the same external port, allowing external peers to connect directly. Symmetric NAT assigns a unique external port for every unique destination IP, requiring a TURN relay to bridge connections."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does DropItOver use third-party signaling brokers?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "No. DropItOver's signaling layer runs entirely on Cloudflare Workers and Durable Objects, ensuring private, self-hosted signaling with zero external tracking."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What latency is typical for WebRTC peer discovery?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "On modern fiber or high-speed Wi-Fi, the initial signaling handshake and ICE candidate pairing complete in under 50 to 150 milliseconds."
-          }
-        }
     ]
   }
 ]
@@ -144,212 +90,37 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>Understanding WebRTC STUN, TURN, and Signaling Servers in Simple Terms</span>
-      </nav>
-
-      <p class="eyebrow">Networking Architecture</p>
-      <h1>Understanding WebRTC STUN, TURN, and Signaling Servers in Simple Terms</h1>
-      <p class="dek">Demystify real-time web networking. Learn how STUN resolves public IPs, TURN relays traffic around strict firewalls, and signaling coordinates peer connections.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Engineering Team</span>
-        </div>
-        <span>11 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>Demystifying Real-Time Web Networking Infrastructure</h2>
-      <p>
-        WebRTC is universally recognized as the fastest and most secure protocol for browser-to-browser peer communication. However, the internet is not a flat, open network where every computer has a public, static IP address.
-      </p>
-      <p>
-        Because of the global shortage of IPv4 addresses and enterprise firewall security policies, nearly all consumer and business devices sit behind <strong>Network Address Translation (NAT)</strong> routers and stateful packet inspection firewalls.
-      </p>
-      <p>
-        To establish a direct peer-to-peer data connection between two browsers, WebRTC relies on three essential architectural components: <strong>Signaling Servers</strong>, <strong>STUN Servers</strong>, and <strong>TURN Relays</strong>.
-      </p>
-
-      <h2>1. The Signaling Server: The Connection Introducer</h2>
-      <p>
-        WebRTC does not define a mandatory signaling protocol. Signaling is the out-of-band communication channel used by two browsers to discover each other and exchange connection metadata.
-      </p>
-      <div class="arch-box">
-        <h3>What Happens During Signaling:</h3>
-        <ul>
-          <li><strong>Session Descriptions (SDP):</strong> Devices exchange codec capabilities, supported encryption ciphers, and DataChannel parameters.</li>
-          <li><strong>Network Candidates (ICE):</strong> Devices tell each other their discovered IP addresses and UDP port numbers.</li>
-          <li><strong>Signaling Tech Stack:</strong> DropItOver uses lightweight, ultra-fast WebSockets running on Cloudflare Workers and Durable Objects to broker signaling in under 50 milliseconds.</li>
-        </ul>
-      </div>
-
-      <h2>2. STUN (Session Traversal Utilities for NAT): The Public Mirror</h2>
-      <p>
-        When your laptop connects to a home Wi-Fi router, it is assigned a private local IP address (such as <code>192.168.1.45</code> or <code>10.0.0.12</code>). This address is meaningless to a computer located on a different network across the internet.
-      </p>
-      <p>
-        <strong>STUN</strong> is a lightweight protocol that answers one simple question for a browser: <em>"What is my public IP address and port as seen by the outside world?"</em>
-      </p>
-      <ol>
-        <li>The browser sends a lightweight UDP request to a STUN server (such as Google's public STUN servers <code>stun.l.google.com:19302</code>).</li>
-        <li>The STUN server replies with the public IP and port assigned to that outgoing packet by the user's router NAT.</li>
-        <li>The browser packages this information into a <strong>"Server Reflexive" ICE Candidate</strong> and shares it with the peer via signaling.</li>
-        <li>If both routers use Full Cone or Restricted Cone NAT, the browsers can now establish a direct UDP socket connection!</li>
-      </ol>
-
-      <h2>3. TURN (Traversal Using Relays around NAT): The Guaranteed Fallback</h2>
-      <p>
-        In approximately 8% to 15% of internet connections—specifically on corporate enterprise networks, university dorms, 5G cellular carriers, and symmetric NAT routers—direct UDP hole punching is blocked by strict firewall policies.
-      </p>
-      <p>
-        When direct peer-to-peer connection attempts fail, WebRTC falls back to a <strong>TURN Relay Server</strong>:
-      </p>
-      <ul>
-        <li>Both browsers establish an encrypted connection to the TURN server.</li>
-        <li>The TURN server relays encrypted binary packets between the two peers.</li>
-        <li><strong>Crucial Security Detail:</strong> The relayed traffic remains 100% end-to-end encrypted via DTLS. The TURN server acts solely as a blind packet forwarder and cannot inspect or decrypt the file data.</li>
-      </ul>
-
-      <h2>Summary of WebRTC Connection Resolution</h2>
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Component</th>
-            <th>Primary Function</th>
-            <th>Data Carried</th>
-            <th>Bandwidth Consumption</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Signaling Server</strong></td>
-            <td>Introduces devices and negotiates SDP offers</td>
-            <td>Connection metadata only</td>
-            <td>Minimal (&lt; a few KB)</td>
-          </tr>
-          <tr>
-            <td><strong>STUN Server</strong></td>
-            <td>Discovers public IP and NAT mapping</td>
-            <td>Small UDP ping packets</td>
-            <td>Negligible (&lt; 1 KB)</td>
-          </tr>
-          <tr>
-            <td><strong>Direct P2P DataChannel</strong></td>
-            <td>Moves raw file chunks between devices</td>
-            <td>End-to-end encrypted file streams</td>
-            <td class="yes">Direct local / ISP line rate</td>
-          </tr>
-          <tr>
-            <td><strong>TURN Relay (Fallback)</strong></td>
-            <td>Forwards packets when direct P2P is blocked</td>
-            <td>Encrypted binary packets</td>
-            <td>Full file payload size</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>Interactive Connectivity Establishment (ICE) in Action</h2>
-      <p>
-        The ICE framework brings together STUN and TURN to execute a structured candidate scoring process:
-      </p>
-      <ol>
-        <li><strong>Host Candidates (Priority 1):</strong> Tested first for zero-latency LAN sockets.</li>
-        <li><strong>Server Reflexive Candidates (Priority 2):</strong> Tested for direct WAN peer-to-peer routing.</li>
-        <li><strong>Relay Candidates (Priority 3):</strong> Engaged only if priorities 1 and 2 fail connectivity checks.</li>
-      </ol>
-
-      <h2>How DropItOver Maximizes Connection Success Rates</h2>
-      <p>
-        DropItOver deploys an intelligent multi-stage connectivity engine:
-      </p>
-      <ol>
-        <li><strong>Local Subnet Direct Sockets:</strong> Devices on the same Wi-Fi connect directly over local host candidates with near-zero latency.</li>
-        <li><strong>STUN NAT Traversal:</strong> External peers resolve public endpoints via redundant global STUN clusters.</li>
-        <li><strong>Cloudflare Realtime TURN Relays:</strong> High-bandwidth relays automatically engage if enterprise symmetric NATs prevent direct UDP pairing.</li>
-        <li><strong>Ephemeral Link Fallback:</strong> If WebRTC cannot establish a live stream, users can seamlessly generate an authenticated AES-256-GCM download link.</li>
-      </ol>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Can a STUN or TURN server operator see the contents of my files?</summary>
-          <div class="faq-answer">
-            No. STUN only processes IP discovery pings. TURN relays forward DTLS-encrypted packets blindly. Because the cryptographic keys exist only in the sender's and receiver's browser memory, the TURN server cannot decrypt the data.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Why is WebRTC faster than standard HTTP downloads?</summary>
-          <div class="faq-answer">
-            WebRTC transfers data over UDP and SCTP without the TCP three-way handshake overhead, packet reordering stalls, and head-of-line blocking that slow down traditional HTTP transfers.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What firewall ports does WebRTC require?</summary>
-          <div class="faq-answer">
-            WebRTC typically communicates over UDP ports in the range of 1024 to 65535, with fallback to standard HTTPS (TCP port 443) when TURN relays are engaged.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What is the difference between Symmetric NAT and Cone NAT?</summary>
-          <div class="faq-answer">
-            Cone NAT maps all outbound packets from a local port to the same external port, allowing external peers to connect directly. Symmetric NAT assigns a unique external port for every unique destination IP, requiring a TURN relay to bridge connections.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Does DropItOver use third-party signaling brokers?</summary>
-          <div class="faq-answer">
-            No. DropItOver's signaling layer runs entirely on Cloudflare Workers and Durable Objects, ensuring private, self-hosted signaling with zero external tracking.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What latency is typical for WebRTC peer discovery?</summary>
-          <div class="faq-answer">
-            On modern fiber or high-speed Wi-Fi, the initial signaling handshake and ICE candidate pairing complete in under 50 to 150 milliseconds.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC Technical Deep Dive</a></li>
-        <li><a href="/guides/share-files-over-local-wifi-network">Local Wi-Fi Network Sharing</a></li>
-        <li><a href="/guides/file-transfer-without-app-installation-pwa">PWAs & In-Browser File Transfer</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>WebRTC signaling, STUN, and TURN: diagnose the failing stage</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>WebRTC signaling, STUN, and TURN: diagnose the failing stage</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>Signaling, STUN, and TURN do different jobs. A signaling service introduces browsers and relays connection descriptions. STUN helps a browser learn a public-facing address. TURN offers a relay path when direct connectivity is unavailable. Treating all three as a generic server makes troubleshooting imprecise and can produce misleading claims about whether file bytes touch infrastructure. This guide maps each role to DropItOver's implementation, shows what a successful stage proves, and explains how to test restrictive networks without exposing private diagnostics or disabling security controls broadly.</p>
+<h2>Signaling is the control conversation</h2>
+<p>The homepage opens /ws/net and joins a NetworkHub selected from a hash of the request's public IP. Room pages use /ws/room with the room identifier. The Durable Object relays identities, offers, responses, SDP, and ICE candidates. The file payload uses a separate data channel after acceptance and negotiation. Consequently, an empty nearby list can be a discovery-group problem even when a room would work, and a visible peer can still be unreachable for data. File names and sizes in transfer offers are metadata, not evidence that signaling stores the complete file.</p>
+<pre>1. Browser -&gt; WebSocket signaling -&gt; peer list and accepted offer
+2. Browser -&gt; STUN -&gt; public-facing candidate information
+3. Both browsers exchange ICE candidates through signaling
+4. ICE checks choose direct path OR TURN relay
+5. SCTP over DTLS carries file messages on the selected path</pre>
+<p>Signaling needs ordinary internet reachability to the Worker. A loaded static page does not prove that a WebSocket upgrade succeeded. Some enterprise proxies permit HTTPS documents but block or interfere with WebSockets. On passive disconnect, the client reconnects with backoff rather than showing a raw HTTP status in the page. Active transfers can still fail and should produce actionable feedback. A reconnected signaling socket is not a persistent file-resume mechanism; do not assume an interrupted received file continues after reload.</p>
+<h2>STUN discovers an address; it does not guarantee reachability</h2>
+<p>NAT can map a private client to an external address and port. A STUN exchange reveals information the browser can propose as a server-reflexive candidate. Whether another peer can use that candidate depends on both networks' mapping and filtering behavior. Carrier-grade NAT, symmetric mapping, restrictive firewalls, and isolated Wi-Fi clients can prevent a direct route. STUN responding successfully is therefore an intermediate observation, not a successful end-to-end connection or proof that a file will stay on the local network.</p>
+<p>Browsers can also offer host candidates, sometimes with mDNS-obfuscated names. Do not treat an unfamiliar candidate address as an error solely because it is not a visible private IP. ICE gathers and checks several possibilities. The selected candidate pair, its state, and growing byte counters matter more than the presence of one candidate in a log. Candidate reports can reveal network details, so redact them before public sharing. A connection-state timeline often supplies enough information for support without publishing the full SDP.</p>
+<h2>TURN relays the encrypted transport</h2>
+<p>If a usable relay candidate is available, traffic can pass through TURN instead of requiring a successful direct route. The file data remains protected by browser-to-browser DTLS, while the relay carries encrypted packets and can observe operational connection information. TURN bandwidth may be metered and constrained by network paths. It is inaccurate both to say TURN never handles traffic and to say it automatically decrypts file contents. It is also inaccurate to promise a relay can bypass every policy: its endpoints and offered transports still have to be reachable.</p>
+<p>DropItOver can mint short-lived Cloudflare TURN credentials when the appropriate key ID and API token are configured. Static TURN configuration is another supported deployment option. The configuration endpoint falls back to STUN when credential minting fails, keeping the page usable but potentially leaving restrictive network pairs unable to connect. A badge or config response showing no relay is a useful diagnostic. Do not expose long-lived service secrets to clients or paste credential API tokens into a support ticket. Consult the deployment README for the configuration sequence.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Service</th><th scope="col">Main purpose</th><th scope="col">File-payload role</th><th scope="col">Success does not prove</th></tr></thead><tbody><tr><td>WebSocket signaling</td><td>Introduce and negotiate peers</td><td>Relays control metadata</td><td>Direct route exists</td></tr><tr><td>STUN</td><td>Discover candidate address information</td><td>Not ordinary file relay</td><td>Other peer can reach that address</td></tr><tr><td>TURN</td><td>Provide relay candidate</td><td>Carries DTLS-encrypted traffic</td><td>Every firewall permits it</td></tr><tr><td>Worker link API</td><td>Stored asynchronous delivery</td><td>Processes and encrypts plaintext</td><td>Operator is excluded from trust</td></tr></tbody></table></div>
+<h2>Inspect the selected candidate pair</h2>
+<p>Use getStats() or your browser's WebRTC diagnostics to find the active transport and nominated candidate pair. Record connection state, candidate types, timestamps, and whether byte counters increase after acceptance. A relay candidate indicates TURN usage. Keep setup time separate from payload time. The existence of many failed candidate checks is not itself a failure if another pair succeeds. Conversely, one successful WebSocket ping says nothing about the data channel's traffic. Describe the stage you actually observed rather than collapsing every symptom into server downtime.</p>
+<p>For a controlled test, compare two devices on a trusted LAN, then test one on cellular, and finally a relay-capable arrangement if available. Do not assume the cellular test must succeed without TURN; NAT behavior varies. Run a small harmless file before a large one and save the copy. If the PC uses a VPN, record whether turning it off within policy changes discovery, route selection, or both. Each result answers a different question, so change one variable at a time.</p>
+<h2>Restrictive networks and mobile execution</h2>
+<p>On Windows 11, inspect Public versus Private profile and browser application permissions without disabling the firewall. On a router you control, check guest or client isolation; on a managed network, ask the administrator for an approved path. An explicit room changes how peers meet, not the underlying firewall rules. A temporary link uses HTTPS storage and may be appropriate when peer routing fails, subject to data-handling policy. Do not present a technical fallback as authorization to bypass an organization's storage restrictions.</p>
+<p>On iOS Safari, keep the tab foregrounded and screen awake. A successful ICE connection can still stop making application progress when a page is suspended. Large receives can also strain memory because the browser retains the completed file as a Blob representation. Those are not STUN failures. If a small transfer works repeatedly while large ones fail after app switching, investigate execution and resources before changing relay credentials. Retain the source, since live partial delivery is not persisted across reloads.</p>
+<h2>Timing and resource worksheet</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated one GiB scenario</th><th scope="col">Assumed payload rate</th><th scope="col">Ideal payload time</th><th scope="col">Missing measurement</th></tr></thead><tbody><tr><td>Direct SCTP/DTLS</td><td>200 Mbit/s</td><td>42.9 seconds</td><td>Actual selected route capacity</td></tr><tr><td>Relayed SCTP/DTLS</td><td>40 Mbit/s</td><td>214.7 seconds</td><td>Relay round trip and contention</td></tr><tr><td>Sequential stored path</td><td>20 up, 100 down Mbit/s</td><td>515.4 seconds</td><td>Request, encryption, and saving overhead</td></tr></tbody></table></div>
+<p>These are arithmetic examples, not observed TURN or product benchmarks. Measure three trials, report medians, document candidate-pair type, and verify the saved bytes. Send-queue thresholds and chunk sizes are not peak-process-memory measurements; observe memory separately with a stated method. Consult the W3C WebRTC specification for the browser API semantics and Cloudflare's official TURN documentation for credential setup. Support reports should identify the failed stage and safe state information, leaving private addresses, tokens, documents, and live download links out of public logs.</p>
+ <h2>Sources and further reading</h2><p><a href="https://www.w3.org/TR/webrtc/">WebRTC specification</a>, <a href="https://github.com/localsend/protocol">LocalSend protocol</a>, <a href="/privacy">DropItOver data-handling policy</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -371,7 +142,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -395,8 +166,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

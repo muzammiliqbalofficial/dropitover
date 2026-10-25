@@ -29,7 +29,16 @@ const state = {
 const transfers = new TransferLog($('#transfers'), $('#transfers-empty'));
 const signaling = new Signaling('/ws/net');
 
-init().catch((err) => toast(err.message, 'error', 6000));
+async function boot() {
+  try {
+    await init();
+  } catch {
+    $('#peer-count').textContent = 'Connecting…';
+    setTimeout(boot, 10_000);
+  }
+}
+wireMobileMenu();
+boot();
 
 async function init() {
   state.config = await loadConfig();
@@ -48,7 +57,9 @@ async function init() {
     })
   );
 
+  wireMobileMenu();
   wireIdentity();
+  wireModeDock();
   wireLinkShare();
   wireRooms();
 
@@ -65,6 +76,37 @@ async function init() {
   markBooted();
 }
 
+function wireMobileMenu() {
+  const toggle = $('#menu-toggle');
+  const nav = $('#top-nav');
+  if (!toggle || !nav) return;
+  const menuIcon = toggle.querySelector('.menu-icon');
+  const closeIcon = toggle.querySelector('.close-icon');
+
+  const setOpen = (open) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    nav.classList.toggle('open', open);
+    if (menuIcon) menuIcon.hidden = open;
+    if (closeIcon) closeIcon.hidden = !open;
+  };
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = nav.classList.contains('open');
+    setOpen(!isOpen);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)) {
+      setOpen(false);
+    }
+  });
+
+  nav.querySelectorAll('.nav-link').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+}
+
 function wireIdentity() {
   const input = $('#device-name');
   input.addEventListener('change', () => {
@@ -79,18 +121,51 @@ function wireIdentity() {
   });
 }
 
+function wireModeDock() {
+  const tabs = [
+    { btn: $('#tab-p2p'), panel: $('#mode-p2p') },
+    { btn: $('#tab-link'), panel: $('#mode-link') },
+    { btn: $('#tab-room'), panel: $('#mode-room') },
+  ];
+  tabs.forEach(({ btn, panel }) => {
+    if (!btn || !panel) return;
+    btn.addEventListener('click', () => {
+      tabs.forEach((t) => {
+        const active = t.btn === btn;
+        t.btn.classList.toggle('active', active);
+        t.btn.setAttribute('aria-selected', String(active));
+        t.panel.hidden = !active;
+      });
+    });
+  });
+
+  // If user drops a file anywhere on window when in p2p mode with no peers, auto-switch to link tab
+  window.addEventListener('dragover', (e) => e.preventDefault());
+  window.addEventListener('drop', (e) => {
+    if (e.target.closest('#link-drop') || e.target.closest('.modal')) return;
+    const files = Array.from(e.dataTransfer?.files || []);
+    if (files.length && $('#mode-p2p') && !$('#mode-p2p').hidden && state.peers.size === 0) {
+      $('#tab-link')?.click();
+      addFiles(files);
+    }
+  });
+}
+
 // --- Mode 1: nearby devices -------------------------------------------------
 
 function wireSignaling() {
-  signaling.on('open', async () => {
+  const hello = async () => {
     try {
       const welcome = await signaling.request('hello', state.identity);
       state.selfId = welcome.id;
       renderPeers(welcome.peers || []);
-    } catch (err) {
-      toast(err.message, 'error');
+    } catch {
+      // A passive handshake failure is retried through the socket reconnect.
+      signaling.ws?.close();
     }
-  });
+  };
+  signaling.on('open', hello);
+  if (signaling.isOpen) hello();
 
   signaling.on('close', () => {
     $('#peer-count').textContent = 'Reconnecting…';

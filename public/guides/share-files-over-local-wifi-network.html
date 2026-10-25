@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#070a12">
-<title>How to Share Files Over Local Wi-Fi Network at Maximum Speed | DropItOver</title>
-<meta name="description" content="How to optimize your home and office Wi-Fi router for maximum local file transfer speeds up to 100+ MB/s. Channel tuning, 5GHz bands, and P2P streaming.">
+<title>Local Wi-Fi file sharing: discovery, isolation, and the actual data path | DropItOver</title>
+<meta name="description" content="Being connected to Wi-Fi does not necessarily mean two devices can communicate directly. Guest isolation, separate VLANs, VPNs, and the access point's forw">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://dropitover.com/guides/share-files-over-local-wifi-network">
 <link rel="stylesheet" href="/css/styles.css">
@@ -14,7 +14,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DropItOver">
-<meta property="og:title" content="How to Share Files Over Local Wi-Fi Network at Maximum Speed">
+<meta property="og:title" content="Local Wi-Fi file sharing: discovery, isolation, and the actual data path">
 <meta property="og:description" content="How to optimize your home and office Wi-Fi router for maximum local file transfer speeds up to 100+ MB/s. Channel tuning, 5GHz bands, and P2P streaming.">
 <meta property="og:url" content="https://dropitover.com/guides/share-files-over-local-wifi-network">
 <meta property="og:image" content="https://dropitover.com/og.png">
@@ -25,14 +25,14 @@
   {
     "@context": "https://schema.org",
     "@type": "TechArticle",
-    "headline": "How to Share Files Over Local Wi-Fi Network at Maximum Speed",
-    "description": "How to optimize your home and office Wi-Fi router for maximum local file transfer speeds up to 100+ MB/s. Channel tuning, 5GHz bands, and P2P streaming.",
+    "headline": "Local Wi-Fi file sharing: discovery, isolation, and the actual data path",
+    "description": "Being connected to Wi-Fi does not necessarily mean two devices can communicate directly. Guest isolation, separate VLANs, VPNs, and the access point's forw",
     "url": "https://dropitover.com/guides/share-files-over-local-wifi-network",
     "datePublished": "2026-08-21",
-    "dateModified": "2026-08-26",
+    "dateModified": "2026-10-17",
     "author": {
       "@type": "Organization",
-      "name": "DropItOver Networking Team",
+      "name": "DropItOver",
       "url": "https://dropitover.com/about"
     },
     "publisher": {
@@ -63,63 +63,9 @@
       {
         "@type": "ListItem",
         "position": 3,
-        "name": "How to Share Files Over Local Wi-Fi Network at Maximum Speed",
+        "name": "Local Wi-Fi file sharing: discovery, isolation, and the actual data path",
         "item": "https://dropitover.com/guides/share-files-over-local-wifi-network"
       }
-    ]
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Why does my transfer slow down when transferring hundreds of small files?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Operating systems must create separate file handles and directory entries for every individual file. For maximum speed when transferring thousands of photos or code files, zip them into a single archive before sending."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can I transfer files over Wi-Fi without an active internet connection?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "WebRTC signaling requires a brief initial handshake to exchange connection parameters. Once the DataChannel is established, all binary file data flows purely across local Wi-Fi without using external internet data."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does distance from the Wi-Fi router affect speed?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Wireless signal strength (RSSI) directly impacts Wi-Fi PHY modulation rates. Staying within 10–15 feet of your wireless access point delivers maximum throughput."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Why is Ethernet + Wi-Fi faster than Wi-Fi to Wi-Fi?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Wi-Fi is half-duplex. When both devices are wireless, the router must receive packets on the Wi-Fi radio and retransmit them on the same frequency, splitting airtime in half. Connecting one device via Ethernet allows simultaneous full-duplex transmission."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What browser provides the fastest WebRTC transfer speeds?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Chromium-based browsers (Google Chrome, Microsoft Edge, Brave) and Apple Safari offer highly optimized WebAssembly and hardware-accelerated crypto pipelines for peak transfer rates."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I know if my devices are using direct LAN sockets?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "When devices are on the same local subnet, DropItOver shows 'Devices on your Wi-Fi'. Transfers initiate instantly with speeds matching local router hardware capacity."
-          }
-        }
     ]
   }
 ]
@@ -144,198 +90,35 @@
 
   <main>
     <article class="card article">
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
-        <span class="sep">/</span>
-        <a href="/guides/">Guides</a>
-        <span class="sep">/</span>
-        <span>How to Share Files Over Local Wi-Fi Network at Maximum Speed</span>
-      </nav>
-
-      <p class="eyebrow">Networking & Performance</p>
-      <h1>How to Share Files Over Local Wi-Fi Network at Maximum Speed</h1>
-      <p class="dek">Unlock the full gigabit potential of your Wi-Fi router for lightning-fast device-to-device file transfers without using external internet bandwidth.</p>
-
-      <div class="article-meta">
-        <div class="author-badge">
-          <div class="avatar-circle">DO</div>
-          <span>DropItOver Networking Team</span>
-        </div>
-        <span>10 min read</span>
-        <span>Updated: August 2026</span>
-      </div>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-
-      <h2>Understanding Local Area Network (LAN) Wireless Throughput</h2>
-      <p>
-        Modern home and office Wi-Fi routers (Wi-Fi 5 / 802.11ac, Wi-Fi 6 / 802.11ax, and Wi-Fi 7) are capable of theoretical local transfer speeds between <strong>1,200 Mbps and 9,600 Mbps</strong> (150 MB/s to 1.2 GB/s).
-      </p>
-      <p>
-        Yet, most users experience agonizingly slow file transfer speeds because their tools route files out across the internet to a third-party server and back down, rather than utilizing the massive local wireless bandwidth already available inside their router.
-      </p>
-
-      <h2>Technical Factors That Dictate Wi-Fi Transfer Speed</h2>
-
-      <table class="compare">
-        <thead>
-          <tr>
-            <th>Wi-Fi Standard / Frequency</th>
-            <th>Channel Width</th>
-            <th>Typical Real-World P2P Transfer Speed</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="us"><strong>Wi-Fi 6 / 6E (5 GHz / 6 GHz)</strong></td>
-            <td>80 MHz &ndash; 160 MHz</td>
-            <td class="us yes">80 &ndash; 120+ MB/s (Gigabit equivalent)</td>
-          </tr>
-          <tr>
-            <td><strong>Wi-Fi 5 (5 GHz)</strong></td>
-            <td>40 MHz &ndash; 80 MHz</td>
-            <td>45 &ndash; 75 MB/s</td>
-          </tr>
-          <tr>
-            <td><strong>Legacy 2.4 GHz Band</strong></td>
-            <td class="no">20 MHz (Congested)</td>
-            <td class="no">3 &ndash; 8 MB/s</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <h2>How to Configure Your Environment for Maximum Wireless Speed</h2>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">1</div>
-          <span>Switch Both Devices to the 5 GHz / 6 GHz Band</span>
-        </div>
-        <p>
-          2.4 GHz Wi-Fi suffers from heavy interference from microwave ovens, Bluetooth accessories, and neighboring networks. Ensure both sending and receiving devices are connected to the 5 GHz network SSID.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">2</div>
-          <span>Disable Router "AP / Client Isolation"</span>
-        </div>
-        <p>
-          Some commercial and guest Wi-Fi routers enable "Access Point Isolation" to prevent devices from communicating directly. For seamless home and office P2P discovery, disable Client Isolation in your router's wireless security settings.
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">3</div>
-          <span>Connect One Device via Gigabit Ethernet (If Available)</span>
-        </div>
-        <p>
-          If your desktop PC or laptop is connected to the router via a physical Cat6 Ethernet cable while your phone is on Wi-Fi, you eliminate half of the wireless airtime contention, effectively doubling your transfer throughput!
-        </p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-card-header">
-          <div class="step-num">4</div>
-          <span>Open DropItOver in Modern Browsers</span>
-        </div>
-        <p>
-          Navigate to <strong><a href="/">dropitover.com</a></strong>. Both devices will pair over local WebRTC DataChannels and stream data directly across router antennas with zero compression.
-        </p>
-      </div>
-
-      <h2>Advanced Router Tuning: Channel Width, DFS Channels &amp; QoS</h2>
-      <p>
-        To squeeze maximum gigabit performance out of your local network router:
-      </p>
-      <ul>
-        <li><strong>Set Channel Width to 80 MHz or 160 MHz:</strong> Standard 20 MHz or 40 MHz settings limit throughput to ~200 Mbps. Switching to 80/160 MHz on 5 GHz allows 1,200+ Mbps physical link rates.</li>
-        <li><strong>Select Uncongested DFS Channels:</strong> In dense apartment complexes, standard 5 GHz channels (36–48) are crowded. Enabling DFS channels (52–144) provides clean, interference-free spectrum.</li>
-        <li><strong>Enable WMM (Wi-Fi Multimedia) QoS:</strong> Ensures high-priority queueing for real-time WebRTC UDP packets.</li>
-      </ul>
-
-      <h2>Troubleshooting Common Local Network Discovery Blockers</h2>
-      <ul>
-        <li><strong>VPN Connections:</strong> Active VPN clients (such as NordVPN, ExpressVPN, or corporate WireGuard/OpenVPN tunnels) route all traffic through virtual adapters, hiding your device from local LAN discovery. Temporarily pause your VPN or enable "Allow LAN traffic" in your VPN settings.</li>
-        <li><strong>Windows Defender / Third-Party Firewall:</strong> If your Windows network profile is set to "Public Network", Windows Firewall may restrict local port discovery. Change your network profile to "Private Network" in Windows Settings.</li>
-        <li><strong>Mesh Wi-Fi Subnet Partitioning:</strong> If your home uses multiple mesh access points, ensure all nodes are configured in bridge mode so all devices receive IP addresses on the same <code>/24</code> subnet.</li>
-      </ul>
-
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary>Why does my transfer slow down when transferring hundreds of small files?</summary>
-          <div class="faq-answer">
-            Operating systems must create separate file handles and directory entries for every individual file. For maximum speed when transferring thousands of photos or code files, zip them into a single archive before sending.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Can I transfer files over Wi-Fi without an active internet connection?</summary>
-          <div class="faq-answer">
-            WebRTC signaling requires a brief initial handshake to exchange connection parameters. Once the DataChannel is established, all binary file data flows purely across local Wi-Fi without using external internet data.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Does distance from the Wi-Fi router affect speed?</summary>
-          <div class="faq-answer">
-            Yes. Wireless signal strength (RSSI) directly impacts Wi-Fi PHY modulation rates. Staying within 10–15 feet of your wireless access point delivers maximum throughput.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>Why is Ethernet + Wi-Fi faster than Wi-Fi to Wi-Fi?</summary>
-          <div class="faq-answer">
-            Wi-Fi is half-duplex. When both devices are wireless, the router must receive packets on the Wi-Fi radio and retransmit them on the same frequency, splitting airtime in half. Connecting one device via Ethernet allows simultaneous full-duplex transmission.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>What browser provides the fastest WebRTC transfer speeds?</summary>
-          <div class="faq-answer">
-            Chromium-based browsers (Google Chrome, Microsoft Edge, Brave) and Apple Safari offer highly optimized WebAssembly and hardware-accelerated crypto pipelines for peak transfer rates.
-          </div>
-        </details>
-        <details class="faq-item">
-          <summary>How do I know if my devices are using direct LAN sockets?</summary>
-          <div class="faq-answer">
-            When devices are on the same local subnet, DropItOver shows 'Devices on your Wi-Fi'. Transfers initiate instantly with speeds matching local router hardware capacity.
-          </div>
-        </details>
-      </div>
-
-      <h2>Related Guides &amp; Tutorials</h2>
-      <ul class="related-links">
-        <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC Technical Deep Dive</a></li>
-        <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-        <li><a href="/guides/webrtc-stun-turn-signaling-servers-explained">STUN, TURN & Signaling Servers Explained</a></li>
-      </ul>
-
-      <div class="cta">
-        <p class="lead" style="margin-bottom:14px">Experience instant, private peer-to-peer file transfer today.</p>
-        <a class="btn btn-primary" href="/">Open DropItOver</a>
-        <a class="btn" href="/guides/">View All Guides &rarr;</a>
-      </div>
-    </article>
+ <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/guides/">Guides</a> / <span>Local Wi-Fi file sharing: discovery, isolation, and the actual data path</span></nav>
+ <p class="eyebrow">Practical engineering guide</p><h1>Local Wi-Fi file sharing: discovery, isolation, and the actual data path</h1>
+ <p class="updated">Reviewed against the implementation: <time datetime="2026-10-17">October 17, 2026</time></p>
+ <p>Being connected to Wi-Fi does not necessarily mean two devices can communicate directly. Guest isolation, separate VLANs, VPNs, and the access point's forwarding policy can separate clients that both browse the internet successfully. DropItOver adds another distinction: nearby discovery groups browsers using a hashed public IP, while WebRTC independently finds a route for file data. Understanding those two layers prevents wasted troubleshooting. This guide shows how to test each layer on a network you control, choose an approved fallback on managed networks, and measure actual file delivery instead of relying on a router's advertised link speed.</p>
+<h2>Draw your network before changing it</h2>
+<p>Write down where each device connects: main SSID, guest SSID, Ethernet switch, phone hotspot, VPN, or cellular. Two identical Wi-Fi names can belong to different isolated segments, and different access points can still belong to one usable LAN. A mesh system may add another wireless hop between clients. A VPN may send signaling through a separate public IP even when local routing remains possible. Record the actual arrangement first; otherwise switching networks, firewall settings, and browser versions at once makes a successful retry hard to interpret.</p>
+<pre>Discovery: Browser A -&gt; internet WebSocket -&gt; hashed-IP hub &lt;- Browser B
+Transport: Browser A -&gt; local route, NAT route, or TURN relay -&gt; Browser B
+Storage fallback: Browser A -&gt; HTTPS Worker/R2 -&gt; Browser B later</pre>
+<p>The discovery service is internet-based. Opening the already loaded page after disconnecting the router from the internet is not a supported offline discovery workflow. A successful nearby peer list establishes that browsers reached the same signaling group; it does not certify a private subnet, trusted identity, or direct file path. In environments where many people share one public address, confirm the receiving nickname and acceptance prompt carefully. If discovery grouping is unsuitable, use an explicit room and protect its invitation URL.</p>
+<h2>Establish a baseline transfer</h2>
+<p>Use two devices on a trusted main network with current browsers. Turn off only an unnecessary VPN that you are allowed to disable, and keep both pages visible. Set recognizable names, send one harmless document, accept on the other device, and save the received file. Record whether the offer appeared and whether payload bytes started moving. That baseline separates a basic connectivity failure from a later problem caused by file size, battery policy, or browser memory. Keep the original until the saved copy opens correctly.</p>
+<p>If discovery is empty, verify each browser can fetch the page and configuration. Compare whether both devices actually use the same internet egress; a phone can silently switch to cellular when Wi-Fi appears unhealthy. An explicit room can bring together browsers with different public IPs. It cannot guarantee direct connectivity through a hostile router. When a room joins but files do not move, inspect ICE or test a trusted hotspot rather than repeatedly renaming devices. Device names do not affect packet routing.</p>
+<h2>AP and Client Isolation</h2>
+<p>Guest networks commonly permit each station to reach the gateway and internet while blocking station-to-station traffic. Settings may be named AP Isolation, Client Isolation, wireless isolation, guest separation, or a vendor-specific equivalent. On your own router, consult the model's documentation and move both devices to the trusted main SSID before changing policy. Do not disable isolation for an entire venue because one transfer failed. On a school or company network, ask the administrator for an approved local segment, relay path, or storage route.</p>
+<p>TURN can relay DTLS-encrypted WebRTC traffic when it is configured and reachable. A relay is not equivalent to a guaranteed local path, and throughput may be constrained by internet uplinks or service limits. If you must keep bytes within a LAN, inspect the selected candidate pair and use a tool designed for your required offline conditions. If internet storage is acceptable, a temporary link avoids the peer route entirely. The right fallback depends on policy and trust requirements, not merely on which button happens to succeed.</p>
+<h2>Windows profiles and mobile foreground execution</h2>
+<p>On Windows 11, inspect the active connection under Settings, Network &amp; internet. Private is appropriate for a trusted home network, while Public applies tighter defaults. Review the browser's firewall permission for the active profile; do not enable SMB sharing or open file-server ports for this browser workflow. Third-party endpoint protection can impose its own restrictions. A transfer working from the same PC on another trusted network is useful evidence when asking an administrator to review the original path.</p>
+<p>On iOS Safari and Android, keep the tab foregrounded and screen awake during a live transfer. Power saving and app switching can stop application progress even though the Wi-Fi indicator stays visible. The receiving browser assembles a complete Blob, so large files also create resource pressure. Reducing the selection can distinguish memory limits from routing: if a tiny document succeeds consistently and a one GiB file fails, investigate resources and suspension before adjusting isolation. There is no persistent live-transfer resume state after a browser reload.</p>
+<h2>Use a troubleshooting matrix</h2>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Test</th><th scope="col">What it establishes</th><th scope="col">What it does not prove</th></tr></thead><tbody><tr><td>Both pages load</td><td>Ordinary web access</td><td>Peer packet forwarding</td></tr><tr><td>Devices appear</td><td>Shared signaling group</td><td>Same subnet or trusted identity</td></tr><tr><td>Offer accepted</td><td>Signaling exchange works</td><td>Successful ICE route</td></tr><tr><td>Payload bytes increase</td><td>Data channel carries traffic</td><td>Local rather than relayed route</td></tr><tr><td>Saved digest matches</td><td>Correct selected file arrived</td><td>Sender identity or document safety</td></tr></tbody></table></div>
+<p>Move through this matrix in order. Save the failed stage and the one change that improved it. Browser WebRTC reports can identify candidate types and connection state, but may reveal private network information. Redact raw addresses and session descriptions before sharing them publicly. A support ticket usually needs versions, network layout, file size, and state transitions rather than complete diagnostic dumps. Keep a record of changed router settings so you can restore the original security policy after testing.</p>
+<h2>Measure local performance reproducibly</h2>
+<p>Use a known one GiB file and run three trials per arrangement: both devices wireless, one wired, and a relay route if available. Report the median, not the best attempt. Keep devices, browser versions, file bytes, and timing boundaries consistent. A five GHz association rate is a physical-link property shared with overhead and other traffic; it is not application throughput. When two wireless clients share airtime, moving a laptop to Ethernet may help, but it cannot overcome a slow phone or policy block.</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Comparison table"><table class="compare"><thead><tr><th scope="col">Calculated one GiB scenario</th><th scope="col">Assumed payload rate</th><th scope="col">Payload time</th><th scope="col">Measurement caveat</th></tr></thead><tbody><tr><td>Direct LAN WebRTC</td><td>100 Mbit/s</td><td>85.9 seconds</td><td>Not a router benchmark</td></tr><tr><td>Direct LAN WebRTC</td><td>400 Mbit/s</td><td>21.5 seconds</td><td>Excludes setup and saving</td></tr><tr><td>Internet relay</td><td>25 Mbit/s</td><td>343.6 seconds</td><td>Capacity must be measured</td></tr><tr><td>Sequential cloud legs</td><td>20 up, 100 down Mbit/s</td><td>515.4 seconds</td><td>Adds both network legs</td></tr></tbody></table></div>
+<p>These are calculated examples, not observed results for DropItOver, Snapdrop, or LocalSend. Compare products only with the same devices and recorded route. Measure memory separately, because an eight MiB send threshold is not a whole-process ceiling and receive Blob storage scales with file size. Keep the original, verify the saved copy, and document the network arrangement that actually worked. That repeatable procedure is more valuable than a universal claim that local sharing is always instant or never touches a relay.</p>
+ <h2>Sources and further reading</h2><p><a href="https://www.w3.org/TR/webrtc/">WebRTC specification</a>, <a href="https://github.com/localsend/protocol">LocalSend protocol</a>, <a href="/privacy">DropItOver data-handling policy</a>. Implementation details above describe this repository; calculated tables are not measured hardware results.</p>
+ <div class="cta"><a class="btn btn-primary" href="/">Open DropItOver</a><a class="btn" href="/guides/">All guides</a><a class="btn" href="/contact">Report a problem</a></div>
+ </article>
   </main>
 
   <footer class="site-footer">
@@ -357,7 +140,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -381,8 +164,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>

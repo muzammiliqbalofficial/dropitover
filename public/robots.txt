@@ -1,7 +1,15 @@
 # Robots.txt for DropItOver - https://dropitover.com/
 
+User-agent: Google-adstxt
+Allow: /ads.txt
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: Googlebot
 User-agent: *
 Allow: /
+Allow: /ads.txt
 Allow: /css/
 Allow: /js/
 Allow: /favicon.svg

@@ -77,25 +77,25 @@
           <div class="avatar-circle">DS</div>
           <span>Support Desk</span>
         </div>
-        <span>Response SLA: &lt; 24 Hours</span>
+        <span>Server-confirmed support tickets</span>
         <span>Direct Email: support@dropitover.com</span>
       </div>
 
       <div class="callout">
         <p><strong>Official Support Email:</strong> <a href="mailto:support@dropitover.com">support@dropitover.com</a></p>
-        <p>Our team actively monitors support inquiries Monday through Friday, 9:00 AM – 6:00 PM UTC. Critical security vulnerability disclosures are handled with 24/7 priority.</p>
+        <p>Include the browser, operating system, transfer mode, and time of the problem. Keep your ticket reference if you contact us again.</p>
       </div>
 
       <h2>Send an Inquiry</h2>
-      <form class="contact-form" id="contactForm" onsubmit="handleContactSubmit(event)">
+      <form class="contact-form" id="contactForm" action="/api/contact" method="post">
         <div class="form-group">
           <label for="contactName">Your Name</label>
-          <input type="text" id="contactName" name="name" required placeholder="Jane Doe" autocomplete="name">
+          <input type="text" id="contactName" name="name" maxlength="100" required placeholder="Jane Doe" autocomplete="name">
         </div>
 
         <div class="form-group">
           <label for="contactEmail">Email Address</label>
-          <input type="email" id="contactEmail" name="email" required placeholder="jane@example.com" autocomplete="email">
+          <input type="email" id="contactEmail" name="email" maxlength="254" required placeholder="jane@example.com" autocomplete="email">
         </div>
 
         <div class="form-group">
@@ -111,57 +111,28 @@
 
         <div class="form-group">
           <label for="contactSubject">Subject</label>
-          <input type="text" id="contactSubject" name="subject" required placeholder="Brief summary of your inquiry">
+          <input type="text" id="contactSubject" name="subject" maxlength="200" required placeholder="Brief summary of your inquiry">
         </div>
 
         <div class="form-group">
           <label for="contactMessage">Detailed Message</label>
-          <textarea id="contactMessage" name="message" rows="5" required placeholder="Please describe what you experienced, including your browser version and operating system if reporting a bug..."></textarea>
+          <textarea id="contactMessage" name="message" maxlength="5000" rows="5" required placeholder="Please describe what you experienced, including your browser version and operating system if reporting a bug..."></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block">Send Message via Email Client</button>
+        <button type="submit" class="btn btn-primary btn-block">Send inquiry</button>
       </form>
 
-      <div id="contactSuccess" class="callout" style="display:none; margin-top:20px;">
-        <p><strong>Thank you for reaching out!</strong> Your message has been prepared for your default email client. If it did not open automatically, please send your email directly to <a href="mailto:support@dropitover.com">support@dropitover.com</a>.</p>
-      </div>
-
-      <script>
-      function handleContactSubmit(e) {
-        e.preventDefault();
-        var name = document.getElementById('contactName').value;
-        var email = document.getElementById('contactEmail').value;
-        var category = document.getElementById('contactCategory').value;
-        var subject = document.getElementById('contactSubject').value;
-        var message = document.getElementById('contactMessage').value;
-        
-        var body = "Name: " + name + "\n" +
-                   "Email: " + email + "\n" +
-                   "Category: " + category + "\n\n" +
-                   "Message:\n" + message;
-                   
-        var mailtoUrl = "mailto:support@dropitover.com?subject=" + encodeURIComponent("[" + category + "] " + subject) + "&body=" + encodeURIComponent(body);
-        window.location.href = mailtoUrl;
-        document.getElementById('contactSuccess').style.display = 'block';
-      }
-      </script>
-
-      <div class="ad-slot">
-        <div class="ad-label">Advertisement</div>
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-8645479142211810"
-             data-ad-slot="auto"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
+      <p id="contactStatus" role="status" aria-live="polite"></p>
+      <p>Inquiries are stored privately for up to 90 days. Do not send passwords, private files, or live share links. See our <a href="/privacy">Privacy Policy</a>.</p>
+      <noscript>Enable JavaScript to submit this form, or email support@dropitover.com.</noscript>
+      <script type="module" src="/js/contact.js"></script>
 
       <h2>Troubleshooting &amp; Support Knowledge Base</h2>
       <div class="faq-list">
         <details class="faq-item" open>
           <summary>Why don't my devices see each other on Wi-Fi?</summary>
           <div class="faq-answer">
-            Make sure both devices are connected to the exact same Wi-Fi network (and same subnet). In corporate or public networks with "Client Isolation" or "AP Isolation" enabled, direct device-to-device discovery is blocked by the router. In that situation, use our <strong>"Send a link"</strong> mode or <strong>"Start a room"</strong> to transfer files seamlessly.
+            Open the site on both devices. Nearby discovery groups browsers by their public IP; a VPN or guest network may put them in different groups. AP or Client Isolation can block a direct data connection even when devices appear. Try a trusted hotspot, an explicit room with a configured TURN relay, or an expiring link.
           </div>
         </details>
 
@@ -175,7 +146,7 @@
         <details class="faq-item">
           <summary>Are my files scanned or stored permanently?</summary>
           <div class="faq-answer">
-            No. Direct Wi-Fi transfers bypass our servers completely. Link shares are encrypted with AES-256-GCM, stored in temporary cloud cache, and automatically wiped the moment they expire or when the recipient downloads them (if "burn after download" is enabled).
+            Direct transfers use browser-to-browser DTLS; TURN may relay encrypted traffic and signaling still processes metadata. For links, the Worker processes plaintext and encrypts file chunks before R2 storage. Expired shares are removed on the scheduled cleanup cycle, normally every ten minutes. Burn-after-read removes a share after required retrieval completes. This is not a malware scanning service.
           </div>
         </details>
 
@@ -189,7 +160,7 @@
         <details class="faq-item">
           <summary>How do I report a security vulnerability?</summary>
           <div class="faq-answer">
-            Security researchers can email vulnerability disclosures directly to <code>support@dropitover.com</code> with "[SECURITY]" in the subject line. We practice responsible disclosure and review reports within 24 hours.
+            Security researchers can email vulnerability disclosures directly to <code>support@dropitover.com</code> with "[SECURITY]" in the subject line. Please provide reproducible steps without including other people’s private data.
           </div>
         </details>
       </div>
@@ -221,7 +192,7 @@
           <li><a href="/guides/airdrop-for-windows">AirDrop for Windows 10/11</a></li>
           <li><a href="/guides/how-webrtc-peer-to-peer-file-transfer-works">WebRTC P2P Technical Deep Dive</a></li>
           <li><a href="/guides/wifi-file-transfer-android-to-pc">Android to PC 4K Video Sharing</a></li>
-          <li><a href="/guides/send-large-files-without-email">Send Large Files Online (2GB+)</a></li>
+          <li><a href="/guides/send-large-files-without-email">Send Large Files (up to 2 GiB)</a></li>
           <li><a href="/guides/aes-256-gcm-encryption-file-sharing">AES-256-GCM Encryption Guide</a></li>
         </ul>
       </div>
@@ -245,8 +216,8 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 DropItOver. All rights reserved. Zero-knowledge peer-to-peer file transfer utility.</p>
-      <p>Direct local transfers never touch our servers. Link shares are encrypted with AES-256-GCM.</p>
+      <p>&copy; 2026 DropItOver. All rights reserved. Browser-to-browser transfers and temporary encrypted links.</p>
+      <p>Direct transfers use WebRTC; TURN may relay encrypted traffic. Link shares are encrypted with AES-256-GCM.</p>
     </div>
   </footer>
 </div>
